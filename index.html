@@ -279,6 +279,14 @@
             justify-content: center;
         }
 
+        #formResponse {
+            margin-top: 1rem;
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+
         footer {
             padding: 3rem 10%;
             background: #050505;
@@ -395,7 +403,8 @@
 
             <div class="h-captcha" data-captcha="true"></div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Message</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%;" id="submitBtn">Submit Message</button>
+            <div id="formResponse"></div>
         </form>
     </section>
 
@@ -412,23 +421,62 @@
     <script src="https://web3forms.com/client/script.js" async defer></script>
 
     <script>
-        // Toggle Mobile Menu
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
 
-        // --- Form Reset Logic ---
-        // Yesle form submit bhaye pachi automatically clear garcha
+        // --- Final Form Handling with Auto-Reset ---
         const form = document.getElementById('contactForm');
-        form.addEventListener('submit', function() {
-            // Sano delay rakhera reset garcha jasle गर्दा submission successfully send hos
-            setTimeout(() => {
-                form.reset();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }, 1000);
+        const responseDiv = document.getElementById('formResponse');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Transmitting Message...";
+            
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                let res = await response.json();
+                if (response.status == 200) {
+                    responseDiv.style.display = "block";
+                    responseDiv.style.color = "#00ff00";
+                    responseDiv.innerHTML = "Signal Received! Form cleared.";
+                    form.reset(); // Yo line le form khali garcha
+                    if (typeof hcaptcha !== 'undefined') hcaptcha.reset(); 
+                } else {
+                    responseDiv.style.display = "block";
+                    responseDiv.style.color = "#ff0000";
+                    responseDiv.innerHTML = res.message;
+                }
+            })
+            .catch(error => {
+                responseDiv.style.display = "block";
+                responseDiv.style.color = "#ff0000";
+                responseDiv.innerHTML = "Transmission Failed!";
+            })
+            .then(function() {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Submit Message";
+                setTimeout(() => {
+                    responseDiv.style.display = "none";
+                }, 4000);
+            });
         });
 
-        // Youtube Stats & Videos Logic
+        // Youtube Data Logic
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
         
         async function updateSubCount() {
@@ -439,9 +487,7 @@
                     const count = data.counts[0].count;
                     document.getElementById('subCount').innerText = Number(count).toLocaleString();
                 }
-            } catch (e) {
-                document.getElementById('subCount').innerText = "LIVE"; 
-            }
+            } catch (e) { document.getElementById('subCount').innerText = "LIVE"; }
         }
 
         async function loadVideos() {
