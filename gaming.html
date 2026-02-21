@@ -21,27 +21,31 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
         
-        nav { position: fixed; top: 0; width: 100%; padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass); }
+        /* --- Navigation --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; padding: 0.8rem 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            z-index: 1000; background: rgba(10, 10, 10, 0.9); 
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass); 
+        }
         .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .logo-img { width: 45px; height: 45px; object-fit: contain; }
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
+        /* --- Hero Section (Black Background) --- */
         .hero { 
             height: 70vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            background: #000000; 
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; text-align: center; 
+            background: #000000; /* Pure Black Section */
             padding: 0 5%;
         }
-
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
         .hero h1 span { color: var(--primary); }
 
-        .typewriter-container { height: 40px; margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; }
+        /* --- Slogan Container --- */
+        .typewriter-container { height: 45px; margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; }
         .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: clamp(0.9rem, 3vw, 1.3rem); letter-spacing: 2px; font-weight: bold; }
 
         .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
@@ -49,8 +53,10 @@
         .btn-red { background: var(--primary); color: white; border: none; }
         .btn-red:hover { box-shadow: 0 0 25px var(--primary); transform: scale(1.05); }
         .btn-white { border-color: white; color: white; }
+        .btn-white:hover { background: white; color: black; }
 
-        section { padding: 80px 10%; background: var(--bg-dark); }
+        /* --- Video Grid --- */
+        section#videos { padding: 100px 10%; background: var(--bg-dark); }
         .section-header { text-align: center; margin-bottom: 4rem; }
         .section-header h2 { font-family: 'Orbitron'; font-size: 2rem; letter-spacing: 3px; }
         .section-header h2 span { color: var(--primary); }
@@ -84,9 +90,11 @@
 
     <section class="hero">
         <h1>DARK <span>LOBBY</span></h1>
+        
         <div class="typewriter-container">
             <span id="slogan" class="slogan-text"></span>
         </div>
+
         <div class="btn-container">
             <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-red"><i class="fab fa-youtube"></i> SUBSCRIBE</a>
             <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-white" style="border-color:#FFD700; color:#FFD700;"><i class="fas fa-heart"></i> DONATE</a>
@@ -99,7 +107,7 @@
             <h2>LATEST <span>TRANSMISSIONS</span></h2>
         </div>
         <div class="video-grid" id="youtubeFeed">
-            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">CONNECTING TO SATELLITE...</p>
+            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">INITIATING SATELLITE SCAN...</p>
         </div>
     </section>
 
@@ -110,7 +118,7 @@
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     
     <script>
-        // --- 1. Slogan Logic (Updated to 20 Seconds) ---
+        // --- 1. Slogan Logic (Changes every 20 seconds) ---
         const slogans = [
             "WE ARE THE FRONT LINE.",
             "VICTORY IS MEASURED IN SECONDS.",
@@ -137,26 +145,27 @@
         }
 
         updateSlogan();
-        setInterval(updateSlogan, 20000); // Changed to 20 Seconds
+        setInterval(updateSlogan, 20000); 
 
-        // --- 2. YouTube Video Logic (Updated to 3 Videos) ---
+        // --- 2. YouTube Video Logic (3 Videos Only) ---
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
 
         async function fetchVideos() {
-            // Using a more reliable proxy for the feed
+            const container = document.getElementById('youtubeFeed');
             const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=00000000000000000000000000000000&count=10`;
+            
+            // Using a more robust proxy approach
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=your_api_key_here&count=10`;
 
             try {
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
-                const container = document.getElementById('youtubeFeed');
 
                 if (data.status === 'ok' && data.items.length > 0) {
                     container.innerHTML = '';
-                    // Limit set to 3 videos
+                    // Showing exactly 3 videos
                     data.items.slice(0, 3).forEach(item => {
-                        const vId = item.guid.split(':').pop();
+                        const vId = item.link.split('v=')[1] || item.guid.split(':').pop();
                         container.innerHTML += `
                             <div class="video-card">
                                 <a href="${item.link}" target="_blank" style="text-decoration:none;">
@@ -165,16 +174,20 @@
                                     </div>
                                     <div class="video-info">
                                         <h3>${item.title}</h3>
-                                        <p style="color:red; font-size:0.7rem; margin-top:8px; font-weight:bold; font-family:'Orbitron';">VIEW DATA</p>
+                                        <p style="color:red; font-size:0.75rem; margin-top:8px; font-weight:bold; font-family:'Orbitron';">WATCH NOW <i class="fas fa-chevron-right"></i></p>
                                     </div>
                                 </a>
                             </div>`;
                     });
                 } else {
-                    container.innerHTML = "<p style='text-align:center; width:100%;'>No transmissions found.</p>";
+                    throw new Error("No items");
                 }
             } catch (err) {
-                document.getElementById('youtubeFeed').innerHTML = "<p style='text-align:center; width:100%;'>Error: Satellite connection lost.</p>";
+                container.innerHTML = `
+                    <div style="text-align:center; width:100%; color:var(--text-dim);">
+                        <p>Satellite link unstable. Please check back later.</p>
+                        <a href="https://youtube.com/channel/${channelId}" target="_blank" class="btn btn-red" style="margin-top:20px; border:1px solid red; background:transparent;">VISIT YOUTUBE DIRECTLY</a>
+                    </div>`;
             }
         }
 
