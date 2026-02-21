@@ -6,6 +6,7 @@
     <title>DARK LOBBY | Content Creator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
     
     <style>
         :root {
@@ -251,7 +252,7 @@
 
         .form-group { margin-bottom: 1.5rem; }
         
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 1rem;
             background: #1a1a1a;
@@ -259,6 +260,21 @@
             color: white;
             border-radius: 4px;
             outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        option {
+            background: var(--bg-card);
+            color: white;
         }
 
         footer {
@@ -291,6 +307,12 @@
         }
 
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .h-captcha {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -349,21 +371,37 @@
 
     <section id="contact" class="reveal">
         <h2 class="section-title">Send <span>Signal</span></h2>
+        
         <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
             <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
             
+            <input type="checkbox" name="botcheck" style="display: none;">
+
             <div class="form-group">
-                <input type="text" name="name" placeholder="Name" required>
+                <input type="text" name="name" placeholder="Full Name" required>
             </div>
             <div class="form-group">
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Email Address" required>
             </div>
+
             <div class="form-group">
-                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                <select name="subject" required>
+                    <option value="" disabled selected>Subject / Inquiry Type</option>
+                    <option value="Business Inquiry">Business Inquiry</option>
+                    <option value="Sponsorship">Sponsorship</option>
+                    <option value="Collaboration">Collaboration</option>
+                    <option value="Technical Issue">Technical Issue</option>
+                    <option value="General Message">General Message</option>
+                </select>
             </div>
-            <input type="hidden" name="redirect" value="https://web3forms.com/success">
-            
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Initiate Contact</button>
+
+            <div class="form-group">
+                <textarea name="message" rows="5" placeholder="Message" required></textarea>
+            </div>
+
+            <div class="h-captcha" data-captcha="true"></div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Message</button>
         </form>
     </section>
 
