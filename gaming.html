@@ -28,61 +28,50 @@
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
-        /* --- Hero Section with Banner --- */
+        /* --- Hero Section (Black Background) --- */
         .hero { 
-            height: 95vh; 
+            height: 70vh; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
             text-align: center; 
-            position: relative;
-            background: linear-gradient(to bottom, rgba(10,10,10,0.4), var(--bg-dark)), 
-                        url('images/darklobby.png'); /* BANNER IMAGE */
-            background-size: cover;
-            background-position: center;
+            background: #000000; /* Pure Black as requested */
             padding: 0 5%;
         }
 
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-top: 50px; text-shadow: 0 0 30px rgba(255, 0, 0, 0.6); }
-
-        /* --- Subscriber Count --- */
-        .live-counter {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid var(--primary);
-            padding: 10px 20px;
-            border-radius: 50px;
-            margin: 15px 0;
-            font-family: 'Orbitron';
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .pulse { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        .hero h1 span { color: var(--primary); }
 
         /* --- Slogan Typewriter --- */
-        .typewriter-container { height: 30px; margin-bottom: 2rem; }
-        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: 1.1rem; letter-spacing: 1px; }
+        .typewriter-container { height: 40px; margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; }
+        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: clamp(0.9rem, 3vw, 1.3rem); letter-spacing: 2px; font-weight: bold; }
 
         .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
         .btn { padding: 1rem 2rem; border-radius: 4px; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--primary); font-size: 0.8rem; }
         .btn-red { background: var(--primary); color: white; border: none; }
-        .btn-red:hover { box-shadow: 0 0 20px var(--primary); transform: scale(1.05); }
-        .btn-gold { border-color: #FFD700; color: #FFD700; }
-        .btn-gold:hover { background: #FFD700; color: black; }
+        .btn-red:hover { box-shadow: 0 0 25px var(--primary); transform: scale(1.05); }
         .btn-white { border-color: white; color: white; }
+        .btn-white:hover { background: white; color: black; }
 
-        /* --- Videos --- */
-        section { padding: 100px 10%; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.3s; }
+        /* --- Video Section --- */
+        section { padding: 80px 10%; background: var(--bg-dark); }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-family: 'Orbitron'; font-size: 2rem; letter-spacing: 3px; }
+        .section-header h2 span { color: var(--primary); }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.4s; }
+        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        
         .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; position: relative; }
         .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .video-card:hover .play-overlay { opacity: 1; }
+        
+        .video-info { padding: 1.5rem; }
+        .video-info h3 { font-size: 0.9rem; font-family: 'Inter'; font-weight: 700; height: 2.5rem; overflow: hidden; color: #fff; line-height: 1.3; }
 
-        footer { padding: 3rem 10%; background: #050505; text-align: center; }
+        footer { padding: 3rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
     </style>
 </head>
 <body>
@@ -99,11 +88,6 @@
     </nav>
 
     <section class="hero">
-        <div class="live-counter">
-            <div class="pulse"></div>
-            LIVE SUBSCRIBERS: <span id="subCount">SYNCING...</span>
-        </div>
-        
         <h1>DARK <span>LOBBY</span></h1>
         
         <div class="typewriter-container">
@@ -112,94 +96,96 @@
 
         <div class="btn-container">
             <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-red"><i class="fab fa-youtube"></i> SUBSCRIBE</a>
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-gold"><i class="fas fa-heart"></i> DONATE</a>
+            <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-white" style="border-color:#FFD700; color:#FFD700;"><i class="fas fa-heart"></i> DONATE</a>
             <a href="index.html" class="btn btn-white">BACK TO HUB</a>
         </div>
     </section>
 
     <section id="videos">
-        <h2 style="font-family:'Orbitron'; text-align:center; margin-bottom:3rem; letter-spacing: 3px;">LATEST <span>TRANSMISSIONS</span></h2>
-        <div class="video-grid" id="youtubeFeed"></div>
+        <div class="section-header">
+            <h2>LATEST <span>TRANSMISSIONS</span></h2>
+        </div>
+        <div class="video-grid" id="youtubeFeed">
+            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">INITIATING SATELLITE SCAN...</p>
+        </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
+        <p style="font-size:0.8rem; color:var(--text-dim);">&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typewriter-effect/2.21.0/core.js"></script>
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    
     <script>
-        // 1. Slogan Logic (Changes every 5 minutes, no repeats)
+        // --- 1. Slogan Logic ---
         const slogans = [
             "WE ARE THE FRONT LINE.",
             "VICTORY IS MEASURED IN SECONDS.",
             "TACTICAL SUPERIORITY ACHIEVED.",
             "DARKNESS IS OUR ALLY.",
-            "ONE SHOT. ONE KILL. NO LUCK.",
-            "THE LOBBY IS WAITING.",
+            "ONE SHOT. ONE KILL.",
             "MOBILE WARFARE REDEFINED.",
-            "DOMINATE THE BATTLEFIELD."
+            "STAY FROSTY. STAY DARK."
         ];
         
-        let availableSlogans = [...slogans];
+        let unusedSlogans = [...slogans];
 
-        function startTypewriter() {
-            if (availableSlogans.length === 0) availableSlogans = [...slogans];
-            
-            const randomIndex = Math.floor(Math.random() * availableSlogans.length);
-            const selected = availableSlogans.splice(randomIndex, 1)[0];
+        function updateSlogan() {
+            if (unusedSlogans.length === 0) unusedSlogans = [...slogans];
+            const index = Math.floor(Math.random() * unusedSlogans.length);
+            const text = unusedSlogans.splice(index, 1)[0];
 
-            const sloganElement = document.getElementById('slogan');
-            sloganElement.innerHTML = '';
-            
-            new Typewriter('#slogan', {
-                strings: [selected],
+            const typewriter = new Typewriter('#slogan', {
                 autoStart: true,
-                loop: false,
                 delay: 75,
-                cursor: "_"
+                cursor: '_'
             });
+
+            typewriter.typeString(text).start();
         }
 
-        startTypewriter();
-        setInterval(startTypewriter, 300000); // 5 Minutes
+        updateSlogan();
+        setInterval(updateSlogan, 300000); // 5 Minutes change
 
-        // 2. Subscriber Count Logic
-        function updateSubCount() {
-            // NOTE: Direct YouTube Scraping without a Backend is restricted by Google.
-            // This function simulates a live feed from your channel metrics.
-            const baseCount = 1250; // Replace with your current count
-            const randomBoost = Math.floor(Math.random() * 5);
-            document.getElementById('subCount').innerText = (baseCount + randomBoost).toLocaleString();
-        }
-        setInterval(updateSubCount, 10000);
-        updateSubCount();
-
-        // 3. YouTube Video Feed (10 Videos)
+        // --- 2. YouTube Video Fix ---
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
-        async function loadVideos() {
-            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://www.youtube.com/feeds/videos.xml?channel_id='+channelId)}`;
+
+        async function fetchVideos() {
+            const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+            // Added a random parameter to bypass cache
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=your_free_api_key_or_empty&cache_buster=${Date.now()}`;
+
             try {
-                const response = await fetch(apiUrl);
+                const response = await fetch(proxyUrl);
                 const data = await response.json();
                 const container = document.getElementById('youtubeFeed');
-                if (data.status === 'ok') {
+
+                if (data.status === 'ok' && data.items.length > 0) {
                     container.innerHTML = '';
-                    data.items.slice(0, 10).forEach(video => {
-                        const videoId = video.guid.split(':').pop();
+                    data.items.slice(0, 10).forEach(item => {
+                        const vId = item.guid.split(':').pop();
                         container.innerHTML += `
                             <div class="video-card">
-                                <a href="${video.link}" target="_blank" style="text-decoration:none; color:inherit;">
-                                    <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${videoId}/maxresdefault.jpg')">
+                                <a href="${item.link}" target="_blank" style="text-decoration:none;">
+                                    <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vId}/maxresdefault.jpg')">
                                         <div class="play-overlay"><i class="fas fa-play" style="color:red; font-size:2rem;"></i></div>
                                     </div>
-                                    <div class="video-info"><h3>${video.title}</h3></div>
+                                    <div class="video-info">
+                                        <h3>${item.title}</h3>
+                                        <p style="color:red; font-size:0.7rem; margin-top:8px; font-weight:bold; font-family:'Orbitron';">VIEW DATA</p>
+                                    </div>
                                 </a>
                             </div>`;
                     });
+                } else {
+                    container.innerHTML = "<p style='text-align:center; width:100%;'>No videos found or limit reached. Refreshing...</p>";
                 }
-            } catch (e) { container.innerHTML = "Signal Lost."; }
+            } catch (err) {
+                document.getElementById('youtubeFeed').innerHTML = "<p style='text-align:center; width:100%;'>Satellite link error. Please check your internet.</p>";
+            }
         }
-        window.onload = loadVideos;
+
+        window.onload = fetchVideos;
     </script>
 </body>
 </html>
