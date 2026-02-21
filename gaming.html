@@ -21,14 +21,12 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
         
-        /* --- Navigation --- */
         nav { position: fixed; top: 0; width: 100%; padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass); }
         .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
         .logo-img { width: 45px; height: 45px; object-fit: contain; }
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
-        /* --- Hero Section (Black Background) --- */
         .hero { 
             height: 70vh; 
             display: flex; 
@@ -36,14 +34,13 @@
             justify-content: center; 
             align-items: center; 
             text-align: center; 
-            background: #000000; /* Pure Black as requested */
+            background: #000000; 
             padding: 0 5%;
         }
 
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
         .hero h1 span { color: var(--primary); }
 
-        /* --- Slogan Typewriter --- */
         .typewriter-container { height: 40px; margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; }
         .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: clamp(0.9rem, 3vw, 1.3rem); letter-spacing: 2px; font-weight: bold; }
 
@@ -52,9 +49,7 @@
         .btn-red { background: var(--primary); color: white; border: none; }
         .btn-red:hover { box-shadow: 0 0 25px var(--primary); transform: scale(1.05); }
         .btn-white { border-color: white; color: white; }
-        .btn-white:hover { background: white; color: black; }
 
-        /* --- Video Section --- */
         section { padding: 80px 10%; background: var(--bg-dark); }
         .section-header { text-align: center; margin-bottom: 4rem; }
         .section-header h2 { font-family: 'Orbitron'; font-size: 2rem; letter-spacing: 3px; }
@@ -89,11 +84,9 @@
 
     <section class="hero">
         <h1>DARK <span>LOBBY</span></h1>
-        
         <div class="typewriter-container">
             <span id="slogan" class="slogan-text"></span>
         </div>
-
         <div class="btn-container">
             <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-red"><i class="fab fa-youtube"></i> SUBSCRIBE</a>
             <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-white" style="border-color:#FFD700; color:#FFD700;"><i class="fas fa-heart"></i> DONATE</a>
@@ -106,7 +99,7 @@
             <h2>LATEST <span>TRANSMISSIONS</span></h2>
         </div>
         <div class="video-grid" id="youtubeFeed">
-            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">INITIATING SATELLITE SCAN...</p>
+            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">CONNECTING TO SATELLITE...</p>
         </div>
     </section>
 
@@ -117,7 +110,7 @@
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     
     <script>
-        // --- 1. Slogan Logic ---
+        // --- 1. Slogan Logic (Updated to 20 Seconds) ---
         const slogans = [
             "WE ARE THE FRONT LINE.",
             "VICTORY IS MEASURED IN SECONDS.",
@@ -135,25 +128,24 @@
             const index = Math.floor(Math.random() * unusedSlogans.length);
             const text = unusedSlogans.splice(index, 1)[0];
 
-            const typewriter = new Typewriter('#slogan', {
+            document.getElementById('slogan').innerHTML = '';
+            new Typewriter('#slogan', {
                 autoStart: true,
-                delay: 75,
+                delay: 50,
                 cursor: '_'
-            });
-
-            typewriter.typeString(text).start();
+            }).typeString(text).start();
         }
 
         updateSlogan();
-        setInterval(updateSlogan, 300000); // 5 Minutes change
+        setInterval(updateSlogan, 20000); // Changed to 20 Seconds
 
-        // --- 2. YouTube Video Fix ---
+        // --- 2. YouTube Video Logic (Updated to 3 Videos) ---
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
 
         async function fetchVideos() {
+            // Using a more reliable proxy for the feed
             const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-            // Added a random parameter to bypass cache
-            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=your_free_api_key_or_empty&cache_buster=${Date.now()}`;
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=00000000000000000000000000000000&count=10`;
 
             try {
                 const response = await fetch(proxyUrl);
@@ -162,7 +154,8 @@
 
                 if (data.status === 'ok' && data.items.length > 0) {
                     container.innerHTML = '';
-                    data.items.slice(0, 10).forEach(item => {
+                    // Limit set to 3 videos
+                    data.items.slice(0, 3).forEach(item => {
                         const vId = item.guid.split(':').pop();
                         container.innerHTML += `
                             <div class="video-card">
@@ -178,10 +171,10 @@
                             </div>`;
                     });
                 } else {
-                    container.innerHTML = "<p style='text-align:center; width:100%;'>No videos found or limit reached. Refreshing...</p>";
+                    container.innerHTML = "<p style='text-align:center; width:100%;'>No transmissions found.</p>";
                 }
             } catch (err) {
-                document.getElementById('youtubeFeed').innerHTML = "<p style='text-align:center; width:100%;'>Satellite link error. Please check your internet.</p>";
+                document.getElementById('youtubeFeed').innerHTML = "<p style='text-align:center; width:100%;'>Error: Satellite connection lost.</p>";
             }
         }
 
