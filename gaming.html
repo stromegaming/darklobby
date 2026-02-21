@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK LOBBY | Gaming Sector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #FF0000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --text-light: #ffffff;
+            --text-dim: #b3b3b3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .logo { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--text-light); text-decoration: none; }
+        .logo span { color: var(--primary); }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.8rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero --- */
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 70%);
+            padding: 0 5%;
+        }
+
+        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        .hero p { color: var(--text-dim); max-width: 600px; margin-bottom: 2rem; font-size: 1.1rem; }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--primary);
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: transparent; color: var(--primary); box-shadow: 0 0 20px var(--primary); }
+        .btn-outline { border: 1px solid white; color: white; margin-left: 10px; }
+        .btn-outline:hover { background: white; color: black; }
+
+        /* --- Video Section --- */
+        section { padding: 100px 10%; }
+        .section-title { text-align: center; margin-bottom: 3.5rem; font-size: 2.2rem; }
+        .section-title span { color: var(--primary); }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.3s; }
+        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; }
+        .video-info { padding: 1.5rem; }
+        .video-info h3 { font-size: 0.9rem; height: 2.5rem; overflow: hidden; }
+
+        /* --- Contact Form --- */
+        .contact-form { max-width: 650px; margin: 0 auto; background: var(--bg-card); padding: 3rem; border-radius: 15px; border: 1px solid var(--glass); }
+        input, textarea { width: 100%; padding: 1rem; background: #000; border: 1px solid var(--glass); color: white; margin-bottom: 1.5rem; border-radius: 5px; outline: none; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        
+        .h-captcha { margin-bottom: 1.5rem; display: flex; justify-content: center; }
+
+        /* --- Footer --- */
+        footer { padding: 4rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
+        .social-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 2rem; }
+        .social-links a { color: white; font-size: 1.6rem; transition: 0.3s; }
+        .social-links a:hover { color: var(--primary); transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 5%; }
+            .nav-links { display: none; }
+            section { padding: 60px 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">DARK<span>LOBBY</span></a>
+        <ul class="nav-links">
+            <li><a href="index.html">RETURN TO HUB</a></li>
+            <li><a href="#videos">VIDEOS</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <h1>DARK <span>LOBBY</span></h1>
+        <p>Mastering the digital battlefield. High-skill CODM transmissions and tactical gameplay.</p>
+        <div>
+            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-primary">
+                <i class="fab fa-youtube"></i> SUBSCRIBE
+            </a>
+            <a href="index.html" class="btn btn-outline">BACK TO HUB</a>
+        </div>
+    </section>
+
+    <section id="videos">
+        <h2 class="section-title">LATEST <span>TRANSMISSIONS</span></h2>
+        <div class="video-grid" id="youtubeFeed">
+            <p style="text-align:center; width:100%;">Syncing with Satellite...</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">SEND <span>SIGNAL</span></h2>
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+            <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
+            <input type="text" name="name" placeholder="OPERATOR NAME" required>
+            <input type="email" name="email" placeholder="ENCRYPTED EMAIL" required>
+            <textarea name="message" rows="5" placeholder="MESSAGE DATA" required></textarea>
+            
+            <div class="h-captcha" data-captcha="true"></div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; cursor: pointer;" id="submitBtn">
+                TRANSMIT MESSAGE
+            </button>
+            <div id="formResponse" style="margin-top: 1.5rem; text-align: center; display: none;"></div>
+        </form>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="https://x.com/DARKLOBBYCODM" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://discord.gg/rbtdGMjqw" target="_blank"><i class="fab fa-discord"></i></a>
+        </div>
+        <p>&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
+    </footer>
+
+    <script src="https://web3forms.com/client/script.js" async defer></script>
+
+    <script>
+        // Form Handling Logic
+        const form = document.getElementById('contactForm');
+        const responseDiv = document.getElementById('formResponse');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.innerText = "TRANSMITTING...";
+            
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: json
+            })
+            .then(async (response) => {
+                if (response.status == 200) {
+                    responseDiv.style.display = "block";
+                    responseDiv.style.color = "#00ff00";
+                    responseDiv.innerHTML = "SIGNAL RECEIVED!";
+                    form.reset();
+                    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+                } else {
+                    responseDiv.innerHTML = "TRANSMISSION ERROR";
+                }
+            })
+            .catch(error => {
+                responseDiv.innerHTML = "OFFLINE ERROR";
+            })
+            .then(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "TRANSMIT MESSAGE";
+                setTimeout(() => { responseDiv.style.display = "none"; }, 4000);
+            });
+        });
+
+        // YouTube Data Integration
+        const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
+        async function loadVideos() {
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+            const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                const container = document.getElementById('youtubeFeed');
+                if (data.status === 'ok') {
+                    container.innerHTML = '';
+                    data.items.slice(0, 3).forEach(video => {
+                        const videoId = video.guid.split(':').pop();
+                        container.innerHTML += `
+                            <div class="video-card">
+                                <a href="${video.link}" target="_blank" style="text-decoration:none; color:inherit;">
+                                    <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${videoId}/maxresdefault.jpg')"></div>
+                                    <div class="video-info">
+                                        <h3>${video.title}</h3>
+                                        <p style="color:var(--primary); font-size:0.7rem; margin-top:10px;">WATCH TRANSMISSION <i class="fas fa-play"></i></p>
+                                    </div>
+                                </a>
+                            </div>`;
+                    });
+                }
+            } catch (e) {
+                document.getElementById('youtubeFeed').innerHTML = '<p>Satellite link offline.</p>';
+            }
+        }
+
+        window.onload = loadVideos;
+    </script>
+</body>
+</html>
