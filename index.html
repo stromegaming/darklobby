@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DARK LOBBY | Content Creator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
     
     <style>
@@ -39,7 +39,6 @@
             letter-spacing: 2px;
         }
 
-        /* --- Navbar --- */
         nav {
             position: fixed;
             top: 0;
@@ -54,38 +53,15 @@
             border-bottom: 1px solid var(--glass);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--text-light); text-decoration: none; }
         .logo span { color: var(--primary); }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-light);
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 500; font-size: 0.9rem; transition: var(--transition); }
         .nav-links a:hover { color: var(--primary); }
 
-        .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
+        .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
 
-        /* --- Hero Section --- */
         .hero {
             height: 90vh;
             display: flex;
@@ -97,142 +73,35 @@
             padding: 0 5%;
         }
 
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        }
-
-        .hero p {
-            color: var(--text-dim);
-            max-width: 600px;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
+        .hero h1 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        .hero p { color: var(--text-dim); max-width: 600px; margin-bottom: 2rem; font-size: 1.1rem; }
 
         .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-
-        .btn {
-            padding: 1rem 2rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            transition: var(--transition);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: 1px solid var(--primary);
-        }
-
-        .btn-primary:hover {
-            background: transparent;
-            box-shadow: 0 0 15px var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline {
-            border: 1px solid white;
-            color: white;
-        }
-
+        .btn { padding: 1rem 2rem; border-radius: 4px; text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; transition: var(--transition); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--primary); color: white; border: 1px solid var(--primary); }
+        .btn-primary:hover { background: transparent; box-shadow: 0 0 15px var(--primary); color: var(--primary); }
+        .btn-outline { border: 1px solid white; color: white; }
         .btn-outline:hover { background: white; color: black; }
+        .btn-donation { background: transparent; border: 1px solid #FFD700; color: #FFD700; }
+        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px #FFD700; }
 
-        .btn-donation {
-            background: transparent;
-            border: 1px solid #FFD700;
-            color: #FFD700;
-        }
-
-        .btn-donation:hover {
-            background: #FFD700;
-            color: black;
-            box-shadow: 0 0 15px #FFD700;
-        }
-
-        /* --- Video Feed --- */
         section { padding: 100px 10%; }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-        }
-
+        .section-title { text-align: center; margin-bottom: 3rem; font-size: 2.5rem; }
         .section-title span { color: var(--primary); }
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .video-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid var(--glass);
-        }
-
-        .video-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
-
-        .video-thumb {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background-size: cover;
-            background-position: center;
-        }
-
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; transition: var(--transition); border: 1px solid var(--glass); }
+        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; }
         .video-info { padding: 1.5rem; }
         .video-info h3 { font-size: 1rem; margin-bottom: 0.5rem; height: 3rem; overflow: hidden;}
 
-        /* --- About & Stats --- */
-        .about-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .stat-box {
-            background: var(--glass);
-            padding: 2rem 1.5rem;
-            text-align: center;
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-            position: relative;
-        }
-
+        .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .stat-box { background: var(--glass); padding: 2rem 1.5rem; text-align: center; border-radius: 8px; border-left: 3px solid var(--primary); position: relative; }
         .stat-box h4 { font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
         .stat-box p { font-size: 0.85rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
-        
-        .live-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse 1.5s infinite;
-        }
+        .live-indicator { display: inline-block; width: 8px; height: 8px; background: #00ff00; border-radius: 50%; margin-right: 8px; animation: pulse 1.5s infinite; }
 
         @keyframes pulse {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); }
@@ -240,82 +109,25 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
         }
 
-        /* --- Form & Footer --- */
-        .contact-form {
-            max-width: 700px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            padding: 3rem;
-            border-radius: 12px;
-        }
-
+        .contact-form { max-width: 700px; margin: 0 auto; background: var(--bg-card); padding: 3rem; border-radius: 12px; }
         .form-group { margin-bottom: 1.5rem; }
-        
-        input, textarea, select {
-            width: 100%;
-            padding: 1rem;
-            background: #1a1a1a;
-            border: 1px solid var(--glass);
-            color: white;
-            border-radius: 4px;
-            outline: none;
-            font-family: 'Inter', sans-serif;
-        }
-
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1em;
-        }
-
+        input, textarea, select { width: 100%; padding: 1rem; background: #1a1a1a; border: 1px solid var(--glass); color: white; border-radius: 4px; outline: none; font-family: 'Inter', sans-serif; }
+        select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         option { background: var(--bg-card); color: white; }
 
-        .h-captcha {
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: center;
-        }
+        .h-captcha { margin-bottom: 1.5rem; display: flex; justify-content: center; }
+        #formResponse { margin-top: 1rem; text-align: center; padding: 10px; border-radius: 4px; display: none; }
 
-        #formResponse {
-            margin-top: 1rem;
-            text-align: center;
-            padding: 10px;
-            border-radius: 4px;
-            display: none;
-        }
-
-        footer {
-            padding: 3rem 10%;
-            background: #050505;
-            text-align: center;
-            border-top: 1px solid var(--glass);
-        }
-
+        footer { padding: 3rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
+        
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                width: 100%;
-                background: var(--bg-dark);
-                padding: 2rem;
-            }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: var(--bg-dark); padding: 2rem; }
             .nav-links.active { display: flex; }
             .menu-toggle { display: block; }
             .about-container { grid-template-columns: 1fr; }
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: 0.8s all ease;
-        }
-
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s all ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
 </head>
@@ -368,24 +180,21 @@
                 </div>
             </div>
             <div class="about-image">
-               <img src="images/darklobby.png" alt="Coming Soon" style="width:100%; border-radius:12px;">
+               <img src="images/darklobby.png" alt="Dark Lobby" style="width:100%; border-radius:12px;">
             </div>
         </div>
     </section>
 
     <section id="contact" class="reveal">
         <h2 class="section-title">Send <span>Signal</span></h2>
-        
         <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
             <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
-            
             <div class="form-group">
                 <input type="text" name="name" placeholder="Full Name" required>
             </div>
             <div class="form-group">
                 <input type="email" name="email" placeholder="Email Address" required>
             </div>
-
             <div class="form-group">
                 <select name="subject" required>
                     <option value="" disabled selected>Subject / Inquiry Type</option>
@@ -396,24 +205,21 @@
                     <option value="General Message">General Message</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <textarea name="message" rows="5" placeholder="Message" required></textarea>
             </div>
-
             <div class="h-captcha" data-captcha="true"></div>
-
             <button type="submit" class="btn btn-primary" style="width: 100%;" id="submitBtn">Submit Message</button>
             <div id="formResponse"></div>
         </form>
     </section>
 
     <footer>
-        <div class="social-links" style="display:flex; justify-content:center; gap:20px; margin-bottom: 20px; flex-wrap: wrap;">
-            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" style="color:white; font-size: 1.5rem;"><i class="fab fa-youtube"></i></a>
-            <a href="https://cr8.rs/darklobby" target="_blank" style="color:#FFD700; font-size: 1.5rem;" title="Support me"><i class="fas fa-hand-holding-heart"></i></a>
-            <a href="https://x.com/DARKLOBBYCODM" target="_blank" style="color:white; font-size: 1.5rem;"><i class="fab fa-x-twitter"></i></a>
-            <a href="https://discord.gg/rbtdGMjqw" target="_blank" style="color:white; font-size: 1.5rem;"><i class="fab fa-discord"></i></a>
+        <div class="social-links" style="display:flex; justify-content:center; gap:25px; margin-bottom: 20px; flex-wrap: wrap; align-items: center;">
+            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" style="color:white; font-size: 1.8rem;"><i class="fab fa-youtube"></i></a>
+            <a href="https://cr8.rs/darklobby" target="_blank" style="color:#FFD700; font-size: 1.8rem;" title="Support me"><i class="fas fa-hand-holding-heart"></i></a>
+            <a href="https://x.com/DARKLOBBYCODM" target="_blank" style="color:white; font-size: 1.8rem;"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://discord.gg/rbtdGMjqw" target="_blank" style="color:white; font-size: 1.8rem;"><i class="fab fa-discord"></i></a>
         </div>
         <p>&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
     </footer>
@@ -421,9 +227,7 @@
     <script src="https://web3forms.com/client/script.js" async defer></script>
 
     <script>
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
 
         const form = document.getElementById('contactForm');
         const responseDiv = document.getElementById('formResponse');
@@ -432,17 +236,15 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             submitBtn.disabled = true;
-            submitBtn.innerText = "Transmitting Message...";
+            submitBtn.innerText = "Transmitting...";
+            
             const formData = new FormData(form);
             const object = Object.fromEntries(formData);
             const json = JSON.stringify(object);
 
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: json
             })
             .then(async (response) => {
@@ -467,9 +269,7 @@
             .then(function() {
                 submitBtn.disabled = false;
                 submitBtn.innerText = "Submit Message";
-                setTimeout(() => {
-                    responseDiv.style.display = "none";
-                }, 4000);
+                setTimeout(() => { responseDiv.style.display = "none"; }, 4000);
             });
         });
 
@@ -479,8 +279,7 @@
                 const response = await fetch(`https://mixerno.space/api/youtube-channel-counter/user/${channelId}`);
                 const data = await response.json();
                 if(data && data.counts && data.counts[0]) {
-                    const count = data.counts[0].count;
-                    document.getElementById('subCount').innerText = Number(count).toLocaleString();
+                    document.getElementById('subCount').innerText = Number(data.counts[0].count).toLocaleString();
                 }
             } catch (e) { document.getElementById('subCount').innerText = "LIVE"; }
         }
@@ -521,12 +320,7 @@
         }
 
         window.addEventListener("scroll", reveal);
-        window.onload = () => {
-            loadVideos();
-            updateSubCount();
-            reveal();
-            setInterval(updateSubCount, 60000);
-        };
+        window.onload = () => { loadVideos(); updateSubCount(); reveal(); setInterval(updateSubCount, 60000); };
     </script>
 </body>
 </html>
