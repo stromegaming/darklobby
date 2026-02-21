@@ -6,6 +6,7 @@
     <title>DARK LOBBY | Gaming Sector</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
             --primary: #FF0000; 
@@ -18,7 +19,7 @@
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1.6; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
         
         /* --- Navigation with Logo --- */
         nav { 
@@ -36,49 +37,68 @@
         }
         
         .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .logo-img { width: 40px; height: 40px; object-fit: contain; }
-        .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
+        .logo-img { width: 45px; height: 45px; object-fit: contain; }
+        .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; letter-spacing: 1px; }
         .logo-text span { color: var(--primary); }
 
         .nav-links { display: flex; gap: 20px; }
         .nav-links a { color: white; text-decoration: none; font-size: 0.8rem; font-family: 'Orbitron'; transition: 0.3s; }
         .nav-links a:hover { color: var(--primary); }
 
-        /* --- Hero --- */
-        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 70%); }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem; }
+        /* --- Hero Section --- */
+        .hero { 
+            height: 85vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 70%); 
+            padding: 0 5%;
+        }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 1rem; text-shadow: 0 0 30px rgba(255, 0, 0, 0.4); }
+        .hero h1 span { color: var(--primary); }
         
-        .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem; }
         .btn { padding: 1rem 2rem; border-radius: 4px; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--primary); font-size: 0.8rem; }
         .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: transparent; box-shadow: 0 0 20px var(--primary); }
         .btn-outline { border-color: white; color: white; }
+        .btn-outline:hover { background: white; color: black; }
         .btn-donation { border-color: #FFD700; color: #FFD700; }
         .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px #FFD700; }
 
-        /* --- Videos Grid --- */
-        section { padding: 80px 10%; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.3s; position: relative; }
-        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        /* --- Video Section --- */
+        section { padding: 100px 10%; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.4s; position: relative; }
+        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1); }
         
         .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; position: relative; }
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .video-card:hover .play-overlay { opacity: 1; }
         
         .video-info { padding: 1.5rem; }
-        .video-info h3 { font-size: 0.9rem; font-family: 'Inter'; font-weight: 700; height: 2.8rem; overflow: hidden; color: #fff; }
+        .video-info h3 { font-size: 0.95rem; font-family: 'Inter'; font-weight: 700; height: 2.8rem; overflow: hidden; color: #fff; line-height: 1.4; }
 
-        footer { padding: 3rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
-        .social-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 20px; }
-        .social-links a { color: white; font-size: 1.5rem; transition: 0.3s; }
-        .social-links a:hover { color: var(--primary); transform: scale(1.1); }
+        /* --- Footer --- */
+        footer { padding: 4rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
+        .social-links { display: flex; justify-content: center; gap: 25px; margin-bottom: 2rem; }
+        .social-links a { color: white; font-size: 1.6rem; transition: 0.3s; }
+        .social-links a:hover { color: var(--primary); transform: scale(1.2); }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 5%; }
+            .logo-text { font-size: 1rem; }
+            section { padding: 60px 5%; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
         <a href="index.html" class="logo-container">
-            <img src="C:\Users\dipesh.ghimire\Desktop\Dark Lobby\images\final logo .png" alt="Logo" class="logo-img">
+            <img src="images/logo.png" alt="DARK LOBBY LOGO" class="logo-img">
             <div class="logo-text">DARK<span>LOBBY</span></div>
         </a>
         <div class="nav-links">
@@ -89,7 +109,7 @@
 
     <section class="hero">
         <h1>DARK <span>LOBBY</span></h1>
-        <p style="color:var(--text-dim); margin-bottom:2rem; max-width: 600px;">Transmitting high-skill CODM gameplay directly from the frontline.</p>
+        <p style="color:var(--text-dim); margin-bottom:1rem; max-width: 600px; font-size: 1.2rem;">Establishing connection to the digital frontline.</p>
         <div class="btn-container">
             <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-primary"><i class="fab fa-youtube"></i> SUBSCRIBE</a>
             <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-donation"><i class="fas fa-heart"></i> DONATE</a>
@@ -98,9 +118,9 @@
     </section>
 
     <section id="videos">
-        <h2 style="font-family:'Orbitron'; text-align:center; margin-bottom:3rem;">LATEST <span>10 TRANSMISSIONS</span></h2>
+        <h2 style="font-family:'Orbitron'; text-align:center; margin-bottom:3.5rem; letter-spacing: 3px;">LATEST <span>10 TRANSMISSIONS</span></h2>
         <div class="video-grid" id="youtubeFeed">
-            <p style="text-align:center; width:100%; color: var(--primary);">Establishing Satellite Link...</p>
+            <p style="text-align:center; width:100%; color: var(--primary); font-family: 'Orbitron';">SYNCING WITH SATELLITE...</p>
         </div>
     </section>
 
@@ -110,7 +130,7 @@
             <a href="https://x.com/DARKLOBBYCODM" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="https://discord.gg/rbtdGMjqw" target="_blank"><i class="fab fa-discord"></i></a>
         </div>
-        <p>&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
+        <p style="font-size: 0.8rem; letter-spacing: 1px;">&copy; 2026 DARK LOBBY UNIVERSE. All Systems Nominal.</p>
     </footer>
 
     <script>
@@ -118,6 +138,7 @@
         const videoCount = 10;
 
         async function loadVideos() {
+            // Fetching YouTube RSS via JSON proxy
             const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
             const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
             
@@ -140,14 +161,14 @@
                                     </div>
                                     <div class="video-info">
                                         <h3>${video.title}</h3>
-                                        <p style="color:var(--primary); font-size:0.7rem; margin-top:10px; font-weight:900;">WATCH NOW</p>
+                                        <p style="color:var(--primary); font-size:0.75rem; margin-top:12px; font-weight:900; letter-spacing: 1px;">WATCH TRANSMISSION <i class="fas fa-chevron-right"></i></p>
                                     </div>
                                 </a>
                             </div>`;
                     });
                 }
             } catch (e) {
-                document.getElementById('youtubeFeed').innerHTML = "<p>Satellite Signal Lost.</p>";
+                document.getElementById('youtubeFeed').innerHTML = "<p style='color:red;'>OFFLINE: Satellite Signal Lost.</p>";
             }
         }
         window.onload = loadVideos;
