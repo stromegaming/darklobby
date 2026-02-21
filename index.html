@@ -368,7 +368,7 @@
     <section id="contact" class="reveal">
         <h2 class="section-title">Send <span>Signal</span></h2>
         
-        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
             <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
             
             <div class="form-group">
@@ -412,10 +412,23 @@
     <script src="https://web3forms.com/client/script.js" async defer></script>
 
     <script>
+        // Toggle Mobile Menu
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
 
+        // --- Form Reset Logic ---
+        // Yesle form submit bhaye pachi automatically clear garcha
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', function() {
+            // Sano delay rakhera reset garcha jasle गर्दा submission successfully send hos
+            setTimeout(() => {
+                form.reset();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 1000);
+        });
+
+        // Youtube Stats & Videos Logic
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
         
         async function updateSubCount() {
