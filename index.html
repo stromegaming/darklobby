@@ -6,6 +6,7 @@
     <title>DIPESH GHIMIRE | Digital Universe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #FF0000;
@@ -16,12 +17,21 @@
             --glass: rgba(255, 255, 255, 0.05);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
         h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
 
+        /* --- Hero Section --- */
         .hub-hero {
-            height: 60vh;
+            height: 70vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -31,27 +41,53 @@
             padding: 0 5%;
             border-bottom: 1px solid var(--glass);
         }
-        .hub-hero h1 { font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
-        .hub-hero h1 span { color: var(--primary); }
-        .hub-hero p { color: var(--text-dim); max-width: 700px; font-size: 1.1rem; margin-bottom: 2rem; }
 
+        .hub-hero h1 { 
+            font-size: clamp(2.5rem, 8vw, 4.5rem); 
+            margin-bottom: 1rem; 
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        .hub-hero h1 span { color: var(--primary); }
+        .hub-hero p { color: var(--text-dim); max-width: 700px; font-size: 1.1rem; margin-bottom: 2.5rem; letter-spacing: 1px; }
+
+        /* --- Action Buttons --- */
+        .hero-btns { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+        
         .btn-donation {
-            padding: 10px 25px;
+            padding: 12px 28px;
             background: transparent;
             border: 1px solid #FFD700;
             color: #FFD700;
             text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             border-radius: 4px;
             transition: 0.3s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
-        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px #FFD700; }
+        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
 
+        .btn-contact {
+            padding: 12px 28px;
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-contact:hover { background: white; color: black; box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
+
+        /* --- Categories Grid --- */
         .grid-container {
             padding: 80px 10%;
             display: grid;
@@ -60,6 +96,7 @@
             max-width: 1400px;
             margin: 0 auto;
         }
+
         .category-card {
             background: var(--bg-card);
             padding: 3.5rem 2rem;
@@ -70,60 +107,119 @@
             border: 1px solid var(--glass);
             transition: var(--transition);
         }
+
         .category-card:hover {
             transform: translateY(-12px);
             border-color: var(--primary);
             box-shadow: 0 10px 30px rgba(255, 0, 0, 0.2);
             background: #1a0000;
         }
-        .category-card i { font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; display: block; }
-        .status-tag { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
+
+        .category-card i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .category-card h3 { margin-bottom: 1rem; font-size: 1.5rem; }
+        .category-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.5; }
+
+        .status-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
         .status-online { background: rgba(0, 255, 0, 0.1); color: #00ff00; }
         .status-offline { background: rgba(255, 255, 255, 0.1); color: var(--text-dim); }
 
-        footer { text-align: center; padding: 60px 40px; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--glass); }
-        .social-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
-        .social-links a { color: white; font-size: 1.5rem; transition: 0.3s; }
-        .social-links a:hover { color: var(--primary); }
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 60px 40px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--glass);
+            background: #050505;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .grid-container { padding: 40px 5%; }
+            .hub-hero { height: 60vh; }
+        }
     </style>
 </head>
 <body>
+
     <section class="hub-hero">
         <h1>DIPESH <span>GHIMIRE</span></h1>
-        <p>Creator | Developer | Gamer</p>
-        <a href="https://cr8.rs/darklobby" target="_blank" class="btn-donation">
-            <i class="fas fa-heart"></i> SUPPORT MY WORK
-        </a>
+        <p>CREATOR | DEVELOPER | GAMER</p>
+        
+        <div class="hero-btns">
+            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-donation">
+                <i class="fas fa-heart"></i> SUPPORT ME
+            </a>
+            <a href="contact.html" class="btn-contact">
+                <i class="fas fa-envelope"></i> CONTACT ME
+            </a>
+        </div>
     </section>
 
     <div class="grid-container">
+        
         <a href="gaming.html" class="category-card">
             <span class="status-tag status-online">Live & Online</span>
             <i class="fas fa-crosshairs"></i>
             <h3>Gaming</h3>
-            <p>Step into the <strong>DARK LOBBY</strong>. High-skill CODM gameplay and tactical transmissions.</p>
+            <p>Access the <strong>DARK LOBBY</strong> transmissions. High-skill CODM gameplay and tactical archives.</p>
         </a>
+
         <a href="maintenance.html" class="category-card">
             <span class="status-tag status-offline">System Idle</span>
             <i class="fas fa-code"></i>
             <h3>Software</h3>
-            <p>Explore my code repositories, open-source projects, and engineering tools.</p>
+            <p>Exploring the core of development. Repositories and engineering tools coming soon.</p>
         </a>
+
         <a href="maintenance.html" class="category-card">
             <span class="status-tag status-offline">Developing</span>
             <i class="fas fa-mobile-screen-button"></i>
             <h3>Mobile Apps</h3>
-            <p>Custom Android and iOS applications designed for performance and speed.</p>
+            <p>Innovating mobile experiences. Custom applications under encryption.</p>
         </a>
+
     </div>
 
     <footer>
         <div class="social-links">
-            <a href="https://x.com/DARKLOBBYCODM" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="https://discord.gg/rbtdGMjqw" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://x.com/DARKLOBBYCODM" target="_blank" title="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://discord.gg/rbtdGMjqw" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
         </div>
         <p>&copy; 2026 DIPESH GHIMIRE. All Systems Nominal.</p>
     </footer>
+
 </body>
 </html>

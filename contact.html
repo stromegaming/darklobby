@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTACT | Dipesh Ghimire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF0000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --text-light: #ffffff;
+            --text-dim: #b3b3b3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        nav { padding: 1.5rem 10%; display: flex; justify-content: space-between; align-items: center; background: rgba(10, 10, 10, 0.8); border-bottom: 1px solid var(--glass); }
+        .logo { font-family: 'Orbitron'; font-size: 1.2rem; color: white; text-decoration: none; }
+        .logo span { color: var(--primary); }
+
+        .contact-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 50px 5%; }
+        .contact-form { width: 100%; max-width: 600px; background: var(--bg-card); padding: 3rem; border-radius: 15px; border: 1px solid var(--glass); }
+        
+        h2 { font-family: 'Orbitron'; text-align: center; margin-bottom: 2rem; letter-spacing: 2px; }
+        h2 span { color: var(--primary); }
+
+        input, textarea, select { width: 100%; padding: 1rem; background: #000; border: 1px solid var(--glass); color: white; margin-bottom: 1.5rem; border-radius: 5px; outline: none; font-family: inherit; }
+        input:focus, textarea:focus { border-color: var(--primary); }
+        
+        .h-captcha { margin-bottom: 1.5rem; display: flex; justify-content: center; }
+
+        .btn-submit { width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 5px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: white; color: black; box-shadow: 0 0 20px white; }
+
+        #formResponse { margin-top: 1.5rem; text-align: center; display: none; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html" class="logo">DIPESH<span>GHIMIRE</span></a>
+        <a href="index.html" style="color:white; text-decoration:none; font-size: 0.8rem; font-family:'Orbitron';">BACK TO HUB</a>
+    </nav>
+
+    <div class="contact-container">
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+            <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
+            
+            <h2>SEND <span>SIGNAL</span></h2>
+            
+            <input type="text" name="name" placeholder="YOUR NAME" required>
+            <input type="email" name="email" placeholder="EMAIL ADDRESS" required>
+            <select name="subject" required>
+                <option value="" disabled selected>SELECT SUBJECT</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Gaming/Collab">Gaming Collaboration</option>
+                <option value="Software/App">Software Inquiry</option>
+            </select>
+            <textarea name="message" rows="5" placeholder="YOUR MESSAGE" required></textarea>
+            
+            <div class="h-captcha" data-captcha="true"></div>
+            
+            <button type="submit" class="btn-submit" id="submitBtn">TRANSMIT DATA</button>
+            <div id="formResponse"></div>
+        </form>
+    </div>
+
+    <script src="https://web3forms.com/client/script.js" async defer></script>
+    <script>
+        const form = document.getElementById('contactForm');
+        const res = document.getElementById('formResponse');
+        const btn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            btn.disabled = true;
+            btn.innerText = "TRANSMITTING...";
+            
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(async (response) => {
+                if (response.status == 200) {
+                    res.style.display = "block";
+                    res.style.background = "rgba(0,255,0,0.1)";
+                    res.style.color = "#00ff00";
+                    res.innerHTML = "SIGNAL RECEIVED SUCCESSFULLY!";
+                    form.reset();
+                    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
+                }
+            })
+            .catch(() => {
+                res.innerHTML = "TRANSMISSION FAILED.";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = "TRANSMIT DATA";
+            });
+        });
+    </script>
+</body>
+</html>
