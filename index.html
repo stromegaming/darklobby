@@ -33,7 +33,24 @@
         }
         .hub-hero h1 { font-size: clamp(2rem, 6vw, 4rem); margin-bottom: 1rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
         .hub-hero h1 span { color: var(--primary); }
-        .hub-hero p { color: var(--text-dim); max-width: 700px; font-size: 1.1rem; letter-spacing: 1px; }
+        .hub-hero p { color: var(--text-dim); max-width: 700px; font-size: 1.1rem; margin-bottom: 2rem; }
+
+        .btn-donation {
+            padding: 10px 25px;
+            background: transparent;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px #FFD700; }
 
         .grid-container {
             padding: 80px 10%;
@@ -60,7 +77,8 @@
             background: #1a0000;
         }
         .category-card i { font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; display: block; }
-        .status-tag { display: inline-block; padding: 5px 12px; background: rgba(0, 255, 0, 0.1); color: #00ff00; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
+        .status-tag { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
+        .status-online { background: rgba(0, 255, 0, 0.1); color: #00ff00; }
         .status-offline { background: rgba(255, 255, 255, 0.1); color: var(--text-dim); }
 
         footer { text-align: center; padding: 60px 40px; color: var(--text-dim); font-size: 0.8rem; border-top: 1px solid var(--glass); }
@@ -73,11 +91,14 @@
     <section class="hub-hero">
         <h1>DIPESH <span>GHIMIRE</span></h1>
         <p>Creator | Developer | Gamer</p>
+        <a href="https://cr8.rs/darklobby" target="_blank" class="btn-donation">
+            <i class="fas fa-heart"></i> SUPPORT MY WORK
+        </a>
     </section>
 
     <div class="grid-container">
         <a href="gaming.html" class="category-card">
-            <span class="status-tag">Live & Online</span>
+            <span class="status-tag status-online">Live & Online</span>
             <i class="fas fa-crosshairs"></i>
             <h3>Gaming</h3>
             <p>Step into the <strong>DARK LOBBY</strong>. High-skill CODM gameplay and tactical transmissions.</p>
