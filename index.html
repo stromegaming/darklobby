@@ -349,10 +349,20 @@
 
     <section id="contact" class="reveal">
         <h2 class="section-title">Send <span>Signal</span></h2>
-        <form class="contact-form" onsubmit="event.preventDefault(); alert('Transmission Received!');">
-            <div class="form-group"><input type="text" placeholder="Name" required></div>
-            <div class="form-group"><input type="email" placeholder="Email" required></div>
-            <div class="form-group"><textarea rows="5" placeholder="Your Message" required></textarea></div>
+        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+            <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
+            
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+            </div>
+            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+            
             <button type="submit" class="btn btn-primary" style="width: 100%;">Initiate Contact</button>
         </form>
     </section>
