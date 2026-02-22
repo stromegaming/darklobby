@@ -13,6 +13,7 @@
             --card: #111111;
             --text: #ffffff;
             --dim: #888888;
+            --overlay: rgba(0, 0, 0, 0.9);
         }
 
         body {
@@ -24,31 +25,19 @@
             min-height: 100vh;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
+        /* Header Section */
+        .header { text-align: center; margin-bottom: 50px; }
         .header h1 {
             font-family: 'Orbitron';
             font-size: 2rem;
             letter-spacing: 4px;
-            color: var(--text);
             text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
-
         .header p { color: var(--dim); font-size: 0.9rem; margin-top: 10px; }
 
-        /* Software List Container */
-        .software-list {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        /* Software List */
+        .software-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
-        /* App Row Design */
         .app-item {
             background: var(--card);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -57,88 +46,63 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
 
-        .app-item:hover {
-            border-color: var(--primary);
-            background: #1a0505;
-            transform: scale(1.02);
-        }
+        .app-item:hover { border-color: var(--primary); background: #1a0505; transform: translateY(-3px); }
 
-        .app-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
+        .app-info { display: flex; align-items: center; gap: 20px; }
         .app-icon {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 0, 0, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.5rem;
+            width: 50px; height: 50px; background: rgba(255, 0, 0, 0.1);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; color: var(--primary); font-size: 1.5rem;
             border: 1px solid rgba(255, 0, 0, 0.2);
         }
 
-        .app-details h3 {
-            font-family: 'Orbitron';
-            font-size: 1rem;
-            margin: 0;
-            letter-spacing: 1px;
+        .app-details h3 { font-family: 'Orbitron'; font-size: 1rem; margin: 0; }
+        .app-details span { font-size: 0.75rem; color: var(--dim); }
+
+        .dl-trigger {
+            background: transparent; border: 1px solid var(--primary);
+            color: var(--primary); padding: 8px 20px; border-radius: 5px;
+            cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem;
+            font-weight: bold; transition: 0.3s;
         }
 
-        .app-details span {
-            font-size: 0.75rem;
-            color: var(--dim);
+        .dl-trigger:hover { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); }
+
+        /* Custom Popup (Modal) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay); display: none; align-items: center;
+            justify-content: center; z-index: 1000; backdrop-filter: blur(8px);
         }
 
-        /* Download Button */
-        .dl-btn {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 8px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            font-weight: bold;
-            transition: 0.3s;
+        .modal-content {
+            background: #111; border: 2px solid var(--primary);
+            padding: 30px; border-radius: 15px; max-width: 450px;
+            width: 90%; text-align: center; position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
         }
 
-        .dl-btn:hover {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+        .modal-content i.security-icon { font-size: 3rem; color: #00ff00; margin-bottom: 20px; }
+        .modal-content h2 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 15px; color: #fff; }
+        .modal-content p { color: #ccc; line-height: 1.6; font-size: 0.95rem; margin-bottom: 25px; }
+
+        .modal-btns { display: flex; gap: 10px; justify-content: center; }
+        .btn-confirm {
+            background: var(--primary); color: white; border: none;
+            padding: 10px 25px; border-radius: 5px; font-family: 'Orbitron';
+            font-size: 0.8rem; cursor: pointer; transition: 0.3s; text-decoration: none;
+        }
+        .btn-cancel {
+            background: #222; color: #fff; border: none;
+            padding: 10px 25px; border-radius: 5px; font-family: 'Orbitron';
+            font-size: 0.8rem; cursor: pointer;
         }
 
-        /* Coming Soon Styling */
-        .coming-soon { opacity: 0.5; cursor: not-allowed; }
-        .coming-soon .dl-btn { border-color: #333; color: #333; pointer-events: none; }
-
-        .back-nav {
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        .back-nav a {
-            color: var(--dim);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: 0.3s;
-        }
-
-        .back-nav a:hover { color: var(--primary); }
-
-        @media (max-width: 600px) {
-            .app-item { flex-direction: column; text-align: center; gap: 15px; }
-            .app-info { flex-direction: column; gap: 10px; }
-        }
+        .back-nav { margin-top: 50px; text-align: center; }
+        .back-nav a { color: var(--dim); text-decoration: none; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -149,53 +113,57 @@
     </div>
 
     <div class="software-list">
-        
         <div class="app-item">
             <div class="app-info">
-                <div class="app-icon">
-                    <i class="fas fa-calculator"></i>
-                </div>
+                <div class="app-icon"><i class="fas fa-calculator"></i></div>
                 <div class="app-details">
                     <h3>Scientific Calculator</h3>
                     <span>v1.0.0 | Windows EXE | 2.5 MB</span>
                 </div>
             </div>
-            <a href="downloads/ScientificCalculator.exe" download class="dl-btn">
+            <button class="dl-trigger" onclick="openModal()">
                 <i class="fas fa-download"></i> DOWNLOAD
-            </a>
+            </button>
         </div>
+    </div>
 
-        <div class="app-item coming-soon">
-            <div class="app-info">
-                <div class="app-icon">
-                    <i class="fas fa-shield-halved"></i>
-                </div>
-                <div class="app-details">
-                    <h3>Encrypted Vault</h3>
-                    <span>System Encrypting...</span>
-                </div>
+    <div class="modal-overlay" id="downloadModal">
+        <div class="modal-content">
+            <i class="fas fa-shield-check security-icon"></i>
+            <h2>SECURITY VERIFICATION</h2>
+            <p>
+                <strong>Safe and verified download.</strong><br><br>
+                If prompted with “Keep or Discard,” select <strong>Keep</strong>. 
+                There is no risk to your system.
+            </p>
+            <div class="modal-btns">
+                <a href="downloads/ScientificCalculator.exe" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
+                <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
             </div>
-            <a href="#" class="dl-btn">LOCKED</a>
         </div>
-
-        <div class="app-item coming-soon">
-            <div class="app-info">
-                <div class="app-icon">
-                    <i class="fas fa-terminal"></i>
-                </div>
-                <div class="app-details">
-                    <h3>Script Runner</h3>
-                    <span>Developing...</span>
-                </div>
-            </div>
-            <a href="#" class="dl-btn">LOCKED</a>
-        </div>
-
     </div>
 
     <div class="back-nav">
         <a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a>
     </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('downloadModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+        }
+
+        // Close modal if user clicks outside the content
+        window.onclick = function(event) {
+            let modal = document.getElementById('downloadModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 
 </body>
 </html>
