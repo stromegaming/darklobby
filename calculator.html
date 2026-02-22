@@ -87,7 +87,6 @@
         .modal-content h2 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 15px; color: #fff; }
         .modal-content p { color: #ccc; line-height: 1.6; font-size: 0.95rem; margin-bottom: 25px; }
 
-        /* Password Tag Style */
         .password-box {
             background: rgba(255, 255, 255, 0.05);
             border: 1px dashed var(--primary);
@@ -122,18 +121,33 @@
     </div>
 
     <div class="software-list">
+        
         <div class="app-item">
             <div class="app-info">
-                <div class="app-icon"><i class="fas fa-file-zipper"></i></div>
+                <div class="app-icon"><i class="fas fa-calculator"></i></div>
                 <div class="app-details">
                     <h3>Scientific Calculator</h3>
-                    <span>v1.0.0 | Password Protected ZIP | 2.4 MB</span>
+                    <span>v1.0.0 | Password ZIP | 2.4 MB</span>
                 </div>
             </div>
-            <button class="dl-trigger" onclick="openModal()">
+            <button class="dl-trigger" onclick="openModal('downloads/ScientificCalculator.zip')">
                 <i class="fas fa-download"></i> DOWNLOAD
             </button>
         </div>
+
+        <div class="app-item">
+            <div class="app-info">
+                <div class="app-icon"><i class="fas fa-calendar-days"></i></div>
+                <div class="app-details">
+                    <h3>Nepali Calendar</h3>
+                    <span>v1.0.0 | Password ZIP | 3.2 MB</span>
+                </div>
+            </div>
+            <button class="dl-trigger" onclick="openModal('downloads/Nepali-Calendar-Dipesh.zip')">
+                <i class="fas fa-download"></i> DOWNLOAD
+            </button>
+        </div>
+
     </div>
 
     <div class="modal-overlay" id="downloadModal">
@@ -148,7 +162,7 @@
             <div class="password-box">darklobby</div>
 
             <div class="modal-btns">
-                <a href="downloads/ScientificCalculator.zip" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
+                <a href="#" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
                 <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
             </div>
         </div>
@@ -159,12 +173,16 @@
     </div>
 
     <script>
-        function openModal() {
+        function openModal(filePath) {
+            // Set the download link dynamically
+            document.getElementById('finalDownload').href = filePath;
             document.getElementById('downloadModal').style.display = 'flex';
         }
+
         function closeModal() {
             document.getElementById('downloadModal').style.display = 'none';
         }
+
         window.onclick = function(event) {
             let modal = document.getElementById('downloadModal');
             if (event.target == modal) { closeModal(); }
