@@ -29,7 +29,6 @@
         }
         .logo-container { display: flex; align-items: center; gap: 15px; text-decoration: none; }
         
-        /* Neon Circle Wrapper */
         .logo-wrapper {
             position: relative;
             width: 55px;
@@ -62,6 +61,39 @@
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
+        /* --- HUB & CONTACT Hover Animations --- */
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            position: relative;
+            padding: 5px 10px;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transition: 0.4s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            text-shadow: 0 0 8px var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-link:hover::after {
+            left: 0;
+        }
+
         /* --- Hero --- */
         .hero { 
             height: 60vh; 
@@ -72,17 +104,17 @@
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 20px; }
         .hero h1 span { color: var(--primary); }
 
-        .typewriter-container { height: 40px; margin-bottom: 2rem; }
-        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: 1rem; letter-spacing: 2px; }
+        .typewriter-container { height: 60px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; }
+        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; }
 
         .btn-container { display: flex; gap: 1rem; justify-content: center; }
         .btn { padding: 0.8rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.75rem; border: 1px solid var(--primary); transition: 0.3s; }
         .btn-red { background: var(--primary); color: white; }
         .btn-white { border-color: white; color: white; }
+        .btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--primary); }
 
-        /* --- ANIMATED HEADER SECTION --- */
+        /* --- Video Section & Others remain same --- */
         .section-header { text-align: center; margin-bottom: 2rem; position: relative; }
-        
         .animated-header {
             font-family: 'Orbitron';
             font-size: 1.8rem;
@@ -93,30 +125,13 @@
             display: inline-block;
             animation: glow-pulse 2s infinite alternate;
         }
-
-        .animated-header span { color: var(--primary); position: relative; }
+        .animated-header span { color: var(--primary); }
 
         @keyframes glow-pulse {
             from { text-shadow: 0 0 5px #fff, 0 0 10px var(--primary); transform: scale(1); }
             to { text-shadow: 0 0 10px #fff, 0 0 20px var(--primary), 0 0 30px var(--primary); transform: scale(1.02); }
         }
 
-        .animated-header::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(255, 255, 255, 0.2);
-            animation: scanline 3s linear infinite;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        @keyframes scanline {
-            0% { top: 0%; opacity: 0; }
-            50% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        /* --- AUTO SCROLL SECTION --- */
         section#videos { padding: 60px 0; background: var(--bg-dark); overflow: hidden; position: relative; }
         .scroll-wrapper { display: flex; width: 100%; overflow: hidden; }
         .video-grid { display: flex; gap: 25px; padding: 40px 20px; animation: scroll-left 35s linear infinite; }
@@ -127,12 +142,11 @@
             100% { transform: translateX(-50%); } 
         }
 
-        /* --- HOVER ANIMATION SECTION --- */
         .video-card { 
             width: 280px; flex: 0 0 auto;
             background: var(--bg-card); border-radius: 12px; 
             overflow: hidden; border: 1px solid var(--glass); 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
         }
         
@@ -140,21 +154,14 @@
             transform: scale(1.08) translateY(-10px);
             border-color: var(--primary);
             box-shadow: 0 15px 30px rgba(255, 0, 0, 0.2);
-            z-index: 10;
         }
 
-        .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; position: relative; transition: filter 0.3s ease; }
-        .video-card:hover .video-thumb { filter: brightness(1.1); }
-        
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; transition: background 0.3s ease; }
-        .video-card:hover .play-overlay { background: rgba(0,0,0,0.1); }
-
-        .play-overlay i { font-size: 1.2rem; color: #fff; background: var(--primary); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: transform 0.3s ease; box-shadow: 0 0 15px var(--primary); }
-        .video-card:hover .play-overlay i { transform: scale(1.2); }
+        .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; position: relative; }
+        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; }
+        .play-overlay i { font-size: 1.2rem; color: #fff; background: var(--primary); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 0 15px var(--primary); }
         
         .video-info { padding: 1.2rem; }
-        .video-info h3 { font-size: 0.85rem; font-weight: 700; height: 2.2rem; overflow: hidden; color: #fff; line-height: 1.2; margin-bottom: 5px; transition: color 0.3s; }
-        .video-card:hover h3 { color: var(--primary); }
+        .video-info h3 { font-size: 0.85rem; font-weight: 700; height: 2.2rem; overflow: hidden; color: #fff; line-height: 1.2; margin-bottom: 5px; }
 
         footer { padding: 2rem; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
     </style>
@@ -169,8 +176,8 @@
             <div class="logo-text">DARK<span>LOBBY</span></div>
         </a>
         <div style="display:flex; gap:20px;">
-            <a href="index.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.7rem;">HUB</a>
-            <a href="contact.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.7rem;">CONTACT</a>
+            <a href="index.html" class="nav-link">HUB</a>
+            <a href="contact.html" class="nav-link">CONTACT</a>
         </div>
     </nav>
 
@@ -188,8 +195,7 @@
             <h2 class="animated-header">LATEST <span>UPLOAD</span></h2>
         </div>
         <div class="scroll-wrapper">
-            <div class="video-grid" id="youtubeFeed">
-                </div>
+            <div class="video-grid" id="youtubeFeed"></div>
         </div>
     </section>
 
@@ -200,16 +206,102 @@
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     
     <script>
-        const slogans = ["WE ARE THE FRONT LINE.", "VICTORY IS MEASURED IN SECONDS.", "DARKNESS IS OUR ALLY.", "STAY FROSTY. STAY DARK."];
+        const slogans = [
+            "Dark Lobby Dominance", "Where Shadows Hunt", "Fear the Dark Spawn", "Silence Wins Here",
+            "Enter the Dark. Exit as Legend.", "Darkness is Our Advantage", "Lobby of No Mercy",
+            "Shadow Mode Activated", "Born in the Dark Lobby", "Where Pros Survive", "Dark Tactics Only",
+            "Low Light. High Kills.", "Silent but Deadly", "Elite in the Shadows", "Darkness Builds Killers",
+            "No Light. Just Fight.", "Fear the Blackout", "Clutch in the Shadows", "Dark Lobby Kings",
+            "Hidden. Lethal. Legendary.", "Night Vision Mentality", "Dark Zone Domination", "Stealth Over Noise",
+            "Shadow Strike Squad", "No Mercy After Midnight", "Dark Energy Only", "Lurking for Victory",
+            "In Darkness We Rule", "Blackout Battlefield", "Ghosts of the Lobby", "Dark Lobby Warriors",
+            "Silence Before Elimination", "Shadow Aim Precision", "Nightfall Domination", "Dark Drop Supremacy",
+            "Hunt in the Shadows", "Unseen. Unmatched.", "Midnight Kill Streak", "Dark Side Victory",
+            "Silent Execution", "Lobby of Shadows", "Shadow Mode Clutch", "No Escape from the Dark",
+            "Night Raid Champions", "Shadow Instinct Activated", "Blackout Sniper Mindset", "Dark Combat Zone",
+            "Stealth Kill Society", "Where Silence Wins Wars", "Midnight Frag Machine", "Shadow Clutch Masters",
+            "Fear the Silent Squad", "Dark Aim Authority", "Hidden but Deadly", "Dark Ops Activated",
+            "Silence Controls the Lobby", "Night Domination Crew", "Dark Rush Tactics", "Shadow Warfare Supreme",
+            "Blackout Kill Leaders", "Undercover Dominance", "Dark Circle Control", "Silent Aggression",
+            "Dark Map Masters", "Shadow Loadout Ready", "Midnight Ranked Warriors", "Dark Clutch Energy",
+            "Silent MVP Mode", "Blackout Tactical Supremacy", "Shadow Elite Rising", "Dark Reign Begins",
+            "Night Hunter Squad", "Shadow Victory Ritual", "Dark Power Unleashed", "Silent Ranked Grind",
+            "Dark Precision Play", "Shadow Drop Kings", "Blackout Combat Instinct", "Dark Victory Protocol",
+            "Silent Frag Authority", "Nightfall Legends", "Dark Mode Champions", "Shadow Domination Era",
+            "Blackout Warfare Mindset", "Dark Tactical Clutch", "Silent Circle Kings", "Midnight Objective Control",
+            "Blackout Push Squad", "Shadow Control Mode", "Dark Streak Activated", "Silent Domination System",
+            "Night Elite Only", "Shadow Crown Holders", "Dark Combat Precision", "Blackout Killstorm",
+            "Silent Strike Crew", "Dark Lobby Reapers", "Shadow Ranked Beasts", "Midnight Tactical Minds",
+            "Dark Objective Hunters", "Blackout Supremacy Squad", "Shadow Aggression Code", "Dark Match Authority",
+            "Silent Sniper Society", "Nightfall Power Play", "Shadow Push Masters", "Dark Ranked Dynasty",
+            "Blackout Victory Formula", "Silent Combat Legends", "Dark Lobby Immortals", "Shadow Instinct Warriors",
+            "Midnight Firepower", "Dark Tactical Legends", "Silent Elimination Crew", "Blackout Frontline",
+            "Shadow Kill Empire", "Dark Grind Never Stops", "Silent Drop Tacticians", "Night Hunter Elite",
+            "Shadow Rank Crushers", "Dark Combat Architects", "Blackout Precision Squad", "Silent Kill Authority",
+            "Dark Circle Kings", "Shadow Tactical Empire", "Midnight Supremacy", "Dark Frontline Beasts",
+            "Silent Objective Lords", "Blackout Ranked Control", "Shadow Domination Pact", "Dark Sniper Discipline",
+            "Nightfall Ranked Energy", "Shadow Push Authority", "Dark Victory Architects", "Silent Warfare Elite",
+            "Blackout Tactical Grind", "Shadow Kill Tacticians", "Dark Domination Ritual", "Midnight Aggression Squad",
+            "Silent Combat Syndicate", "Dark Drop Authority", "Shadow Ranked Storm", "Blackout Kill Protocol",
+            "Silent Frontline Reign", "Dark Tactical Instinct", "Shadow Clutch Authority", "Midnight Combat Crew",
+            "Dark Elite Hunters", "Blackout Shadow Reign", "Dark Kill Dynasty", "Midnight Domination Mode",
+            "Dark Victory Hunters", "Silent Circle Authority", "Blackout Elite Energy", "Shadow Sniper Lords",
+            "Dark Ranked Warriors", "Silent Kill Kings", "Night Tactical Domination", "Shadow Drop Authority",
+            "Dark Combat Lords", "Blackout Reaper Squad", "Silent Tactical Masters", "Dark Shadow Protocol",
+            "Midnight Victory Grind", "Shadow Domination Kings", "Dark Objective Authority", "Blackout Combat Masters",
+            "Silent Elite Squad", "Midnight Kill Authority", "Dark Rank Dominators", "Silent Drop Lords",
+            "Blackout Night Kings", "Dark Circle Dominators", "Midnight Elite Energy", "Blackout Domination Lords",
+            "Dark Tactical Reign", "Midnight Power Authority", "Dark Kill Authority", "Silent Victory Syndicate",
+            "Shadow Elite Authority", "Dark Frontline Authority", "Midnight Ranked Kings", "Silent Sniper Authority",
+            "Blackout Combat Kings", "Shadow Domination Authority", "Dark Tactical Syndicate", "Midnight Elite Kings",
+            "Silent Combat Kings", "Blackout Ranked Authority", "Shadow Victory Kings", "Dark Aggression Authority",
+            "Midnight Tactical Authority", "Silent Frontline Kings", "Blackout Sniper Authority", "Shadow Kill Authority",
+            "Dark Domination Kings", "Midnight Combat Authority", "Silent Tactical Kings", "Blackout Victory Authority",
+            "Shadow Frontline Elite", "Dark Ranked Authority", "Midnight Domination Kings", "Silent Combat Authority",
+            "Blackout Tactical Authority", "Shadow Aggression Kings", "Dark Sniper Kings", "Midnight Frontline Authority",
+            "Silent Victory Authority", "Blackout Domination Authority", "Shadow Tactical Kings", "Dark Combat Authority",
+            "Midnight Sniper Kings", "Silent Ranked Kings", "Blackout Frontline Authority", "Shadow Victory Authority",
+            "Dark Tactical Elite", "Midnight Aggression Authority", "Silent Sniper Kings", "Blackout Combat Authority",
+            "Shadow Ranked Authority", "Dark Victory Kings", "Midnight Tactical Kings", "Silent Domination Authority",
+            "Blackout Sniper Kings", "Shadow Combat Authority", "Dark Frontline Kings", "Midnight Victory Authority",
+            "Silent Tactical Authority", "Blackout Ranked Kings", "Shadow Aggression Authority", "Dark Combat Kings",
+            "Midnight Domination Authority", "Blackout Tactical Elite", "Shadow Frontline Authority", "Dark Ranked Kings",
+            "Midnight Victory Kings", "Silent Combat Elite", "Blackout Domination Kings", "Shadow Tactical Authority",
+            "Dark Aggression Kings", "Midnight Sniper Authority", "Silent Ranked Authority", "Blackout Combat Elite",
+            "Shadow Victory Elite", "Dark Tactical Authority", "Midnight Frontline Kings", "Silent Domination Kings",
+            "Blackout Sniper Elite", "Shadow Combat Elite", "Dark Victory Authority", "Midnight Tactical Elite",
+            "Silent Aggression Authority", "Blackout Ranked Elite", "Shadow Frontline Kings", "Dark Sniper Elite",
+            "Midnight Combat Elite", "Silent Victory Kings", "Shadow Domination Elite", "Dark Combat Elite",
+            "Midnight Aggression Kings", "Silent Ranked Elite", "Blackout Victory Elite", "Shadow Sniper Elite",
+            "Dark Frontline Elite", "Midnight Domination Elite", "Silent Tactical Elite", "Dark Aggression Elite",
+            "Midnight Ranked Elite", "Silent Sniper Elite", "Blackout Domination Elite", "Shadow Tactical Elite",
+            "Dark Victory Elite", "Silent Frontline Elite", "Blackout Aggression Elite", "Shadow Ranked Elite",
+            "Dark Tactical Kings", "Midnight Sniper Elite", "Silent Domination Elite", "Blackout Victory Kings",
+            "Shadow Combat Kings", "Silent Aggression Elite", "Dark Sniper Authority", "Midnight Combat Kings",
+            "Shadow Aggression Elite", "Midnight Ranked Authority", "Dark Domination Authority",
+            "Midnight Victory Elite", "Blackout Tactical Kings", "Shadow Ranked Kings", "Midnight Frontline Elite",
+            "Silent Aggression Kings", "Dark Domination Elite"
+        ];
+
         let unusedSlogans = [...slogans];
+
         function updateSlogan() {
             if (unusedSlogans.length === 0) unusedSlogans = [...slogans];
-            const text = unusedSlogans.splice(Math.floor(Math.random()*unusedSlogans.length), 1)[0];
-            document.getElementById('slogan').innerHTML = '';
-            new Typewriter('#slogan', { autoStart: true, delay: 50, cursor: '_' }).typeString(text).start();
+            const randomIndex = Math.floor(Math.random() * unusedSlogans.length);
+            const text = unusedSlogans.splice(randomIndex, 1)[0];
+            
+            const sloganElement = document.getElementById('slogan');
+            sloganElement.innerHTML = ''; 
+            
+            new Typewriter('#slogan', {
+                autoStart: true,
+                delay: 40,
+                cursor: '█'
+            }).typeString(text).start();
         }
+
         updateSlogan();
-        setInterval(updateSlogan, 20000); 
+        setInterval(updateSlogan, 10000); // Changed to 10 seconds
 
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
 
