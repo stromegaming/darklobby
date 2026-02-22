@@ -31,7 +31,7 @@
 
         /* --- Hero Section --- */
         .hub-hero {
-            height: 70vh;
+            height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -40,6 +40,51 @@
             background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%);
             padding: 0 5%;
             border-bottom: 1px solid var(--glass);
+        }
+
+        /* --- Logo & Rectangle Animation --- */
+        .logo-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100px; /* Logo size */
+            z-index: 2;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+        }
+
+        /* Rotating Rectangle Animation */
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            animation: rotateRect 6s linear infinite;
+            z-index: 1;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border: 1px solid white;
+            opacity: 0.3;
+            animation: rotateRect 10s linear infinite reverse;
+            z-index: 1;
+        }
+
+        @keyframes rotateRect {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .hub-hero h1 { 
@@ -167,13 +212,17 @@
 
         @media (max-width: 768px) {
             .grid-container { padding: 40px 5%; }
-            .hub-hero { height: 60vh; }
+            .hub-hero { height: auto; padding: 50px 5%; }
         }
     </style>
 </head>
 <body>
 
     <section class="hub-hero">
+        <div class="logo-container">
+            <img src="dglogo.png" alt="DG LOGO">
+        </div>
+
         <h1>DIPESH <span>GHIMIRE</span></h1>
         <p>CREATOR | DEVELOPER | GAMER</p>
         
