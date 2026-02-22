@@ -15,11 +15,10 @@
             --text-light: #ffffff; 
             --text-dim: #b3b3b3; 
             --glass: rgba(255, 255, 255, 0.05); 
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; }
         
         /* --- Navigation --- */
         nav { 
@@ -33,46 +32,153 @@
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
-        /* --- Hero Section --- */
+        /* --- Hero --- */
         .hero { 
-            height: 70vh; 
+            height: 60vh; 
             display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; 
-            background: #000000; 
-            padding: 0 5%;
+            background: #000000; padding: 0 5%;
         }
-        .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+        .hero h1 { font-family: 'Orbitron'; font-size: clamp(2.5rem, 6vw, 5rem); margin-bottom: 20px; }
         .hero h1 span { color: var(--primary); }
 
-        /* --- Slogan Container --- */
-        .typewriter-container { height: 45px; margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; }
-        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: clamp(0.9rem, 3vw, 1.3rem); letter-spacing: 2px; font-weight: bold; }
+        .typewriter-container { height: 40px; margin-bottom: 2rem; }
+        .slogan-text { color: #FFD700; font-family: 'Orbitron'; font-size: 1rem; letter-spacing: 2px; }
 
-        .btn-container { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-        .btn { padding: 1rem 2rem; border-radius: 4px; text-decoration: none; font-weight: bold; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; border: 1px solid var(--primary); font-size: 0.8rem; }
-        .btn-red { background: var(--primary); color: white; border: none; }
-        .btn-red:hover { box-shadow: 0 0 25px var(--primary); transform: scale(1.05); }
+        .btn-container { display: flex; gap: 1rem; justify-content: center; }
+        .btn { padding: 0.8rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.75rem; border: 1px solid var(--primary); transition: 0.3s; }
+        .btn-red { background: var(--primary); color: white; }
         .btn-white { border-color: white; color: white; }
-        .btn-white:hover { background: white; color: black; }
 
-        /* --- Video Grid --- */
-        section#videos { padding: 100px 10%; background: var(--bg-dark); }
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-header h2 { font-family: 'Orbitron'; font-size: 2rem; letter-spacing: 3px; }
-        .section-header h2 span { color: var(--primary); }
-
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
-        .video-card { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--glass); transition: 0.4s; }
-        .video-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        /* --- ANIMATED HEADER SECTION --- */
+        .section-header { text-align: center; margin-bottom: 2rem; position: relative; }
         
-        .video-thumb { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; position: relative; }
-        .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
-        .video-card:hover .play-overlay { opacity: 1; }
-        
-        .video-info { padding: 1.5rem; }
-        .video-info h3 { font-size: 0.9rem; font-family: 'Inter'; font-weight: 700; height: 2.5rem; overflow: hidden; color: #fff; line-height: 1.3; }
+        .animated-header {
+            font-family: 'Orbitron';
+            font-size: 1.8rem;
+            letter-spacing: 5px;
+            color: #fff;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            animation: glow-pulse 2s infinite alternate;
+        }
 
-        footer { padding: 3rem 10%; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
+        .animated-header span {
+            color: var(--primary);
+            position: relative;
+        }
+
+        /* Neon Breathing Effect */
+        @keyframes glow-pulse {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px var(--primary), 0 0 15px var(--primary);
+                transform: scale(1);
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px var(--primary), 0 0 30px var(--primary), 0 0 40px var(--primary);
+                transform: scale(1.02);
+            }
+        }
+
+        /* Subtle Scanning Line Effect across header */
+        .animated-header::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: scanline 3s linear infinite;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        @keyframes scanline {
+            0% { top: 0%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* --- AUTO SCROLL SECTION --- */
+        section#videos { padding: 60px 0; background: var(--bg-dark); overflow: hidden; position: relative; }
+
+        .scroll-wrapper { display: flex; width: 100%; overflow: hidden; }
+
+        .video-grid { 
+            display: flex; 
+            gap: 25px; 
+            padding: 40px 20px;
+            animation: scroll-left 35s linear infinite; 
+        }
+
+        .video-grid:hover { animation-play-state: paused; }
+
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
+        /* --- HOVER ANIMATION SECTION --- */
+        .video-card { 
+            width: 280px; 
+            flex: 0 0 auto;
+            background: var(--bg-card); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid var(--glass); 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .video-card:hover { 
+            transform: scale(1.08) translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .video-thumb { 
+            width: 100%; 
+            aspect-ratio: 16/9; 
+            background-size: cover; 
+            background-position: center; 
+            position: relative; 
+            transition: filter 0.3s ease;
+        }
+
+        .video-card:hover .video-thumb {
+            filter: brightness(1.1);
+        }
+        
+        .play-overlay { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.3); 
+            display: flex; align-items: center; justify-content: center; 
+            transition: background 0.3s ease;
+        }
+
+        .video-card:hover .play-overlay {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .play-overlay i { 
+            font-size: 1.2rem; color: #fff; 
+            background: var(--primary); 
+            width: 45px; height: 45px; 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; 
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .video-card:hover .play-overlay i {
+            transform: scale(1.2);
+        }
+        
+        .video-info { padding: 1.2rem; }
+        .video-info h3 { font-size: 0.85rem; font-weight: 700; height: 2.2rem; overflow: hidden; color: #fff; line-height: 1.2; margin-bottom: 5px; transition: color 0.3s; }
+        .video-card:hover h3 { color: var(--primary); }
+
+        footer { padding: 2rem; background: #050505; text-align: center; border-top: 1px solid var(--glass); }
     </style>
 </head>
 <body>
@@ -83,78 +189,53 @@
             <div class="logo-text">DARK<span>LOBBY</span></div>
         </a>
         <div style="display:flex; gap:20px;">
-            <a href="index.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.8rem;">HUB</a>
-            <a href="contact.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.8rem;">CONTACT</a>
+            <a href="index.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.7rem;">HUB</a>
+            <a href="contact.html" style="color:white; text-decoration:none; font-family:'Orbitron'; font-size:0.7rem;">CONTACT</a>
         </div>
     </nav>
 
     <section class="hero">
         <h1>DARK <span>LOBBY</span></h1>
-        
-        <div class="typewriter-container">
-            <span id="slogan" class="slogan-text"></span>
-        </div>
-
+        <div class="typewriter-container"><span id="slogan" class="slogan-text"></span></div>
         <div class="btn-container">
-            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-red"><i class="fab fa-youtube"></i> SUBSCRIBE</a>
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn btn-white" style="border-color:#FFD700; color:#FFD700;"><i class="fas fa-heart"></i> DONATE</a>
+            <a href="https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ" target="_blank" class="btn btn-red">SUBSCRIBE</a>
             <a href="index.html" class="btn btn-white">BACK TO HUB</a>
         </div>
     </section>
 
     <section id="videos">
         <div class="section-header">
-            <h2>LATEST <span>TRANSMISSIONS</span></h2>
+            <h2 class="animated-header">LATEST <span>UPLOAD</span></h2>
         </div>
-        <div class="video-grid" id="youtubeFeed">
-            <p style="text-align:center; width:100%; font-family:'Orbitron'; color:var(--text-dim);">INITIATING SATELLITE SCAN...</p>
+        <div class="scroll-wrapper">
+            <div class="video-grid" id="youtubeFeed">
+                </div>
         </div>
     </section>
 
     <footer>
-        <p style="font-size:0.8rem; color:var(--text-dim);">&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
+        <p style="font-size:0.7rem; color:var(--text-dim);">&copy; 2026 DARK LOBBY. All Systems Nominal.</p>
     </footer>
 
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     
     <script>
-        // --- 1. Slogan Logic ---
-        const slogans = [
-            "WE ARE THE FRONT LINE.",
-            "VICTORY IS MEASURED IN SECONDS.",
-            "TACTICAL SUPERIORITY ACHIEVED.",
-            "DARKNESS IS OUR ALLY.",
-            "ONE SHOT. ONE KILL.",
-            "MOBILE WARFARE REDEFINED.",
-            "STAY FROSTY. STAY DARK."
-        ];
-        
+        const slogans = ["WE ARE THE FRONT LINE.", "VICTORY IS MEASURED IN SECONDS.", "DARKNESS IS OUR ALLY.", "STAY FROSTY. STAY DARK."];
         let unusedSlogans = [...slogans];
-
         function updateSlogan() {
             if (unusedSlogans.length === 0) unusedSlogans = [...slogans];
-            const index = Math.floor(Math.random() * unusedSlogans.length);
-            const text = unusedSlogans.splice(index, 1)[0];
-
+            const text = unusedSlogans.splice(Math.floor(Math.random()*unusedSlogans.length), 1)[0];
             document.getElementById('slogan').innerHTML = '';
-            new Typewriter('#slogan', {
-                autoStart: true,
-                delay: 50,
-                cursor: '_'
-            }).typeString(text).start();
+            new Typewriter('#slogan', { autoStart: true, delay: 50, cursor: '_' }).typeString(text).start();
         }
-
         updateSlogan();
         setInterval(updateSlogan, 20000); 
 
-        // --- 2. YouTube Video Logic (Updated to 5 Videos) ---
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
 
         async function fetchVideos() {
             const container = document.getElementById('youtubeFeed');
             const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-            
-            // Using a public RSS to JSON converter (No API key required for basic use)
             const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
             try {
@@ -162,38 +243,30 @@
                 const data = await response.json();
 
                 if (data.status === 'ok' && data.items.length > 0) {
-                    container.innerHTML = '';
-                    // Updated to slice(0, 5) to get top 5 videos
-                    data.items.slice(0, 5).forEach(item => {
-                        // Extract video ID from link or guid
+                    let htmlContent = '';
+                    const videos = data.items.slice(0, 5);
+                    
+                    videos.forEach(item => {
                         const vId = item.link.split('v=')[1] || item.guid.split(':').pop();
-                        
-                        container.innerHTML += `
+                        htmlContent += `
                             <div class="video-card">
                                 <a href="${item.link}" target="_blank" style="text-decoration:none;">
                                     <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vId}/mqdefault.jpg')">
-                                        <div class="play-overlay"><i class="fas fa-play" style="color:red; font-size:2rem;"></i></div>
+                                        <div class="play-overlay"><i class="fas fa-play"></i></div>
                                     </div>
                                     <div class="video-info">
                                         <h3>${item.title}</h3>
-                                        <p style="color:red; font-size:0.75rem; margin-top:8px; font-weight:bold; font-family:'Orbitron';">WATCH NOW <i class="fas fa-chevron-right"></i></p>
+                                        <p style="color:red; font-size:0.65rem; font-weight:bold; font-family:'Orbitron';">WATCH NOW</p>
                                     </div>
                                 </a>
                             </div>`;
                     });
-                } else {
-                    throw new Error("Data retrieval failed");
+                    container.innerHTML = htmlContent + htmlContent; 
                 }
             } catch (err) {
-                console.error("Fetch Error:", err);
-                container.innerHTML = `
-                    <div style="text-align:center; width:100%; color:var(--text-dim);">
-                        <p>Satellite link unstable. Please check back later.</p>
-                        <a href="https://youtube.com/channel/${channelId}" target="_blank" class="btn btn-red" style="margin-top:20px; border:1px solid red; background:transparent;">VISIT YOUTUBE DIRECTLY</a>
-                    </div>`;
+                container.innerHTML = `<p style="color:white; width:100%; text-align:center;">Satellite link unstable.</p>`;
             }
         }
-
         window.onload = fetchVideos;
     </script>
 </body>
