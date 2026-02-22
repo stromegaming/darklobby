@@ -33,12 +33,12 @@
         .logo-text { font-family: 'Orbitron'; font-size: 1.2rem; color: white; font-weight: 900; }
         .logo-text span { color: var(--primary); }
 
-        /* --- Hero Section (Black Background) --- */
+        /* --- Hero Section --- */
         .hero { 
             height: 70vh; 
             display: flex; flex-direction: column; justify-content: center; 
             align-items: center; text-align: center; 
-            background: #000000; /* Pure Black Section */
+            background: #000000; 
             padding: 0 5%;
         }
         .hero h1 { font-family: 'Orbitron'; font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 20px; text-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
@@ -118,7 +118,7 @@
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     
     <script>
-        // --- 1. Slogan Logic (Changes every 20 seconds) ---
+        // --- 1. Slogan Logic ---
         const slogans = [
             "WE ARE THE FRONT LINE.",
             "VICTORY IS MEASURED IN SECONDS.",
@@ -147,15 +147,15 @@
         updateSlogan();
         setInterval(updateSlogan, 20000); 
 
-        // --- 2. YouTube Video Logic (3 Videos Only) ---
+        // --- 2. YouTube Video Logic (Updated to 5 Videos) ---
         const channelId = 'UC-A6-4UrizOPvqMPzFQOiYQ';
 
         async function fetchVideos() {
             const container = document.getElementById('youtubeFeed');
-            const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+            const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
             
-            // Using a more robust proxy approach
-            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=your_api_key_here&count=10`;
+            // Using a public RSS to JSON converter (No API key required for basic use)
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
             try {
                 const response = await fetch(proxyUrl);
@@ -163,13 +163,15 @@
 
                 if (data.status === 'ok' && data.items.length > 0) {
                     container.innerHTML = '';
-                    // Showing exactly 3 videos
-                    data.items.slice(0, 3).forEach(item => {
+                    // Updated to slice(0, 5) to get top 5 videos
+                    data.items.slice(0, 5).forEach(item => {
+                        // Extract video ID from link or guid
                         const vId = item.link.split('v=')[1] || item.guid.split(':').pop();
+                        
                         container.innerHTML += `
                             <div class="video-card">
                                 <a href="${item.link}" target="_blank" style="text-decoration:none;">
-                                    <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vId}/maxresdefault.jpg')">
+                                    <div class="video-thumb" style="background-image: url('https://img.youtube.com/vi/${vId}/mqdefault.jpg')">
                                         <div class="play-overlay"><i class="fas fa-play" style="color:red; font-size:2rem;"></i></div>
                                     </div>
                                     <div class="video-info">
@@ -180,9 +182,10 @@
                             </div>`;
                     });
                 } else {
-                    throw new Error("No items");
+                    throw new Error("Data retrieval failed");
                 }
             } catch (err) {
+                console.error("Fetch Error:", err);
                 container.innerHTML = `
                     <div style="text-align:center; width:100%; color:var(--text-dim);">
                         <p>Satellite link unstable. Please check back later.</p>
