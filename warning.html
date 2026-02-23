@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SYSTEM LOCKED | DARK LOBBY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        body { background: #000; color: #ff0000; font-family: 'Orbitron', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; text-align: center; }
+        .box { border: 3px solid #ff0000; padding: 50px; background: rgba(255,0,0,0.05); box-shadow: 0 0 50px #ff0000; position: relative; }
+        h1 { font-size: 3rem; margin-bottom: 20px; text-shadow: 0 0 10px red; }
+        #timer { font-size: 2.5rem; color: #fff; margin-top: 20px; letter-spacing: 2px; }
+        .glitch-line { width: 100%; height: 2px; background: red; position: absolute; left: 0; animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="glitch-line"></div>
+        <h1>ACCESS RESTRICTED</h1>
+        <p>SECURITY PROTOCOL ACTIVATED</p>
+        <p>SYSTEM LOCKED FOR 24 HOURS DUE TO BREACH ATTEMPT</p>
+        <div id="timer">00:00:00</div>
+    </div>
+
+    <script>
+        function updateTimer() {
+            const blockUntil = localStorage.getItem('blockUntil');
+            const now = new Date().getTime();
+            const diff = blockUntil - now;
+
+            if (diff <= 0) {
+                localStorage.removeItem('blockUntil');
+                window.location.href = "admin.html";
+                return;
+            }
+
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerText = 
+                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>
