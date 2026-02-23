@@ -233,6 +233,20 @@
         </div>
         <p>&copy; 2026 DIPESH GHIMIRE. All Systems Nominal.</p>
     </footer>
+	<script>
+    // Page Visit Counter
+    let visits = localStorage.getItem('pageVisits') || 0;
+    visits++;
+    localStorage.setItem('pageVisits', visits);
 
+    // Download Tracker Function
+    // Jun button ma download track garnu parne ho, tyesma onclick="trackDownload('File_Name')" halnuhos
+    function trackDownload(fileName) {
+        let downloads = localStorage.getItem('downloadCount') || 0;
+        downloads++;
+        localStorage.setItem('downloadCount', downloads);
+        alert("Downloading: " + fileName);
+    }
+</script>
 </body>
 </html>
