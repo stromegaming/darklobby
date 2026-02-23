@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOTES HUB | DARK LOBBY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF0000;
@@ -13,7 +13,7 @@
             --card: #111111;
             --text: #ffffff;
             --dim: #888888;
-            --overlay: rgba(0, 0, 0, 0.95);
+            --overlay: rgba(0, 0, 0, 0.98);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -40,235 +40,176 @@
             position: relative;
             width: 80px;
             height: 80px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-shrink: 0;
+            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
         }
 
-        .logo-box-small img {
-            width: 50px; 
-            z-index: 2;
-            filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.5));
-        }
+        .logo-box-small img { width: 50px; z-index: 2; filter: drop-shadow(0 0 8px var(--primary)); }
 
         .logo-box-small::before {
-            content: '';
-            position: absolute;
-            width: 70px;
-            height: 70px;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 10px var(--primary);
-            animation: rotateRect 6s linear infinite;
-            z-index: 1;
+            content: ''; position: absolute; width: 70px; height: 70px;
+            border: 2px solid var(--primary); box-shadow: 0 0 10px var(--primary);
+            animation: rotateRect 6s linear infinite; z-index: 1;
         }
 
-        @keyframes rotateRect {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .header-text h1 {
-            font-family: 'Orbitron';
-            font-size: 1.8rem;
-            letter-spacing: 3px;
-            margin: 0;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-        }
-
+        .header-text h1 { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 3px; margin: 0; text-shadow: 0 0 15px var(--primary); }
         .header-text p { color: var(--dim); font-size: 0.85rem; margin-top: 5px; }
 
         /* --- Notes List --- */
         .notes-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-
         .note-item {
-            background: var(--card);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 15px 25px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: 0.3s;
-            cursor: pointer;
+            background: var(--card); border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 25px; border-radius: 12px; display: flex;
+            align-items: center; justify-content: space-between; transition: 0.3s; cursor: pointer;
         }
-
         .note-item:hover { border-color: var(--primary); background: #1a0505; transform: translateY(-3px); }
-
-        /* Locked Items Styling */
-        .note-item.locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-            border: 1px dashed #333;
-        }
-
-        .note-item.locked:hover {
-            transform: none;
-            border-color: #333;
-            background: var(--card);
-        }
-
+        .note-item.locked { opacity: 0.4; cursor: not-allowed; border: 1px dashed #333; }
+        
         .note-info { display: flex; align-items: center; gap: 20px; }
-        .note-icon {
-            width: 50px; height: 50px; background: rgba(255, 0, 0, 0.1);
-            border-radius: 10px; display: flex; align-items: center;
-            justify-content: center; color: var(--primary); font-size: 1.5rem;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
+        .note-icon { width: 50px; height: 50px; background: rgba(255, 0, 0, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; border: 1px solid rgba(255, 0, 0, 0.2); }
         .note-details h3 { font-family: 'Orbitron'; font-size: 1rem; margin: 0; }
-        .note-details span { font-size: 0.75rem; color: var(--dim); }
+        
+        .view-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 8px 20px; border-radius: 5px; font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold; }
 
-        .view-btn {
-            background: transparent; border: 1px solid var(--primary);
-            color: var(--primary); padding: 8px 20px; border-radius: 5px;
-            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold;
-        }
-
-        .locked-btn {
-            color: #555; border: 1px solid #333;
-            padding: 8px 20px; border-radius: 5px;
-            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold;
-        }
-
-        /* --- Verification Modal --- */
+        /* --- Hacker Modal --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--overlay); display: none; align-items: center;
-            justify-content: center; z-index: 1000; backdrop-filter: blur(10px);
+            background: var(--overlay); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(15px);
         }
 
         .modal-content {
-            background: #0a0a0a; border: 2px solid var(--primary);
-            padding: 40px; border-radius: 20px; max-width: 400px;
-            width: 90%; text-align: center; position: relative;
-            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
-            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #000; border: 2px solid var(--primary); padding: 40px; border-radius: 5px;
+            max-width: 420px; width: 90%; text-align: center; position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.4); font-family: 'JetBrains Mono', monospace;
         }
 
-        @keyframes modalPop {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
+        .hacker-glitch { font-family: 'Orbitron'; color: var(--primary); font-size: 1.4rem; margin-bottom: 15px; text-transform: uppercase; animation: glitch 0.2s infinite alternate; }
+        @keyframes glitch { 0% { opacity: 1; } 100% { opacity: 0.8; transform: skew(1deg); } }
 
-        .modal-content i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
-        .modal-content h2 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 10px; }
-        .modal-content p { color: var(--dim); font-size: 0.9rem; margin-bottom: 20px; }
-
-        .math-question {
-            font-family: 'Orbitron'; font-size: 1.8rem; color: #fff;
-            margin: 20px 0; background: rgba(255, 0, 0, 0.05);
-            padding: 15px; border-radius: 10px; border: 1px dashed var(--primary);
-        }
-
+        .math-question { font-size: 2rem; color: #fff; margin: 25px 0; border: 1px solid #333; padding: 20px; background: #080808; position: relative; }
+        
         .math-input {
-            width: 100%; background: #111; border: 1px solid #333;
-            padding: 12px; border-radius: 8px; color: #fff;
-            font-family: 'Orbitron'; text-align: center; font-size: 1.2rem;
-            margin-bottom: 20px; outline: none; transition: 0.3s;
+            width: 100%; background: #000; border: 1px solid var(--primary); padding: 15px;
+            color: #0f0; font-family: 'JetBrains Mono'; font-size: 1.5rem; text-align: center; outline: none; margin-bottom: 20px; box-sizing: border-box;
         }
 
-        .math-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255,0,0,0.2); }
-
-        .verify-btn {
-            width: 100%; background: var(--primary); color: #fff;
-            border: none; padding: 12px; border-radius: 8px;
-            font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
-            transition: 0.3s;
+        /* --- Lockout Display --- */
+        #lockoutSection { display: none; color: #ff0000; }
+        .timer-val { font-size: 2.5rem; font-weight: bold; margin: 10px 0; display: block; }
+        
+        .error-terminal { 
+            color: #ff0000; font-size: 0.8rem; background: #1a0000; 
+            padding: 15px; margin-top: 15px; text-align: left; 
+            border-left: 3px solid #ff0000; display: none; 
+            line-height: 1.4;
         }
 
-        .verify-btn:hover { background: #cc0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
-
-        .error-msg { color: #ff4d4d; font-size: 0.8rem; margin-top: 10px; display: none; }
+        .btn-box { display: flex; flex-direction: column; gap: 10px; }
+        .verify-btn { background: var(--primary); color: #fff; border: none; padding: 15px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .abort-btn { background: #111; color: #888; border: 1px solid #333; padding: 12px; font-family: 'Orbitron'; cursor: pointer; text-decoration: none; font-size: 0.8rem; display: block; transition: 0.3s; }
+        .abort-btn:hover { background: #222; color: #fff; border-color: #555; }
 
         .back-nav { margin-top: 50px; text-align: center; }
-        .back-nav a { color: var(--dim); text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
-        .back-nav a:hover { color: var(--primary); }
+        .back-nav a { color: var(--dim); text-decoration: none; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <div class="header-container">
-        <div class="logo-box-small">
-            <img src="images/DGLOGO.PNG" alt="DG LOGO">
-        </div>
+        <div class="logo-box-small"><img src="images/DGLOGO.PNG" alt="DG LOGO"></div>
         <div class="header-text">
             <h1>NOTES HUB</h1>
-            <p>EDUCATIONAL ARCHIVES & LOGS</p>
+            <p>SECURE DATA TERMINAL V2.0</p>
         </div>
     </div>
 
     <div class="notes-list">
-        <div class="note-item" onclick="startVerification('github-guide.html')">
+        <div class="note-item" onclick="handleAccess('github-guide.html')">
             <div class="note-info">
                 <div class="note-icon"><i class="fab fa-github"></i></div>
-                <div class="note-details">
-                    <h3>GitHub Complete Guide</h3>
-                    <span>To create and live website from GitHub</span>
-                </div>
+                <div class="note-details"><h3>GitHub Guide</h3><span>Access Source Code</span></div>
             </div>
-            <div class="view-btn">VIEW GUIDE</div>
+            <div class="view-btn">DECRYPT</div>
         </div>
-
+        
         <div class="note-item locked">
-            <div class="note-info">
-                <div class="note-icon"><i class="fas fa-lock"></i></div>
-                <div class="note-details">
-                    <h3>Web Development Roadmap</h3>
-                    <span>COMMING SOON | SECURE ARCHIVE</span>
-                </div>
-            </div>
-            <div class="locked-btn">LOCKED</div>
-        </div>
-
-        <div class="note-item locked">
-            <div class="note-info">
-                <div class="note-icon"><i class="fas fa-microchip"></i></div>
-                <div class="note-details">
-                    <h3>Python Automation Mastery</h3>
-                    <span>COMMING SOON | SECURE ARCHIVE</span>
-                </div>
-            </div>
-            <div class="locked-btn">LOCKED</div>
+            <div class="note-info"><div class="note-icon"><i class="fas fa-lock"></i></div>
+            <div class="note-details"><h3>COMING SOON</h3><span>SECURE ARCHIVE</span></div></div>
+            <div class="view-btn" style="border-color:#333; color:#333;">LOCKED</div>
         </div>
     </div>
 
     <div class="modal-overlay" id="mathModal">
         <div class="modal-content">
-            <i class="fas fa-user-shield"></i>
-            <h2>VERIFY IDENTITY</h2>
-            <p>Solve this simple equation to gain access.</p>
-            <div class="math-question" id="questionText">0 + 0</div>
-            <input type="number" id="userAnswer" class="math-input" placeholder="Enter answer...">
-            <button class="verify-btn" onclick="checkAnswer()">PROCEED ACCESS</button>
-            <p id="errorMessage" class="error-msg">Wrong answer! Please try again.</p>
-            <button onclick="closeModal()" style="background:transparent; border:none; color:var(--dim); margin-top:15px; cursor:pointer; font-size:0.7rem; font-family:'Orbitron';">ABORT MISSION</button>
+            
+            <div id="mainModalContent">
+                <div class="hacker-glitch">Security Check</div>
+                <p style="font-size: 0.8rem; color: #555;">[SYSTEM] Solve to establish connection...</p>
+                <div class="math-question" id="questionText">0 + 0</div>
+                <input type="number" id="userAnswer" class="math-input" placeholder="ANS_">
+                <div class="btn-box">
+                    <button class="verify-btn" onclick="checkAnswer()">PROCEED_DECRYPTION</button>
+                    <button class="abort-btn" onclick="closeModal()">TERMINATE</button>
+                </div>
+            </div>
+
+            <div id="lockoutSection">
+                <div class="hacker-glitch">Access Denied</div>
+                <p>Too many failed attempts. Connection Throttled.</p>
+                <span class="timer-val" id="countdownTimer">00:00</span>
+                <p style="font-size: 0.7rem; color: #555; margin-bottom: 20px;">Retry after cooldown period.</p>
+                <div class="btn-box">
+                    <button class="abort-btn" onclick="closeModal()">ABORT MISSION</button>
+                </div>
+            </div>
+
+            <div class="error-terminal" id="errorTerminal">
+                <div id="attemptMsg" style="color: #fff; font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid #ff0000; padding-bottom: 2px;"></div>
+                > ERROR: INVALID_CREDENTIALS<br>
+                > UNAUTHORIZED_ACCESS_DETECTED<br>
+                > ATTEMPT_LOGGED: <span id="logTimestamp"></span>
+            </div>
         </div>
     </div>
 
-    <div class="back-nav">
-        <a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a>
-    </div>
+    <div class="back-nav"><a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a></div>
 
     <script>
         let currentCorrectAnswer = 0;
         let targetUrl = "";
+        let attemptCount = 0;
 
-        function startVerification(url) {
-            targetUrl = url;
-            generateMathQuestion();
-            document.getElementById('mathModal').style.display = 'flex';
-            document.getElementById('userAnswer').focus();
+        // Check persistent lockout on load
+        window.onload = function() {
+            const unlockTime = localStorage.getItem('unlockTime');
+            if (unlockTime && Date.now() < unlockTime) {
+                const remaining = Math.ceil((unlockTime - Date.now()) / 1000);
+                startLockout(remaining);
+            }
+        };
+
+        function handleAccess(url) {
+            const unlockTime = localStorage.getItem('unlockTime');
+            if (unlockTime && Date.now() < unlockTime) {
+                const remaining = Math.ceil((unlockTime - Date.now()) / 1000);
+                startLockout(remaining);
+                document.getElementById('mathModal').style.display = 'flex';
+            } else {
+                targetUrl = url;
+                generateMathQuestion();
+                document.getElementById('mathModal').style.display = 'flex';
+                document.getElementById('userAnswer').focus();
+            }
         }
 
         function generateMathQuestion() {
             const ops = ['+', '-', '*'];
             const op = ops[Math.floor(Math.random() * ops.length)];
-            let n1 = Math.floor(Math.random() * 10) + 1;
-            let n2 = Math.floor(Math.random() * 10) + 1;
-
-            if (op === '-' && n1 < n2) { [n1, n2] = [n2, n1]; }
-
+            let n1 = Math.floor(Math.random() * 12) + 2;
+            let n2 = Math.floor(Math.random() * 10) + 2;
+            if (op === '-' && n1 < n2) [n1, n2] = [n2, n1];
+            
             document.getElementById('questionText').innerText = `${n1} ${op === '*' ? '×' : op} ${n2}`;
             
             if(op === '+') currentCorrectAnswer = n1 + n2;
@@ -278,29 +219,73 @@
 
         function checkAnswer() {
             const userAns = parseInt(document.getElementById('userAnswer').value);
-            const errorElement = document.getElementById('errorMessage');
+            const terminal = document.getElementById('errorTerminal');
+            const attemptDisplay = document.getElementById('attemptMsg');
+            const timestamp = document.getElementById('logTimestamp');
 
             if (userAns === currentCorrectAnswer) {
-                errorElement.style.display = 'none';
-                document.querySelector('.modal-content').innerHTML = `
-                    <i class="fas fa-check-circle" style="color:#00ff00;"></i>
-                    <h2 style="color:#00ff00;">ACCESS GRANTED</h2>
-                    <p>Redirecting to secure archives...</p>
+                attemptCount = 0;
+                localStorage.removeItem('lockoutLevel');
+                document.getElementById('mainModalContent').innerHTML = `
+                    <div class="hacker-glitch" style="color:#0f0">ACCESS GRANTED</div>
+                    <p style="color:#0f0">> BYPASSING FIREWALL...<br>> LOADING SECURE_ARCHIVE...</p>
                 `;
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 1500);
+                setTimeout(() => { window.location.href = targetUrl; }, 1500);
             } else {
-                errorElement.style.display = 'block';
+                attemptCount++;
+                timestamp.innerText = new Date().toLocaleTimeString();
+                terminal.style.display = 'block';
+                
+                // Set Attempt Message
+                if (attemptCount === 1) attemptDisplay.innerText = "[!] FIRST ATTEMPT FAILED";
+                else if (attemptCount === 2) attemptDisplay.innerText = "[!!] SECOND ATTEMPT FAILED";
+                else if (attemptCount === 3) attemptDisplay.innerText = "[!!!] THIRD ATTEMPT FAILED";
+
                 document.getElementById('userAnswer').value = "";
-                setTimeout(generateMathQuestion, 500);
+                
+                if (attemptCount >= 3) {
+                    let level = parseInt(localStorage.getItem('lockoutLevel') || 0);
+                    let waitTime = 5 * Math.pow(2, level); // 5, 10, 20...
+                    const unlockAt = Date.now() + (waitTime * 60 * 1000);
+                    
+                    localStorage.setItem('unlockTime', unlockAt);
+                    localStorage.setItem('lockoutLevel', level + 1);
+                    
+                    setTimeout(() => startLockout(waitTime * 60), 1000);
+                } else {
+                    setTimeout(generateMathQuestion, 600);
+                }
             }
+        }
+
+        function startLockout(seconds) {
+            document.getElementById('mainModalContent').style.display = 'none';
+            document.getElementById('lockoutSection').style.display = 'block';
+            document.getElementById('errorTerminal').style.display = 'none';
+
+            const timerDisplay = document.getElementById('countdownTimer');
+            const interval = setInterval(() => {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    location.reload(); 
+                }
+                seconds--;
+            }, 1000);
         }
 
         function closeModal() {
             document.getElementById('mathModal').style.display = 'none';
+            document.getElementById('errorTerminal').style.display = 'none';
+            attemptCount = 0;
+            // Clear input if closed
+            document.getElementById('userAnswer').value = "";
         }
 
+        // Allow 'Enter' key to submit
         document.getElementById('userAnswer').addEventListener("keyup", function(event) {
             if (event.key === "Enter") { checkAnswer(); }
         });
