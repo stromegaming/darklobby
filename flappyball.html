@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flappy Balls - DarkLobby</title>
+    <style>
+        :root {
+            --neon-red: #ff003c;
+            --neon-glow: rgba(255, 0, 60, 0.6);
+            --bg-black: #050505;
+            --ui-white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 700px;
+            background-color: var(--bg-black);
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.2);
+            overflow: hidden;
+            border: 2px solid var(--neon-red);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .menu-card {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 20px var(--neon-glow);
+            pointer-events: auto;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+            color: white;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 { 
+            color: var(--neon-red); 
+            margin-bottom: 0.5rem; 
+            font-size: 2.2rem; 
+            text-shadow: 0 0 10px var(--neon-red);
+            letter-spacing: 2px;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.65rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        p { color: #aaa; margin-bottom: 1.5rem; }
+
+        .challenge-msg {
+            color: var(--neon-red);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--neon-red);
+            border: 2px solid var(--neon-red);
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+
+        .btn:hover { background: rgba(255, 0, 60, 0.1); }
+        .btn:active { transform: scale(0.95); background: var(--neon-red); color: black; }
+
+        #score-display {
+            position: absolute;
+            top: 20px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--neon-red);
+            text-shadow: 0 0 15px var(--neon-red);
+            pointer-events: none;
+        }
+
+        #speed-tag {
+            position: absolute;
+            top: 85px;
+            color: #ff003c;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        #pause-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        #message-box {
+            position: absolute;
+            bottom: 40px;
+            background: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid var(--neon-red);
+            font-weight: bold;
+            color: var(--neon-red);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 0 10px var(--neon-glow);
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <button id="pause-btn" onclick="togglePause()" style="display:none">||</button>
+    
+    <div id="ui-overlay">
+        <div id="score-display">0</div>
+        <div id="speed-tag">LVL: 1</div>
+        
+        <!-- Start Menu -->
+        <div id="start-menu" class="menu-card" style="display: block;">
+            <h1>FLAPPY BALLS</h1>
+            <div class="copyright">© 2026 DARK LOBBY. ALL RIGHTS RESERVED.</div>
+            <p>Tap or Space to Jump</p>
+            <div class="btn-group">
+                <button class="btn" onclick="startGame(true)">START NEW GAME</button>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pause-menu" class="menu-card">
+            <h1>PAUSED</h1>
+            <div class="copyright">© 2026 DARK LOBBY. ALL RIGHTS RESERVED.</div>
+            <div class="btn-group">
+                <button class="btn" onclick="togglePause()">RESUME</button>
+                <button class="btn" onclick="startGame(true)">RESTART NEW GAME</button>
+            </div>
+        </div>
+
+        <!-- Game Over Menu -->
+        <div id="game-over-menu" class="menu-card">
+            <h1>CRITICAL FAILURE</h1>
+            <div class="copyright">© 2026 DARK LOBBY. ALL RIGHTS RESERVED.</div>
+            <p id="final-score">Score: 0</p>
+            <p id="high-score">BEST SCORE: 0</p>
+            <span class="challenge-msg">CAN YOU CROSS THIS SCORE ??</span>
+            <div class="btn-group">
+                <button class="btn" onclick="startGame(true)">RESTART</button>
+            </div>
+        </div>
+
+        <div id="message-box"></div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('score-display');
+    const speedTag = document.getElementById('speed-tag');
+    const startMenu = document.getElementById('start-menu');
+    const pauseMenu = document.getElementById('pause-menu');
+    const gameOverMenu = document.getElementById('game-over-menu');
+    const pauseBtn = document.getElementById('pause-btn');
+    const finalScoreText = document.getElementById('final-score');
+    const highScoreText = document.getElementById('high-score');
+    const messageBox = document.getElementById('message-box');
+
+    // Game Constants
+    const GRAVITY = 0.25;
+    const JUMP_STRENGTH = -5.5;
+    const BASE_PIPE_SPEED = 2.8;
+    const BASE_SPAWN_RATE = 90;
+    const PIPE_WIDTH = 65;
+    const PIPE_GAP = 175;
+    const BIRD_SIZE = 32;
+
+    // Game State
+    let bird, pipes, frameCount, score;
+    let highScore = parseInt(localStorage.getItem('flappyBalls_highScore')) || 0;
+    let stars = [];
+    let gameActive = false;
+    let isPaused = false;
+    let currentPipeSpeed = BASE_PIPE_SPEED;
+    let spawnRate = BASE_SPAWN_RATE;
+
+    function resize() {
+        const container = document.getElementById('game-container');
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        initStars();
+    }
+
+    window.addEventListener('resize', resize);
+
+    class Star {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5;
+            this.opacity = Math.random();
+            this.fadeSpeed = 0.01 + Math.random() * 0.02;
+            this.driftSpeed = 0.1 + Math.random() * 0.3;
+        }
+
+        draw() {
+            ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        update() {
+            if (isPaused) return;
+            this.x -= this.driftSpeed;
+            if (this.x < 0) this.x = canvas.width;
+            this.opacity += this.fadeSpeed;
+            if (this.opacity > 1 || this.opacity < 0.2) {
+                this.fadeSpeed = -this.fadeSpeed;
+            }
+        }
+    }
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < 60; i++) {
+            stars.push(new Star());
+        }
+    }
+
+    resize();
+
+    class Bird {
+        constructor() {
+            this.x = 60;
+            this.y = canvas.height / 2;
+            this.velocity = 0;
+            this.radius = BIRD_SIZE / 2;
+        }
+
+        draw() {
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, this.velocity * 0.1));
+            ctx.rotate(rotation);
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ff003c';
+            ctx.beginPath();
+            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#ff003c';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(this.radius * 0.4, -this.radius * 0.2, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#000';
+            ctx.fill();
+            ctx.restore();
+        }
+
+        update() {
+            if (isPaused) return;
+            this.velocity += GRAVITY;
+            this.y += this.velocity;
+            if (this.y + this.radius > canvas.height) {
+                this.y = canvas.height - this.radius;
+                endGame();
+            }
+            if (this.y - this.radius < 0) {
+                this.y = this.radius;
+                this.velocity = 0;
+            }
+        }
+
+        jump() {
+            if (gameActive && !isPaused) this.velocity = JUMP_STRENGTH;
+        }
+    }
+
+    class Pipe {
+        constructor() {
+            this.x = canvas.width;
+            this.topHeight = Math.random() * (canvas.height - PIPE_GAP - 150) + 75;
+            this.passed = false;
+        }
+
+        draw() {
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#ff003c';
+            ctx.fillStyle = '#110000';
+            ctx.strokeStyle = '#ff003c';
+            ctx.lineWidth = 4;
+            this.drawPipeSection(this.x, 0, PIPE_WIDTH, this.topHeight, true);
+            const bottomY = this.topHeight + PIPE_GAP;
+            const bottomHeight = canvas.height - bottomY;
+            this.drawPipeSection(this.x, bottomY, PIPE_WIDTH, bottomHeight, false);
+            ctx.shadowBlur = 0;
+        }
+
+        drawPipeSection(x, y, w, h, isTop) {
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeRect(x, y, w, h);
+            ctx.beginPath();
+            ctx.moveTo(x + w * 0.5, y);
+            ctx.lineTo(x + w * 0.5, y + h);
+            ctx.strokeStyle = 'rgba(255, 0, 60, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            const lipY = isTop ? y + h - 25 : y;
+            ctx.fillStyle = '#000';
+            ctx.strokeStyle = '#ff003c';
+            ctx.lineWidth = 4;
+            ctx.fillRect(x - 5, lipY, w + 10, 25);
+            ctx.strokeRect(x - 5, lipY, w + 10, 25);
+        }
+
+        update() {
+            if (isPaused) return;
+            this.x -= currentPipeSpeed;
+        }
+
+        isColliding(bird) {
+            const bx = bird.x;
+            const by = bird.y;
+            const br = bird.radius - 4;
+            if (bx + br > this.x && bx - br < this.x + PIPE_WIDTH) {
+                if (by - br < this.topHeight || by + br > this.topHeight + PIPE_GAP) return true;
+            }
+            return false;
+        }
+    }
+
+    function togglePause() {
+        if (!gameActive) return;
+        isPaused = !isPaused;
+        pauseMenu.style.display = isPaused ? 'block' : 'none';
+        pauseBtn.innerText = isPaused ? '▶' : '||';
+        if (!isPaused) requestAnimationFrame(gameLoop);
+    }
+
+    function updateSpeed() {
+        let linearIncrease = score * 0.05;
+        let multiplierFactor = Math.floor(score / 5);
+        let exponentialIncrease = Math.pow(1.1, multiplierFactor);
+        currentPipeSpeed = (BASE_PIPE_SPEED + linearIncrease) * exponentialIncrease;
+        if (currentPipeSpeed > 10) currentPipeSpeed = 10;
+        spawnRate = (BASE_SPAWN_RATE * BASE_PIPE_SPEED) / currentPipeSpeed;
+        speedTag.innerText = `LVL: ${multiplierFactor + 1}`;
+    }
+
+    function startGame(isNew) {
+        if (isNew) {
+            bird = new Bird();
+            pipes = [];
+            score = 0;
+            frameCount = 0;
+            currentPipeSpeed = BASE_PIPE_SPEED;
+            spawnRate = BASE_SPAWN_RATE;
+            initStars();
+        }
+        isPaused = false;
+        gameActive = true;
+        scoreElement.innerText = '0';
+        speedTag.innerText = 'LVL: 1';
+        startMenu.style.display = 'none';
+        pauseMenu.style.display = 'none';
+        gameOverMenu.style.display = 'none';
+        pauseBtn.style.display = 'flex';
+        requestAnimationFrame(gameLoop);
+    }
+
+    function endGame() {
+        if (!gameActive) return;
+        gameActive = false;
+        pauseBtn.style.display = 'none';
+        
+        if (score > highScore) {
+            highScore = score;
+            localStorage.setItem('flappyBalls_highScore', highScore);
+            showMessage("NEW BEST SCORE ACHIEVED");
+        }
+        
+        finalScoreText.innerText = `Score: ${score}`;
+        highScoreText.innerText = `BEST SCORE: ${highScore}`;
+        gameOverMenu.style.display = 'block';
+    }
+
+    function showMessage(text) {
+        messageBox.innerText = text;
+        messageBox.style.opacity = '1';
+        setTimeout(() => messageBox.style.opacity = '0', 2500);
+    }
+
+    function gameLoop() {
+        if (!gameActive || isPaused) return;
+        ctx.fillStyle = '#050505';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(star => {
+            star.update();
+            star.draw();
+        });
+        ctx.strokeStyle = 'rgba(255, 0, 60, 0.05)';
+        ctx.lineWidth = 1;
+        for(let i=0; i<canvas.width; i+=30) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+        }
+        if (frameCount % Math.floor(spawnRate) === 0) {
+            pipes.push(new Pipe());
+        }
+        for (let i = pipes.length - 1; i >= 0; i--) {
+            pipes[i].update();
+            pipes[i].draw();
+            if (pipes[i].isColliding(bird)) endGame();
+            if (!pipes[i].passed && pipes[i].x + PIPE_WIDTH < bird.x) {
+                pipes[i].passed = true;
+                score++;
+                scoreElement.innerText = score;
+                updateSpeed();
+            }
+            if (pipes[i].x + PIPE_WIDTH < -100) pipes.splice(i, 1);
+        }
+        bird.update();
+        bird.draw();
+        frameCount++;
+        requestAnimationFrame(gameLoop);
+    }
+
+    function handleAction(e) {
+        if (e.type === 'keydown') {
+            if (e.code === 'KeyP' || e.code === 'Escape') {
+                togglePause();
+                return;
+            }
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                // If game is over, restart on Space
+                if (!gameActive && gameOverMenu.style.display === 'block') {
+                    startGame(true);
+                    return;
+                }
+                // If game hasn't started, start on Space
+                if (!gameActive && startMenu.style.display === 'block') {
+                    startGame(true);
+                    return;
+                }
+                // Otherwise jump
+                if (gameActive && !isPaused) bird.jump();
+            }
+        }
+    }
+
+    window.addEventListener('keydown', handleAction);
+    canvas.addEventListener('touchstart', (e) => {
+        if (e.target.id === 'pause-btn') return;
+        e.preventDefault();
+        if (gameActive && !isPaused) bird.jump();
+    }, { passive: false });
+    canvas.addEventListener('mousedown', (e) => {
+        if (e.target.id === 'pause-btn') return;
+        if (gameActive && !isPaused) bird.jump();
+    });
+</script>
+</body>
+</html>
