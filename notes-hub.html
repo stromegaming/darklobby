@@ -13,7 +13,7 @@
             --card: #111111;
             --text: #ffffff;
             --dim: #888888;
-            --overlay: rgba(0, 0, 0, 0.9);
+            --overlay: rgba(0, 0, 0, 0.95);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -26,7 +26,7 @@
             min-height: 100vh;
         }
 
-        /* --- Header Section (Matching Software Hub) --- */
+        /* --- Header Section --- */
         .header-container {
             display: flex;
             align-items: center;
@@ -36,7 +36,6 @@
             padding-top: 20px;
         }
 
-        /* Logo Box Animation (Matching Software Hub) */
         .logo-box-small {
             position: relative;
             width: 80px;
@@ -69,7 +68,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        .header-text { text-align: left; }
         .header-text h1 {
             font-family: 'Orbitron';
             font-size: 1.8rem;
@@ -77,9 +75,10 @@
             margin: 0;
             text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
+
         .header-text p { color: var(--dim); font-size: 0.85rem; margin-top: 5px; }
 
-        /* --- Notes List (Matching Software Hub List Style) --- */
+        /* --- Notes List --- */
         .notes-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
         .note-item {
@@ -91,14 +90,22 @@
             align-items: center;
             justify-content: space-between;
             transition: 0.3s;
-            text-decoration: none;
-            color: inherit;
+            cursor: pointer;
         }
 
-        .note-item:hover { 
-            border-color: var(--primary); 
-            background: #1a0505; 
-            transform: translateY(-3px); 
+        .note-item:hover { border-color: var(--primary); background: #1a0505; transform: translateY(-3px); }
+
+        /* Locked Items Styling */
+        .note-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border: 1px dashed #333;
+        }
+
+        .note-item.locked:hover {
+            transform: none;
+            border-color: #333;
+            background: var(--card);
         }
 
         .note-info { display: flex; align-items: center; gap: 20px; }
@@ -115,26 +122,68 @@
         .view-btn {
             background: transparent; border: 1px solid var(--primary);
             color: var(--primary); padding: 8px 20px; border-radius: 5px;
-            font-family: 'Orbitron'; font-size: 0.7rem;
-            font-weight: bold; transition: 0.3s;
+            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold;
         }
 
-        .note-item:hover .view-btn { 
-            background: var(--primary); 
-            color: white; 
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); 
+        .locked-btn {
+            color: #555; border: 1px solid #333;
+            padding: 8px 20px; border-radius: 5px;
+            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold;
         }
+
+        /* --- Verification Modal --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--overlay); display: none; align-items: center;
+            justify-content: center; z-index: 1000; backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: #0a0a0a; border: 2px solid var(--primary);
+            padding: 40px; border-radius: 20px; max-width: 400px;
+            width: 90%; text-align: center; position: relative;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+            animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content i { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
+        .modal-content h2 { font-family: 'Orbitron'; font-size: 1.2rem; margin-bottom: 10px; }
+        .modal-content p { color: var(--dim); font-size: 0.9rem; margin-bottom: 20px; }
+
+        .math-question {
+            font-family: 'Orbitron'; font-size: 1.8rem; color: #fff;
+            margin: 20px 0; background: rgba(255, 0, 0, 0.05);
+            padding: 15px; border-radius: 10px; border: 1px dashed var(--primary);
+        }
+
+        .math-input {
+            width: 100%; background: #111; border: 1px solid #333;
+            padding: 12px; border-radius: 8px; color: #fff;
+            font-family: 'Orbitron'; text-align: center; font-size: 1.2rem;
+            margin-bottom: 20px; outline: none; transition: 0.3s;
+        }
+
+        .math-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255,0,0,0.2); }
+
+        .verify-btn {
+            width: 100%; background: var(--primary); color: #fff;
+            border: none; padding: 12px; border-radius: 8px;
+            font-family: 'Orbitron'; font-weight: bold; cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-btn:hover { background: #cc0000; box-shadow: 0 0 20px rgba(255, 0, 0, 0.4); }
+
+        .error-msg { color: #ff4d4d; font-size: 0.8rem; margin-top: 10px; display: none; }
 
         .back-nav { margin-top: 50px; text-align: center; }
         .back-nav a { color: var(--dim); text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
         .back-nav a:hover { color: var(--primary); }
-
-        @media (max-width: 600px) {
-            .header-container { flex-direction: column; text-align: center; gap: 15px; }
-            .header-text { text-align: center; }
-            .note-item { flex-direction: column; text-align: center; gap: 15px; }
-            .note-info { flex-direction: column; gap: 10px; }
-        }
     </style>
 </head>
 <body>
@@ -150,8 +199,7 @@
     </div>
 
     <div class="notes-list">
-        
-        <a href="github-guide.html" class="note-item">
+        <div class="note-item" onclick="startVerification('github-guide.html')">
             <div class="note-info">
                 <div class="note-icon"><i class="fab fa-github"></i></div>
                 <div class="note-details">
@@ -159,26 +207,103 @@
                     <span>To create and live website from GitHub</span>
                 </div>
             </div>
-            <div class="view-btn">
-                <i class="fas fa-eye"></i> VIEW GUIDE
-            </div>
-        </a>
+            <div class="view-btn">VIEW GUIDE</div>
+        </div>
 
-        <div class="note-item" style="opacity: 0.4; cursor: not-allowed; border-style: dashed;">
+        <div class="note-item locked">
             <div class="note-info">
                 <div class="note-icon"><i class="fas fa-lock"></i></div>
                 <div class="note-details">
-                    <h3>Coming Soon</h3>
-                    <span>Encryption in progress...</span>
+                    <h3>Web Development Roadmap</h3>
+                    <span>COMMING SOON | SECURE ARCHIVE</span>
                 </div>
             </div>
+            <div class="locked-btn">LOCKED</div>
         </div>
 
+        <div class="note-item locked">
+            <div class="note-info">
+                <div class="note-icon"><i class="fas fa-microchip"></i></div>
+                <div class="note-details">
+                    <h3>Python Automation Mastery</h3>
+                    <span>COMMING SOON | SECURE ARCHIVE</span>
+                </div>
+            </div>
+            <div class="locked-btn">LOCKED</div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="mathModal">
+        <div class="modal-content">
+            <i class="fas fa-user-shield"></i>
+            <h2>VERIFY IDENTITY</h2>
+            <p>Solve this simple equation to gain access.</p>
+            <div class="math-question" id="questionText">0 + 0</div>
+            <input type="number" id="userAnswer" class="math-input" placeholder="Enter answer...">
+            <button class="verify-btn" onclick="checkAnswer()">PROCEED ACCESS</button>
+            <p id="errorMessage" class="error-msg">Wrong answer! Please try again.</p>
+            <button onclick="closeModal()" style="background:transparent; border:none; color:var(--dim); margin-top:15px; cursor:pointer; font-size:0.7rem; font-family:'Orbitron';">ABORT MISSION</button>
+        </div>
     </div>
 
     <div class="back-nav">
         <a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a>
     </div>
 
+    <script>
+        let currentCorrectAnswer = 0;
+        let targetUrl = "";
+
+        function startVerification(url) {
+            targetUrl = url;
+            generateMathQuestion();
+            document.getElementById('mathModal').style.display = 'flex';
+            document.getElementById('userAnswer').focus();
+        }
+
+        function generateMathQuestion() {
+            const ops = ['+', '-', '*'];
+            const op = ops[Math.floor(Math.random() * ops.length)];
+            let n1 = Math.floor(Math.random() * 10) + 1;
+            let n2 = Math.floor(Math.random() * 10) + 1;
+
+            if (op === '-' && n1 < n2) { [n1, n2] = [n2, n1]; }
+
+            document.getElementById('questionText').innerText = `${n1} ${op === '*' ? '×' : op} ${n2}`;
+            
+            if(op === '+') currentCorrectAnswer = n1 + n2;
+            if(op === '-') currentCorrectAnswer = n1 - n2;
+            if(op === '*') currentCorrectAnswer = n1 * n2;
+        }
+
+        function checkAnswer() {
+            const userAns = parseInt(document.getElementById('userAnswer').value);
+            const errorElement = document.getElementById('errorMessage');
+
+            if (userAns === currentCorrectAnswer) {
+                errorElement.style.display = 'none';
+                document.querySelector('.modal-content').innerHTML = `
+                    <i class="fas fa-check-circle" style="color:#00ff00;"></i>
+                    <h2 style="color:#00ff00;">ACCESS GRANTED</h2>
+                    <p>Redirecting to secure archives...</p>
+                `;
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 1500);
+            } else {
+                errorElement.style.display = 'block';
+                document.getElementById('userAnswer').value = "";
+                setTimeout(generateMathQuestion, 500);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('mathModal').style.display = 'none';
+        }
+
+        document.getElementById('userAnswer').addEventListener("keyup", function(event) {
+            if (event.key === "Enter") { checkAnswer(); }
+        });
+    </script>
 </body>
 </html>
