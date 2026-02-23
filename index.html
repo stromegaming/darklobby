@@ -97,7 +97,7 @@
             position: relative;
         }
 
-        /* --- New Dark Lobby Button Style --- */
+        /* --- Gaming Hub Switch Button --- */
         .btn-dark-lobby {
             border: 1px solid var(--primary);
             color: var(--primary);
@@ -200,7 +200,6 @@
         .social-links a { color: white; font-size: 1.2rem; transition: 0.3s; }
         .social-links a:hover { color: var(--primary); transform: scale(1.2); }
 
-        /* Responsive Settings */
         @media (max-width: 1024px) {
             .grid-container { grid-template-columns: repeat(2, 1fr); }
         }
@@ -208,7 +207,7 @@
             .grid-container { grid-template-columns: 1fr; }
             .hub-hero { height: auto; padding: 60px 5%; }
             .hero-btns { flex-direction: column; width: 100%; align-items: center; }
-            .btn-common { width: 200px; justify-content: center; }
+            .btn-common { width: 220px; justify-content: center; }
         }
     </style>
 </head>
@@ -222,9 +221,9 @@
         <p>CREATOR | DEVELOPER | GAMER</p>
         
         <div class="hero-btns">
-            <a href="gaming.html" class="btn-common btn-dark-lobby">
+            <a href="gaming-hub.html" class="btn-common btn-dark-lobby">
                 <span class="pulse-dot"></span>
-                <i class="fas fa-ghost"></i> DARK LOBBY
+                <i class="fas fa-ghost"></i> ENTER GAMING HUB
             </a>
 
             <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation">
@@ -239,11 +238,11 @@
 
     <div class="grid-container">
         
-        <a href="gaming.html" class="category-card">
+        <a href="gaming-hub.html" class="category-card">
             <span class="status-tag status-online">Transmitting</span>
             <i class="fas fa-crosshairs"></i>
-            <h3>Gaming</h3>
-            <p>High-skill CODM gameplay archives.</p>
+            <h3>Gaming Hub</h3>
+            <p>Tactical operations, arcade missions & highlights.</p>
         </a>
 
         <a href="calculator.html" class="category-card">
@@ -282,13 +281,6 @@
         let visits = localStorage.getItem('pageVisits') || 0;
         visits++;
         localStorage.setItem('pageVisits', visits);
-
-        function trackDownload(fileName) {
-            let downloads = localStorage.getItem('downloadCount') || 0;
-            downloads++;
-            localStorage.setItem('downloadCount', downloads);
-            alert("Downloading: " + fileName);
-        }
     </script>
 </body>
 </html>
