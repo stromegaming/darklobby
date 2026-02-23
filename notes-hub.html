@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Hub | Digital Universe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF0000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --text-light: #ffffff;
+            --text-dim: #b3b3b3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Small Animated Logo */
+        .header-section {
+            padding: 40px 5%;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 100%);
+        }
+
+        .logo-small {
+            width: 60px; /* Chittika pareko sano logo */
+            filter: drop-shadow(0 0 8px var(--primary));
+            animation: pulse 2s infinite ease-in-out;
+            margin-bottom: 15px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--primary)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--primary)); }
+        }
+
+        .header-section h1 { font-size: 2rem; margin: 0; }
+        .header-section h1 span { color: var(--primary); }
+
+        /* Grid for Notes Cards */
+        .notes-grid {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .note-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            border: 1px solid var(--glass);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.15);
+            background: #150000;
+        }
+
+        .note-card i {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .note-card h3 { font-size: 1rem; margin: 5px 0; }
+        .note-card p { color: var(--text-dim); font-size: 0.8rem; line-height: 1.5; }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); }
+
+        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.7rem; }
+    </style>
+</head>
+<body>
+
+    <section class="header-section">
+        <a href="index.html">
+            <img src="images/DGLOGO.PNG" alt="DG" class="logo-small">
+        </a>
+        <h1>NOTES <span>HUB</span></h1>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO UNIVERSE</a>
+    </section>
+
+    <div class="notes-grid">
+        
+        <a href="github-guide.html" class="note-card">
+            <i class="fab fa-github"></i>
+            <h3>🚀 GitHub Complete Guide</h3>
+            <p>To create and live website from GitHub. Step-by-step roadmap for beginners.</p>
+        </a>
+
+        <div class="note-card" style="opacity: 0.5; cursor: not-allowed;">
+            <i class="fas fa-lock"></i>
+            <h3>More Coming Soon</h3>
+            <p>Archives are being decrypted...</p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 DIPESH GHIMIRE | Notes Hub Encryption Active.
+    </footer>
+
+</body>
+</html>

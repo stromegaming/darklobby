@@ -99,11 +99,10 @@
         .btn-contact { border: 1px solid white; color: white; }
         .btn-contact:hover { background: white; color: black; }
 
-        /* --- 4 Cards in 1 Row Layout --- */
+        /* --- 4 Cards Layout --- */
         .grid-container {
             padding: 20px 5% 80px 5%;
             display: grid;
-            /* Force 4 columns on large screens */
             grid-template-columns: repeat(4, 1fr); 
             gap: 1rem;
             max-width: 1300px;
@@ -167,10 +166,10 @@
 
         /* Responsive Settings */
         @media (max-width: 1024px) {
-            .grid-container { grid-template-columns: repeat(2, 1fr); } /* 2 per row on tablets */
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 600px) {
-            .grid-container { grid-template-columns: 1fr; } /* 1 per row on phones */
+            .grid-container { grid-template-columns: 1fr; }
             .hub-hero { height: auto; padding: 60px 5%; }
         }
     </style>
@@ -216,8 +215,8 @@
             <p>Apps under encryption.</p>
         </a>
 
-        <a href="maintenance.html" class="category-card">
-            <span class="status-tag status-offline">Locked</span>
+        <a href="notes-hub.html" class="category-card">
+            <span class="status-tag status-online">Active</span>
             <i class="fas fa-book-bookmark"></i>
             <h3>Notes</h3>
             <p>Educational archives & logs.</p>
@@ -233,20 +232,18 @@
         </div>
         <p>&copy; 2026 DIPESH GHIMIRE. All Systems Nominal.</p>
     </footer>
-	<script>
-    // Page Visit Counter
-    let visits = localStorage.getItem('pageVisits') || 0;
-    visits++;
-    localStorage.setItem('pageVisits', visits);
 
-    // Download Tracker Function
-    // Jun button ma download track garnu parne ho, tyesma onclick="trackDownload('File_Name')" halnuhos
-    function trackDownload(fileName) {
-        let downloads = localStorage.getItem('downloadCount') || 0;
-        downloads++;
-        localStorage.setItem('downloadCount', downloads);
-        alert("Downloading: " + fileName);
-    }
-</script>
+    <script>
+        let visits = localStorage.getItem('pageVisits') || 0;
+        visits++;
+        localStorage.setItem('pageVisits', visits);
+
+        function trackDownload(fileName) {
+            let downloads = localStorage.getItem('downloadCount') || 0;
+            downloads++;
+            localStorage.setItem('downloadCount', downloads);
+            alert("Downloading: " + fileName);
+        }
+    </script>
 </body>
 </html>
