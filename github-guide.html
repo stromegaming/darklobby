@@ -3,212 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Hub | GitHub Guide</title>
+    <title>GitHub Guide | Dark Lobby</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0d1117;
-            --card-bg: #161b22;
-            --border: #30363d;
-            --accent: #58a6ff;
-            --text: #c9d1d9;
-            --code-text: #7ee787;
+            --primary: #FF0000;
+            --bg-dark: #0a0a0a;
+            --bg-card: #111111;
+            --text-light: #ffffff;
+            --text-dim: #b3b3b3;
+            --border: rgba(255, 0, 0, 0.2);
+            --transition: all 0.3s ease;
         }
 
         body {
             background-color: var(--bg-dark);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             line-height: 1.6;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        /* Animated Logo */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
+        /* --- Animated Back Button --- */
+        .btn-wrapper {
+            margin: 30px 0;
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .btn-wrapper.end {
+            justify-content: center; /* Bottom button center ma rakheko */
+            margin-top: 50px;
         }
 
-        .animated-logo {
-            width: 120px;
-            height: auto;
-            animation: pulse 2s infinite ease-in-out;
-            filter: drop-shadow(0 0 10px var(--accent));
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 5px var(--accent)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 20px var(--accent)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--accent)); }
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            color: #fff;
-            margin: 10px 0;
-            letter-spacing: 2px;
-        }
-
-        .hub-tag {
-            background: var(--accent);
-            color: #000;
-            padding: 5px 15px;
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
             font-weight: bold;
+            border: 1px solid var(--primary);
+            padding: 12px 25px;
             border-radius: 5px;
-            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            background: transparent;
+            z-index: 1;
         }
 
-        /* Separate Step Cards */
-        .step-card {
-            background: var(--card-bg);
+        .btn-back::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn-back:hover::before {
+            left: 0;
+        }
+
+        .btn-back:hover {
+            color: black;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-back i {
+            animation: moveLeft 1.5s infinite ease-in-out;
+        }
+
+        @keyframes moveLeft {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-5px); }
+        }
+
+        /* --- Content Sections --- */
+        .guide-section {
+            background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 30px;
-            margin-bottom: 30px;
-            position: relative;
-            transition: 0.3s;
+            margin-bottom: 25px;
+            transition: var(--transition);
         }
 
-        .step-card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .guide-section:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1);
         }
 
-        .step-number {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: var(--accent);
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        h2 { color: var(--accent); margin-top: 10px; }
+        p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
 
         pre {
             background: #000;
             padding: 15px;
             border-radius: 8px;
+            border: 1px solid #333;
             overflow-x: auto;
-            border: 1px solid var(--border);
         }
 
-        code { color: var(--code-text); font-family: 'Consolas', monospace; }
+        code {
+            color: #ff4d4d;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
 
-        .note-box {
-            background: rgba(88, 166, 255, 0.1);
-            border-left: 4px solid var(--accent);
-            padding: 15px;
-            margin: 15px 0;
-            font-style: italic;
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
         }
 
         footer {
             text-align: center;
-            margin-top: 60px;
-            padding: 20px;
+            padding: 40px 0;
+            color: var(--text-dim);
+            font-size: 0.8rem;
             border-top: 1px solid var(--border);
-            color: #8b949e;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="logo-container">
-            <img src="DGLOGO.PNG" alt="Notes Hub Logo" class="animated-logo">
+        <div class="btn-wrapper">
+            <a href="notes-hub.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> BACK TO NOTES HUB
+            </a>
         </div>
 
-        <header>
-            <span class="hub-tag">Notes Hub</span>
-            <h1>GitHub Complete Guide</h1>
-            <p>Master the art of Version Control & Deployment</p>
-        </header>
-
-        <div class="step-card">
-            <div class="step-number">STEP 01</div>
-            <h2>🖥️ Create Your Website</h2>
-            <p>Sabai bhanda pahila euta naya folder banaunus ra tesma <code>index.html</code> file create garnuhos. Yo nai tapai ko website ko main structure ho.</p>
+        <div class="guide-section">
+            <h2><i class="fas fa-file-code"></i> STEP 01: Build Website</h2>
+            <p>Create a folder and an <span class="highlight">index.html</span> file.</p>
             <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;body&gt;
-    &lt;h1&gt;Welcome to Notes Hub&lt;/h1&gt;
+    &lt;h1&gt;Site Live On GitHub&lt;/h1&gt;
   &lt;/body&gt;
 &lt;/html&gt;</code></pre>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 02</div>
-            <h2>🔧 Install Git</h2>
-            <p>Official website <a href="https://git-scm.com/" style="color:var(--accent)">git-scm.com</a> bata Git download garera install garnuhos. Check garna terminal ma yo type garnuhos:</p>
-            <pre><code>git --version</code></pre>
+        <div class="guide-section">
+            <h2><i class="fas fa-download"></i> STEP 02: Install Git</h2>
+            <p>Download Git and verify with <span class="highlight">git --version</span>.</p>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 03</div>
-            <h2>📁 Initialize Git</h2>
-            <p>Afno website bhayeko folder bhitra terminal/CMD kholnus ra Git lai initialize garnuhos:</p>
+        <div class="guide-section">
+            <h2><i class="fas fa-folder-plus"></i> STEP 03: Git Init</h2>
             <pre><code>git init</code></pre>
-            <div class="note-box">Yo command le tapai ko folder ma track rakhna suru garcha.</div>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 04</div>
-            <h2>📌 Add Files to Staging</h2>
-            <p>Aba sabai files haru lai snapshot ko lagi ready garnuhos:</p>
+        <div class="guide-section">
+            <h2><i class="fas fa-plus-circle"></i> STEP 04: Add Files</h2>
             <pre><code>git add .</code></pre>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 05</div>
-            <h2>💾 Commit Changes</h2>
-            <p>Afno progress lai save garnuhos euta message ko sath:</p>
-            <pre><code>git commit -m "My first website commit"</code></pre>
+        <div class="guide-section">
+            <h2><i class="fas fa-save"></i> STEP 05: Commit</h2>
+            <pre><code>git commit -m "Initial commit"</code></pre>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 06</div>
-            <h2>🌐 Create GitHub Repository</h2>
-            <p>GitHub.com ma janus, "New" button ma click garnus, ra repository ko naam rakhera "Create" garnuhos.</p>
-        </div>
-
-        <div class="step-card">
-            <div class="step-number">STEP 07</div>
-            <h2>🔗 Connect Local to Cloud</h2>
-            <p>GitHub le diyeko link use garera local project lai connect garnuhos:</p>
-            <pre><code>git remote add origin https://github.com/username/repo-name.git</code></pre>
-        </div>
-
-        <div class="step-card">
-            <div class="step-number">STEP 08</div>
-            <h2>⬆️ Push Your Code</h2>
-            <p>Last ma afno code lai GitHub ma upload garnuhos:</p>
-            <pre><code>git branch -M main
+        <div class="guide-section">
+            <h2><i class="fas fa-cloud-upload-alt"></i> STEP 06: Connect & Push</h2>
+            <pre><code>git remote add origin YOUR_REPO_URL
+git branch -M main
 git push -u origin main</code></pre>
         </div>
 
-        <div class="step-card">
-            <div class="step-number">STEP 09</div>
-            <h2>🌍 Make it Live</h2>
-            <p>GitHub Repository ko <b>Settings > Pages</b> ma janus, 'main' branch select garnus ra Save garnuhos. Tapai ko website live hunecha!</p>
+        <div class="guide-section">
+            <h2><i class="fas fa-globe"></i> STEP 07: Deployment</h2>
+            <p>Go to <span class="highlight">Settings > Pages</span> on GitHub and set branch to <b>Main</b>.</p>
+        </div>
+
+        <div class="btn-wrapper end">
+            <a href="notes-hub.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> BACK TO NOTES HUB
+            </a>
         </div>
 
         <footer>
-            <p>© 2024 Notes Hub | Powered by DG Logo Animation</p>
+            <p>&copy; 2026 DIPESH GHIMIRE | Advanced Git Documentation</p>
         </footer>
     </div>
 

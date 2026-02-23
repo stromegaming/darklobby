@@ -3,134 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes Hub | Digital Universe</title>
+    <title>NOTES HUB | DARK LOBBY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF0000;
-            --bg-dark: #0a0a0a;
-            --bg-card: #111111;
-            --text-light: #ffffff;
-            --text-dim: #b3b3b3;
-            --glass: rgba(255, 255, 255, 0.05);
+            --bg: #050505;
+            --card: #111111;
+            --text: #ffffff;
+            --dim: #888888;
+            --overlay: rgba(0, 0, 0, 0.9);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            background-color: var(--bg);
+            color: var(--text);
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+            padding: 20px 5%;
+            min-height: 100vh;
         }
 
-        h1, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* Small Animated Logo */
-        .header-section {
-            padding: 40px 5%;
-            text-align: center;
-            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 100%);
-        }
-
-        .logo-small {
-            width: 60px; /* Chittika pareko sano logo */
-            filter: drop-shadow(0 0 8px var(--primary));
-            animation: pulse 2s infinite ease-in-out;
-            margin-bottom: 15px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px var(--primary)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--primary)); }
-        }
-
-        .header-section h1 { font-size: 2rem; margin: 0; }
-        .header-section h1 span { color: var(--primary); }
-
-        /* Grid for Notes Cards */
-        .notes-grid {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .note-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 25px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: white;
-            border: 1px solid var(--glass);
-            transition: var(--transition);
+        /* --- Header Section (Matching Software Hub) --- */
+        .header-container {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            padding-top: 20px;
         }
 
-        .note-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.15);
-            background: #150000;
+        /* Logo Box Animation (Matching Software Hub) */
+        .logo-box-small {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
         }
 
-        .note-card i {
+        .logo-box-small img {
+            width: 50px; 
+            z-index: 2;
+            filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.5));
+        }
+
+        .logo-box-small::before {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+            animation: rotateRect 6s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes rotateRect {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-text { text-align: left; }
+        .header-text h1 {
+            font-family: 'Orbitron';
             font-size: 1.8rem;
-            color: var(--primary);
+            letter-spacing: 3px;
+            margin: 0;
+            text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
+        .header-text p { color: var(--dim); font-size: 0.85rem; margin-top: 5px; }
 
-        .note-card h3 { font-size: 1rem; margin: 5px 0; }
-        .note-card p { color: var(--text-dim); font-size: 0.8rem; line-height: 1.5; }
+        /* --- Notes List (Matching Software Hub List Style) --- */
+        .notes-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
-        .back-btn {
-            display: inline-block;
-            margin-top: 20px;
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.8rem;
+        .note-item {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             transition: 0.3s;
+            text-decoration: none;
+            color: inherit;
         }
-        .back-btn:hover { color: var(--primary); }
 
-        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.7rem; }
+        .note-item:hover { 
+            border-color: var(--primary); 
+            background: #1a0505; 
+            transform: translateY(-3px); 
+        }
+
+        .note-info { display: flex; align-items: center; gap: 20px; }
+        .note-icon {
+            width: 50px; height: 50px; background: rgba(255, 0, 0, 0.1);
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; color: var(--primary); font-size: 1.5rem;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .note-details h3 { font-family: 'Orbitron'; font-size: 1rem; margin: 0; }
+        .note-details span { font-size: 0.75rem; color: var(--dim); }
+
+        .view-btn {
+            background: transparent; border: 1px solid var(--primary);
+            color: var(--primary); padding: 8px 20px; border-radius: 5px;
+            font-family: 'Orbitron'; font-size: 0.7rem;
+            font-weight: bold; transition: 0.3s;
+        }
+
+        .note-item:hover .view-btn { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4); 
+        }
+
+        .back-nav { margin-top: 50px; text-align: center; }
+        .back-nav a { color: var(--dim); text-decoration: none; font-size: 0.8rem; transition: 0.3s; }
+        .back-nav a:hover { color: var(--primary); }
+
+        @media (max-width: 600px) {
+            .header-container { flex-direction: column; text-align: center; gap: 15px; }
+            .header-text { text-align: center; }
+            .note-item { flex-direction: column; text-align: center; gap: 15px; }
+            .note-info { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <section class="header-section">
-        <a href="index.html">
-            <img src="images/DGLOGO.PNG" alt="DG" class="logo-small">
-        </a>
-        <h1>NOTES <span>HUB</span></h1>
-        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> BACK TO UNIVERSE</a>
-    </section>
+    <div class="header-container">
+        <div class="logo-box-small">
+            <img src="images/DGLOGO.PNG" alt="DG LOGO">
+        </div>
+        <div class="header-text">
+            <h1>NOTES HUB</h1>
+            <p>EDUCATIONAL ARCHIVES & LOGS</p>
+        </div>
+    </div>
 
-    <div class="notes-grid">
+    <div class="notes-list">
         
-        <a href="github-guide.html" class="note-card">
-            <i class="fab fa-github"></i>
-            <h3>🚀 GitHub Complete Guide</h3>
-            <p>To create and live website from GitHub. Step-by-step roadmap for beginners.</p>
+        <a href="github-guide.html" class="note-item">
+            <div class="note-info">
+                <div class="note-icon"><i class="fab fa-github"></i></div>
+                <div class="note-details">
+                    <h3>GitHub Complete Guide</h3>
+                    <span>To create and live website from GitHub</span>
+                </div>
+            </div>
+            <div class="view-btn">
+                <i class="fas fa-eye"></i> VIEW GUIDE
+            </div>
         </a>
 
-        <div class="note-card" style="opacity: 0.5; cursor: not-allowed;">
-            <i class="fas fa-lock"></i>
-            <h3>More Coming Soon</h3>
-            <p>Archives are being decrypted...</p>
+        <div class="note-item" style="opacity: 0.4; cursor: not-allowed; border-style: dashed;">
+            <div class="note-info">
+                <div class="note-icon"><i class="fas fa-lock"></i></div>
+                <div class="note-details">
+                    <h3>Coming Soon</h3>
+                    <span>Encryption in progress...</span>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <footer>
-        &copy; 2026 DIPESH GHIMIRE | Notes Hub Encryption Active.
-    </footer>
+    <div class="back-nav">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a>
+    </div>
 
 </body>
 </html>
