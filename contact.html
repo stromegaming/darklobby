@@ -6,6 +6,7 @@
     <title>TERMINAL | CONTACT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@500;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --primary: #FF0000;
@@ -13,9 +14,7 @@
             --bg-dark: #050505;
             --bg-card: #0a0a0a;
             --text-light: #ffffff;
-            --text-dim: #00ff41; /* Hacker Green accent */
-            --glass: rgba(255, 0, 0, 0.1);
-            --border: 1px solid #333;
+            --text-dim: #00ff41; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +29,28 @@
             background-size: 100% 2px, 3px 100%;
         }
 
-        /* --- Header Section with Integrated Logo --- */
+        /* Hacker Alert Screen */
+        #hackerAlert {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            display: none; justify-content: center; align-items: center;
+            z-index: 9999; border: 4px solid var(--primary);
+        }
+        .alert-box {
+            text-align: center; color: var(--primary); font-family: 'Orbitron';
+            padding: 40px; background: #000; border: 1px solid var(--primary);
+            box-shadow: 0 0 50px var(--primary);
+        }
+        .glitch-text { animation: alertBlink 0.2s infinite alternate; font-size: 1.5rem; margin-bottom: 20px; font-weight: 900; }
+        .alert-btn {
+            background: var(--primary); color: #fff; border: none;
+            padding: 12px 30px; cursor: pointer; font-family: 'Orbitron';
+            margin-top: 25px; letter-spacing: 2px; font-weight: bold;
+        }
+
+        @keyframes alertBlink { 0% { opacity: 1; } 100% { opacity: 0.7; } }
+
+        /* Nav & Logo */
         nav { 
             padding: 1.5rem 10%; 
             display: flex; 
@@ -40,171 +60,71 @@
             border-bottom: 2px solid var(--primary);
             box-shadow: 0 0 15px var(--primary-glow);
         }
-
         .header-brand { display: flex; align-items: center; gap: 15px; text-decoration: none; }
-        
         .logo-box-small {
-            position: relative;
-            width: 45px; height: 45px;
-            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            position: relative; width: 45px; height: 45px;
+            display: flex; justify-content: center; align-items: center;
         }
-
         .logo-box-small img { width: 30px; z-index: 2; filter: drop-shadow(0 0 5px var(--primary)); }
-
         .logo-box-small::before {
             content: ''; position: absolute; width: 40px; height: 40px;
-            border: 2px solid var(--primary); box-shadow: 0 0 10px var(--primary);
-            animation: rotateRect 6s linear infinite; z-index: 1;
+            border: 2px solid var(--primary); animation: rotateRect 6s linear infinite;
         }
-
         @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         .logo { font-family: 'Orbitron'; font-size: 1.2rem; color: white; text-decoration: none; letter-spacing: 3px; }
         .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        .back-hub { color: var(--text-dim); text-decoration: none; font-size: 0.8rem; font-family: 'Orbitron'; border: 1px solid var(--text-dim); padding: 5px 15px; }
 
-        .back-hub { 
-            color: var(--text-dim); 
-            text-decoration: none; 
-            font-size: 0.8rem; 
-            font-family: 'Orbitron'; 
-            border: 1px solid var(--text-dim);
-            padding: 5px 15px;
-            transition: 0.3s;
-        }
-        .back-hub:hover { background: var(--text-dim); color: black; }
-
-        /* Main Container */
-        .contact-container { 
-            flex: 1; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 50px 5%;
-            position: relative;
-        }
-
-        /* Hacker Form Layout */
-        .contact-form { 
-            width: 100%; 
-            max-width: 650px; 
-            background: var(--bg-card); 
-            padding: 3rem; 
-            border: 1px solid var(--primary);
-            position: relative;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
-        }
-
-        .contact-form::before {
-            content: "SYSTEM_ACCESS: ACTIVE";
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: var(--bg-dark);
-            padding: 0 10px;
-            color: var(--primary);
-            font-size: 0.7rem;
-            font-family: 'Orbitron';
-        }
-
-        h2 { 
-            font-family: 'Orbitron'; 
-            text-align: left; 
-            margin-bottom: 2rem; 
-            letter-spacing: 4px; 
-            font-size: 1.8rem;
-            border-bottom: 1px solid #222;
-            padding-bottom: 10px;
-        }
+        /* Form & Math Section */
+        .contact-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 50px 5%; }
+        .contact-form { width: 100%; max-width: 650px; background: var(--bg-card); padding: 3rem; border: 1px solid var(--primary); position: relative; }
+        h2 { font-family: 'Orbitron'; text-align: left; margin-bottom: 2rem; letter-spacing: 4px; font-size: 1.8rem; border-bottom: 1px solid #222; padding-bottom: 10px; }
         h2 span { color: var(--primary); }
-
-        /* Input Styling */
-        .input-group { margin-bottom: 1.5rem; position: relative; }
+        .input-group { margin-bottom: 1.5rem; }
+        input, textarea, select { width: 100%; padding: 1.2rem; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: var(--text-dim); outline: none; font-family: 'JetBrains Mono'; font-size: 0.9rem; }
         
-        input, textarea, select { 
-            width: 100%; 
-            padding: 1.2rem; 
-            background: rgba(0, 0, 0, 0.8); 
-            border: 1px solid #333; 
-            color: var(--text-dim); 
-            border-radius: 0; 
-            outline: none; 
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            transition: 0.3s;
+        /* Math Challenge Styling */
+        .math-challenge {
+            border: 1px dashed var(--text-dim);
+            padding: 15px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 255, 65, 0.05);
         }
+        #math-question { font-weight: bold; color: var(--text-dim); min-width: 120px; }
+        .math-input { width: 100px !important; padding: 0.5rem !important; text-align: center; }
 
-        input:focus, textarea:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 10px var(--primary-glow);
-            color: white;
-        }
-
-        /* Submit Button */
-        .btn-submit { 
-            width: 100%; 
-            padding: 1.2rem; 
-            background: transparent; 
-            color: var(--primary); 
-            border: 2px solid var(--primary); 
-            font-family: 'Orbitron'; 
-            font-weight: bold; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-submit:hover { 
-            background: var(--primary); 
-            color: white; 
-            box-shadow: 0 0 25px var(--primary);
-        }
-
-        /* Terminal Response */
-        #formResponse { 
-            margin-top: 1.5rem; 
-            font-family: 'JetBrains Mono';
-            font-size: 0.8rem;
-            text-align: center; 
-            display: none; 
-            padding: 15px; 
-            border: 1px dashed;
-        }
-
-        .status-dot {
-            height: 8px;
-            width: 8px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 10px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0% { opacity: 1; }
-            50% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
+        .btn-submit { width: 100%; padding: 1.2rem; background: transparent; color: var(--primary); border: 2px solid var(--primary); font-family: 'Orbitron'; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.4s; }
+        .btn-submit:hover { background: var(--primary); color: white; }
+        
+        #formResponse { margin-top: 1.5rem; text-align: center; display: none; padding: 15px; border: 1px dashed; font-family: 'JetBrains Mono'; font-size: 0.8rem;}
+        .status-dot { height: 8px; width: 8px; background-color: var(--primary); border-radius: 50%; display: inline-block; margin-right: 10px; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
+    <div id="hackerAlert">
+        <div class="alert-box">
+            <div class="glitch-text">⚠️ ACCESS DENIED ⚠️</div>
+            <p>> ERROR: WRONG_LOGIC_INPUT</p>
+            <p>> STATUS: BOT_ATTEMPT_SUSPECTED</p>
+            <button class="alert-btn" onclick="closeAlert()">RETRY AUTHENTICATION</button>
+        </div>
+    </div>
+
     <nav>
         <div class="header-brand">
-            <div class="logo-box-small">
-                <img src="images/DGLOGO.PNG" alt="DG">
-            </div>
+            <div class="logo-box-small"><img src="images/DGLOGO.PNG" alt="DG"></div>
             <a href="index.html" class="logo">DIPESH<span>GHIMIRE</span></a>
         </div>
         <a href="index.html" class="back-hub">> EXIT_TO_HUB</a>
     </nav>
 
     <div class="contact-container">
-        <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+        <form action="https://api.web3forms.com/submit" method="POST" id="contactForm" class="contact-form">
             <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
             
             <h2><span class="status-dot"></span>ESTABLISH <span>CONNECTION</span></h2>
@@ -230,27 +150,62 @@
                 <textarea name="message" rows="5" placeholder="[ ENTER_ENCRYPTED_MESSAGE ]" required></textarea>
             </div>
             
-            <div class="h-captcha" data-captcha="true"></div>
+            <div class="math-challenge">
+                <span id="math-question">Loading...</span>
+                <input type="number" id="math-answer" class="math-input" placeholder="?" required>
+            </div>
             
             <button type="submit" class="btn-submit" id="submitBtn">EXECUTE TRANSMISSION</button>
-            
             <div id="formResponse"></div>
         </form>
     </div>
 
-    <script src="https://web3forms.com/client/script.js" async defer></script>
     <script>
         const form = document.getElementById('contactForm');
+        const alertScreen = document.getElementById('hackerAlert');
         const res = document.getElementById('formResponse');
         const btn = document.getElementById('submitBtn');
+        const mathQuestionLabel = document.getElementById('math-question');
+        const mathAnswerInput = document.getElementById('math-answer');
+
+        let correctAnswer;
+
+        // Math generator function
+        function generateMath() {
+            const num1 = Math.floor(Math.random() * 10);
+            const num2 = Math.floor(Math.random() * 10);
+            const ops = ['+', '-', '*'];
+            const op = ops[Math.floor(Math.random() * ops.length)];
+            
+            mathQuestionLabel.innerText = `[SOLVE]: ${num1} ${op} ${num2} =`;
+            
+            if(op === '+') correctAnswer = num1 + num2;
+            else if(op === '-') correctAnswer = num1 - num2;
+            else correctAnswer = num1 * num2;
+            
+            mathAnswerInput.value = '';
+        }
+
+        function closeAlert() {
+            alertScreen.style.display = 'none';
+            generateMath(); // Generate new problem on retry
+        }
+
+        // Initialize math on load
+        window.onload = generateMath;
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            btn.disabled = true;
-            btn.innerText = "INITIALIZING... 0%";
             
-            setTimeout(() => { btn.innerText = "BYPASSING FIREWALL... 45%"; }, 500);
-            setTimeout(() => { btn.innerText = "UPLOADING DATA... 82%"; }, 1200);
+            // Logic Check
+            const userAnswer = parseInt(mathAnswerInput.value);
+            if (userAnswer !== correctAnswer) {
+                alertScreen.style.display = 'flex';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "TRANSMITTING...";
 
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
@@ -259,20 +214,16 @@
             .then(async (response) => {
                 if (response.status == 200) {
                     res.style.display = "block";
-                    res.style.borderColor = "#00ff41";
                     res.style.color = "#00ff41";
-                    res.innerHTML = "> ACCESS GRANTED: SIGNAL DISPATCHED SUCCESSFULLY.";
+                    res.innerHTML = "> ACCESS GRANTED: SIGNAL DISPATCHED.";
                     form.reset();
-                    if (typeof hcaptcha !== 'undefined') hcaptcha.reset();
-                } else {
-                    throw new Error();
-                }
+                    generateMath();
+                } else { throw new Error(); }
             })
             .catch(() => {
                 res.style.display = "block";
-                res.style.borderColor = "var(--primary)";
-                res.style.color = "var(--primary)";
-                res.innerHTML = "> ERROR: CONNECTION REFUSED. PACKET LOSS DETECTED.";
+                res.style.color = "red";
+                res.innerHTML = "> ERROR: CONNECTION REFUSED.";
             })
             .finally(() => {
                 btn.disabled = false;
