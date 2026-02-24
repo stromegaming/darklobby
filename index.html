@@ -15,51 +15,181 @@
             --text-light: #ffffff;
             --text-dim: #b3b3b3;
             --glass: rgba(255, 255, 255, 0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
         h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- Hero --- */
+        /* --- Hero Section --- */
         .hub-hero {
-            height: 65vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%); padding: 0 5%;
+            height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%);
+            padding: 0 5%;
         }
 
         .logo-container {
-            position: relative; width: 110px; height: 110px; margin-bottom: 1.5rem;
+            position: relative;
+            width: 110px; height: 110px;
+            margin-bottom: 1.5rem;
             display: flex; justify-content: center; align-items: center;
         }
-        .logo-container img { width: 70px; z-index: 2; filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); }
-        .logo-container::before {
-            content: ''; position: absolute; width: 90px; height: 90px;
-            border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary);
-            animation: rotateRect 6s linear infinite; z-index: 1;
+
+        .logo-container img {
+            width: 70px; z-index: 2;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
         }
+
+        .logo-container::before {
+            content: ''; position: absolute;
+            width: 90px; height: 90px;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            animation: rotateRect 6s linear infinite;
+            z-index: 1;
+        }
+
         @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .hub-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
         .hub-hero h1 span { color: var(--primary); }
 
+        /* --- White Typewriter Subtext --- */
         .animated-subtext {
-            color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 0.95rem;
-            height: 1.5rem; margin-bottom: 2.5rem; letter-spacing: 4px; font-weight: 500;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            height: 1.5rem;
+            margin-bottom: 2.5rem;
+            letter-spacing: 4px;
+            font-weight: 500;
             display: flex; align-items: center; justify-content: center;
         }
-        .animated-subtext span { border-right: 3px solid var(--primary); padding-right: 5px; animation: blink 0.7s infinite alternate; }
+
+        .animated-subtext span {
+            border-right: 3px solid var(--primary);
+            padding-right: 5px;
+            animation: blink 0.7s infinite alternate;
+        }
+
         @keyframes blink { from { border-color: transparent; } to { border-color: var(--primary); } }
 
+        /* --- Hero Buttons (Support & Contact Fix) --- */
         .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        
         .btn-common {
-            padding: 10px 20px; text-decoration: none; font-weight: bold;
-            text-transform: uppercase; font-size: 0.7rem; border-radius: 4px;
-            transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
         }
-        .btn-dark-lobby { border: 1px solid var(--primary); color: var(--primary); background: rgba(255, 0, 0, 0.05); }
-        .btn-dark-lobby:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+
+        .btn-dark-lobby {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .btn-dark-lobby:hover {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 20px var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .btn-donation { border: 1px solid #FFD700; color: #FFD700; background: transparent; }
+        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); transform: translateY(-3px); }
+
+        .btn-contact { border: 1px solid white; color: white; background: transparent; }
+        .btn-contact:hover { background: white; color: black; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); transform: translateY(-3px); }
+
+        /* --- Animated Hub Cards (Gaming, Software, etc.) --- */
+        .grid-container {
+            padding: 20px 5% 80px 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+            gap: 1.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            padding: 2.5rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Border Trace Animation */
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            transition: 0.5s;
+        }
+
+        .category-card:hover::before { left: 100%; }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 0, 0.3);
+            background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .category-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .category-card:hover i {
+            animation: iconPulse 1.5s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px var(--primary));
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .status-tag {
+            padding: 3px 10px; border-radius: 4px; font-size: 0.6rem;
+            font-weight: bold; margin-bottom: 15px; text-transform: uppercase;
+        }
+        .status-online { background: rgba(0, 255, 0, 0.1); color: #00ff00; border: 1px solid #00ff00; }
+        .status-offline { background: rgba(255, 255, 255, 0.05); color: #777; border: 1px solid #444; }
 
         /* --- Hacker Terminal --- */
         #terminal-overlay {
@@ -68,59 +198,64 @@
             display: none; justify-content: center; align-items: center;
             font-family: 'JetBrains Mono', monospace; padding: 20px;
         }
+
         .terminal-box {
-            width: 100%; max-width: 500px; background: #050505; border: 2px solid var(--primary);
-            padding: 30px; box-shadow: 0 0 50px rgba(255,0,0,0.4); position: relative;
+            width: 100%; max-width: 500px;
+            background: #050505; border: 2px solid var(--primary);
+            padding: 30px; box-shadow: 0 0 50px rgba(255,0,0,0.4);
+            position: relative;
         }
+
         .terminal-header {
-            position: absolute; top: -15px; left: 20px; background: var(--primary);
-            color: white; padding: 2px 15px; font-size: 0.7rem;
+            position: absolute; top: -15px; left: 20px;
+            background: var(--primary); color: white;
+            padding: 2px 15px; font-size: 0.7rem;
         }
+
         .terminal-text { color: var(--primary); font-size: 0.85rem; line-height: 1.6; margin-bottom: 25px; }
         .terminal-btns { display: flex; flex-direction: column; gap: 12px; }
-        .t-btn {
-            background: transparent; border: 1px solid var(--primary); color: var(--primary);
-            padding: 12px; cursor: pointer; text-transform: uppercase; font-weight: bold; font-family: 'JetBrains Mono', monospace;
-        }
-        .t-btn:hover { background: var(--primary); color: white; }
-        .access-denied-msg { color: #ff0000; font-weight: bold; text-align: center; margin-top: 15px; display: none; }
-
-        /* --- Grid --- */
-        .grid-container {
-            padding: 20px 5% 80px 5%; display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 1rem; max-width: 1300px; margin: 0 auto;
-        }
-        .category-card {
-            background: var(--bg-card); padding: 2rem 1rem; border-radius: 12px;
-            text-decoration: none; color: white; text-align: center;
-            border: 1px solid var(--glass); transition: var(--transition);
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .category-card:hover { transform: translateY(-8px); border-color: var(--primary); background: #150000; }
-        .category-card i { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; }
         
-        footer { text-align: center; padding: 40px; color: var(--text-dim); border-top: 1px solid var(--glass); font-size: 0.75rem; }
+        .t-btn {
+            background: transparent; border: 1px solid var(--primary);
+            color: var(--primary); padding: 12px; cursor: pointer;
+            text-transform: uppercase; font-weight: bold; font-family: 'JetBrains Mono', monospace;
+        }
+
+        .t-btn:hover { background: var(--primary); color: white; }
+        .access-denied-box { color: #ff0000; font-weight: bold; text-align: center; margin-top: 15px; display: none; }
+
+        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--glass); }
     </style>
 </head>
 <body>
 
     <section class="hub-hero">
-        <div class="logo-container"><img src="images/DGLOGO.PNG" alt="DG LOGO"></div>
+        <div class="logo-container">
+            <img src="images/DGLOGO.PNG" alt="DG LOGO">
+        </div>
         <h1>DIPESH <span>GHIMIRE</span></h1>
-        <div class="animated-subtext"><p id="typewriter"></p></div>
+        
+        <div class="animated-subtext">
+            <p id="typewriter"></p>
+        </div>
+        
         <div class="hero-btns">
             <a onclick="handleLobbyEntry()" class="btn-common btn-dark-lobby">
                 <i class="fas fa-ghost"></i> ENTER DARK LOBBY
             </a>
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common" style="border:1px solid #FFD700; color:#FFD700;">SUPPORT</a>
-            <a href="contact.html" class="btn-common" style="border:1px solid white; color:white;">CONTACT</a>
+            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation">
+                <i class="fas fa-heart"></i> SUPPORT
+            </a>
+            <a href="contact.html" class="btn-common btn-contact">
+                <i class="fas fa-envelope"></i> CONTACT
+            </a>
         </div>
     </section>
 
     <div id="terminal-overlay">
         <div class="terminal-box">
-            <div class="terminal-header">SECURITY_CLEARANCE</div>
-            <div class="terminal-text" id="status-msg">
+            <div class="terminal-header">SECURITY_CLEARANCE_V4</div>
+            <div class="terminal-text">
                 [SYSTEM] ACCESS RESTRICTED.<br>
                 [INFO] SUBSCRIBE TO UPLINK TO BYPASS SECURITY PROTOCOLS.
             </div>
@@ -128,43 +263,76 @@
                 <button class="t-btn" onclick="subscribeAndRedirect()">[ 01 ] SUBSCRIBE TO UPLINK</button>
                 <button class="t-btn" onclick="abortMission()" style="border-color:#444; color:#444;">[ 02 ] ABORT MISSION</button>
             </div>
-            <div id="denied-box" class="access-denied-msg">
+            <div id="denied-msg" class="access-denied-box">
                 [ ALERT ] ACCESS DENIED: PROTOCOL TERMINATED.
             </div>
         </div>
     </div>
 
     <div class="grid-container">
-        <a href="gaming-hub.html" class="category-card"><i class="fas fa-crosshairs"></i><h3>Gaming Hub</h3><p>Tactical operations.</p></a>
-        <a href="calculator.html" class="category-card"><i class="fas fa-code"></i><h3>Software Hub</h3><p>Custom tools.</p></a>
-        <a href="maintenance.html" class="category-card"><i class="fas fa-mobile-screen-button"></i><h3>Mobile Hub</h3><p>Mobile Apps.</p></a>
-        <a href="notes-hub.html" class="category-card"><i class="fas fa-book-bookmark"></i><h3>Notes Hub</h3><p>Archives.</p></a>
+        <a href="gaming-hub.html" class="category-card">
+            <span class="status-tag status-online">ACTIVE</span>
+            <i class="fas fa-crosshairs"></i>
+            <h3>Gaming Hub</h3>
+            <p>Tactical operations, arcade missions & highlights.</p>
+        </a>
+
+        <a href="calculator.html" class="category-card">
+            <span class="status-tag status-online">ACTIVE</span>
+            <i class="fas fa-code"></i>
+            <h3>Software Hub</h3>
+            <p>Custom tools & resources.</p>
+        </a>
+
+        <a href="maintenance.html" class="category-card">
+            <span class="status-tag status-offline">INACTIVE</span>
+            <i class="fas fa-mobile-screen-button"></i>
+            <h3>Mobile Hub</h3>
+            <p>Apps under encryption (Maintenance).</p>
+        </a>
+
+        <a href="notes-hub.html" class="category-card">
+            <span class="status-tag status-online">ACTIVE</span>
+            <i class="fas fa-book-bookmark"></i>
+            <h3>Notes Hub</h3>
+            <p>Educational archives & logs.</p>
+        </a>
     </div>
 
+    <footer>
+        <p>&copy; 2026 DIPESH GHIMIRE. All Systems Nominal.</p>
+    </footer>
+
     <script>
-        // TYPEWRITER
+        // TYPEWRITER EFFECT
+        const textElement = document.getElementById('typewriter');
         const words = ["CREATOR", "DEVELOPER", "GAMER"];
-        let wordIdx = 0, charIdx = 0, isDel = false;
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
+
         function type() {
-            const current = words[wordIdx];
-            const txt = isDel ? current.substring(0, charIdx-1) : current.substring(0, charIdx+1);
-            document.getElementById('typewriter').innerHTML = `<span>${txt}</span>`;
-            charIdx = isDel ? charIdx - 1 : charIdx + 1;
-            let speed = isDel ? 80 : 150;
-            if(!isDel && charIdx === current.length) { isDel = true; speed = 2000; }
-            else if(isDel && charIdx === 0) { isDel = false; wordIdx = (wordIdx+1)%words.length; speed = 500; }
-            setTimeout(type, speed);
+            const currentWord = words[wordIndex];
+            const displayTxt = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
+            textElement.innerHTML = `<span>${displayTxt}</span>`;
+            charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
+
+            let typeSpeed = isDeleting ? 80 : 150;
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                typeSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                typeSpeed = 500;
+            }
+            setTimeout(type, typeSpeed);
         }
 
-        // ENTRY LOGIC
+        // LOBBY ENTRY LOGIC
         const YT_URL = "https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ?sub_confirmation=1";
 
         function handleLobbyEntry() {
-            const hasSubscribed = localStorage.getItem('is_subscribed');
-            if (hasSubscribed === 'true') {
-                // If already clicked before, go straight to YouTube or Gaming.html
-                // If you want them to go to Gaming.html after subscribe, change this to "gaming.html"
-                window.location.href = YT_URL; 
+            if (localStorage.getItem('is_subscribed') === 'true') {
+                window.location.href = YT_URL;
             } else {
                 document.getElementById('terminal-overlay').style.display = 'flex';
             }
@@ -176,12 +344,11 @@
         }
 
         function abortMission() {
-            const msg = document.getElementById('denied-box');
+            const msg = document.getElementById('denied-msg');
             msg.style.display = 'block';
             setTimeout(() => {
                 msg.style.display = 'none';
                 document.getElementById('terminal-overlay').style.display = 'none';
-                // Back to index (already on index, so just close)
             }, 2000);
         }
 
