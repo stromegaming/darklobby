@@ -83,7 +83,6 @@
         .input-group { margin-bottom: 1.5rem; }
         input, textarea, select { width: 100%; padding: 1.2rem; background: rgba(0, 0, 0, 0.8); border: 1px solid #333; color: var(--text-dim); outline: none; font-family: 'JetBrains Mono'; font-size: 0.9rem; }
         
-        /* Math Challenge Styling */
         .math-challenge {
             border: 1px dashed var(--text-dim);
             padding: 15px;
@@ -100,8 +99,6 @@
         .btn-submit:hover { background: var(--primary); color: white; }
         
         #formResponse { margin-top: 1.5rem; text-align: center; display: none; padding: 15px; border: 1px dashed; font-family: 'JetBrains Mono'; font-size: 0.8rem;}
-        .status-dot { height: 8px; width: 8px; background-color: var(--primary); border-radius: 50%; display: inline-block; margin-right: 10px; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -124,10 +121,8 @@
     </nav>
 
     <div class="contact-container">
-        <form action="https://api.web3forms.com/submit" method="POST" id="contactForm" class="contact-form">
-            <input type="hidden" name="access_key" value="8d715c6b-c36a-479b-bec7-05f392ebe0f4">
-            
-            <h2><span class="status-dot"></span>ESTABLISH <span>CONNECTION</span></h2>
+        <form id="contactForm" class="contact-form">
+            <h2>CONNECTION<span>_ESTABLISH</span></h2>
             
             <div class="input-group">
                 <input type="text" name="name" placeholder="[ USER_IDENTIFICATION ]" required>
@@ -170,36 +165,29 @@
 
         let correctAnswer;
 
-        // Math generator function
         function generateMath() {
             const num1 = Math.floor(Math.random() * 10);
             const num2 = Math.floor(Math.random() * 10);
             const ops = ['+', '-', '*'];
             const op = ops[Math.floor(Math.random() * ops.length)];
-            
             mathQuestionLabel.innerText = `[SOLVE]: ${num1} ${op} ${num2} =`;
-            
             if(op === '+') correctAnswer = num1 + num2;
             else if(op === '-') correctAnswer = num1 - num2;
             else correctAnswer = num1 * num2;
-            
             mathAnswerInput.value = '';
         }
 
         function closeAlert() {
             alertScreen.style.display = 'none';
-            generateMath(); // Generate new problem on retry
+            generateMath();
         }
 
-        // Initialize math on load
         window.onload = generateMath;
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Logic Check
-            const userAnswer = parseInt(mathAnswerInput.value);
-            if (userAnswer !== correctAnswer) {
+            if (parseInt(mathAnswerInput.value) !== correctAnswer) {
                 alertScreen.style.display = 'flex';
                 return;
             }
@@ -207,23 +195,39 @@
             btn.disabled = true;
             btn.innerText = "TRANSMITTING...";
 
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            // Access Key thapeko
+            object.access_key = "8d715c6b-c36a-479b-bec7-05f392ebe0f4";
+            const json = JSON.stringify(object);
+
             fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
-                body: new FormData(form)
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
             })
             .then(async (response) => {
+                let json = await response.json();
                 if (response.status == 200) {
                     res.style.display = "block";
                     res.style.color = "#00ff41";
+                    res.style.borderColor = "#00ff41";
                     res.innerHTML = "> ACCESS GRANTED: SIGNAL DISPATCHED.";
                     form.reset();
                     generateMath();
-                } else { throw new Error(); }
+                } else {
+                    res.innerHTML = "> ERROR: " + json.message;
+                    res.style.display = "block";
+                    res.style.color = "red";
+                }
             })
-            .catch(() => {
+            .catch(error => {
                 res.style.display = "block";
                 res.style.color = "red";
-                res.innerHTML = "> ERROR: CONNECTION REFUSED.";
+                res.innerHTML = "> ERROR: CONNECTION REFUSED. CHECK NETWORK.";
             })
             .finally(() => {
                 btn.disabled = false;
