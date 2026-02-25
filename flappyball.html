@@ -10,6 +10,7 @@
             --neon-glow: rgba(255, 0, 60, 0.6);
             --bg-black: #050505;
             --ui-white: #ffffff;
+            --hub-blue: #00d2ff; /* Hub button ko naya color */
         }
 
         * {
@@ -73,6 +74,7 @@
             animation: fadeIn 0.3s ease-out;
             color: white;
             z-index: 10;
+            width: 85%;
         }
 
         @keyframes fadeIn {
@@ -129,6 +131,16 @@
 
         .btn:hover { background: rgba(255, 0, 60, 0.1); }
         .btn:active { transform: scale(0.95); background: var(--neon-red); color: black; }
+
+        /* BACK TO HUB Button Styling */
+        .hub-btn {
+            color: var(--hub-blue);
+            border-color: var(--hub-blue);
+            box-shadow: 0 0 5px var(--hub-blue);
+            margin-top: 5px;
+        }
+        .hub-btn:hover { background: rgba(0, 210, 255, 0.1); }
+        .hub-btn:active { background: var(--hub-blue); color: black; }
 
         #score-display {
             position: absolute;
@@ -198,6 +210,7 @@
             <p>Tap or Space to Jump</p>
             <div class="btn-group">
                 <button class="btn" onclick="startGame(true)">START NEW GAME</button>
+                <button class="btn hub-btn" onclick="window.location.href='gaming-hub.html'">BACK TO HUB</button>
             </div>
         </div>
 
@@ -207,6 +220,7 @@
             <div class="btn-group">
                 <button class="btn" onclick="togglePause()">RESUME</button>
                 <button class="btn" onclick="startGame(true)">RESTART NEW GAME</button>
+                <button class="btn hub-btn" onclick="window.location.href='gaming-hub.html'">BACK TO HUB</button>
             </div>
         </div>
 
@@ -218,6 +232,7 @@
             <span class="challenge-msg">CAN YOU CROSS THIS SCORE ??</span>
             <div class="btn-group">
                 <button class="btn" onclick="startGame(true)">RESTART</button>
+                <button class="btn hub-btn" onclick="window.location.href='gaming-hub.html'">BACK TO HUB</button>
             </div>
         </div>
 
@@ -389,7 +404,7 @@
         jump() {
             if (gameActive && !isPaused) {
                 this.velocity = JUMP_STRENGTH;
-                playSound('jump'); // Bounce sound
+                playSound('jump');
             }
         }
     }
@@ -474,7 +489,7 @@
             currentPipeSpeed = BASE_PIPE_SPEED;
             spawnRate = BASE_SPAWN_RATE;
             initStars();
-            playSound('start'); // Start sound
+            playSound('start');
         }
         isPaused = false;
         gameActive = true;
@@ -491,7 +506,7 @@
         if (!gameActive) return;
         gameActive = false;
         pauseBtn.style.display = 'none';
-        playSound('gameover'); // Game over sound
+        playSound('gameover');
         
         if (score > highScore) {
             highScore = score;
@@ -553,11 +568,7 @@
                 return;
             }
             if (e.code === 'Space' || e.code === 'ArrowUp') {
-                if (!gameActive && gameOverMenu.style.display === 'block') {
-                    startGame(true);
-                    return;
-                }
-                if (!gameActive && startMenu.style.display === 'block') {
+                if (!gameActive && (gameOverMenu.style.display === 'block' || startMenu.style.display === 'block')) {
                     startGame(true);
                     return;
                 }
@@ -568,7 +579,7 @@
 
     window.addEventListener('keydown', handleAction);
     canvas.addEventListener('touchstart', (e) => {
-        if (e.target.id === 'pause-btn') return;
+        if (e.target.id === 'pause-btn' || e.target.classList.contains('btn')) return;
         e.preventDefault();
         if (!gameActive && (startMenu.style.display === 'block' || gameOverMenu.style.display === 'block')) {
             startGame(true);
@@ -578,7 +589,7 @@
     }, { passive: false });
     
     canvas.addEventListener('mousedown', (e) => {
-        if (e.target.id === 'pause-btn') return;
+        if (e.target.id === 'pause-btn' || e.target.classList.contains('btn')) return;
         if (gameActive && !isPaused) bird.jump();
     });
 </script>
