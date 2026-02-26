@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flappy Balls - DarkLobby</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --neon-red: #ff003c;
             --neon-glow: rgba(255, 0, 60, 0.6);
             --bg-black: #050505;
             --ui-white: #ffffff;
-            --hub-blue: #00d2ff; /* Hub button ko naya color */
+            --hub-blue: #00d2ff;
         }
 
         * {
@@ -132,15 +136,12 @@
         .btn:hover { background: rgba(255, 0, 60, 0.1); }
         .btn:active { transform: scale(0.95); background: var(--neon-red); color: black; }
 
-        /* BACK TO HUB Button Styling */
         .hub-btn {
             color: var(--hub-blue);
             border-color: var(--hub-blue);
             box-shadow: 0 0 5px var(--hub-blue);
             margin-top: 5px;
         }
-        .hub-btn:hover { background: rgba(0, 210, 255, 0.1); }
-        .hub-btn:active { background: var(--hub-blue); color: black; }
 
         #score-display {
             position: absolute;
@@ -241,6 +242,32 @@
 </div>
 
 <script>
+    // --- FIREBASE SETUP (Added) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+        authDomain: "website-analysis-f6451.firebaseapp.com",
+        databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+        projectId: "website-analysis-f6451",
+        storageBucket: "website-analysis-f6451.firebasestorage.app",
+        messagingSenderId: "115116599128",
+        appId: "1:115116599128:web:9ea566870aa624453f272d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let userCountry = "Unknown";
+    fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+        userCountry = d.country_name || "Unknown";
+        // Log Game Launch
+        db.ref('stats/gameLaunches').transaction(c => (c || 0) + 1);
+        db.ref('visitorLogs').push({
+            activity: "Played Flappy Balls",
+            country: userCountry,
+            time: Date.now()
+        });
+    });
+
+    // --- GAME ENGINE ---
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const scoreElement = document.getElementById('score-display');
@@ -253,7 +280,6 @@
     const highScoreText = document.getElementById('high-score');
     const messageBox = document.getElementById('message-box');
 
-    // --- SOUND SYSTEM ---
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
@@ -262,38 +288,29 @@
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-
         if (type === 'jump') {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(250, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.1);
-        } 
-        else if (type === 'start') {
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'start') {
             osc.type = 'square';
-            [440, 554, 659].forEach((f, i) => {
-                osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.1);
-            });
+            [440, 554, 659].forEach((f, i) => osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.1));
             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.4);
-        }
-        else if (type === 'gameover') {
+            osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+        } else if (type === 'gameover') {
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(300, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.5);
             gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
             gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
         }
     }
 
-    // Game Constants
     const GRAVITY = 0.25;
     const JUMP_STRENGTH = -5.5;
     const BASE_PIPE_SPEED = 2.8;
@@ -302,7 +319,6 @@
     const PIPE_GAP = 175;
     const BIRD_SIZE = 32;
 
-    // Game State
     let bird, pipes, frameCount, score;
     let highScore = parseInt(localStorage.getItem('flappyBalls_highScore')) || 0;
     let stars = [];
@@ -317,7 +333,6 @@
         canvas.height = container.clientHeight;
         initStars();
     }
-
     window.addEventListener('resize', resize);
 
     class Star {
@@ -329,82 +344,55 @@
             this.fadeSpeed = 0.01 + Math.random() * 0.02;
             this.driftSpeed = 0.1 + Math.random() * 0.3;
         }
-
         draw() {
             ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
         }
-
         update() {
             if (isPaused) return;
             this.x -= this.driftSpeed;
             if (this.x < 0) this.x = canvas.width;
             this.opacity += this.fadeSpeed;
-            if (this.opacity > 1 || this.opacity < 0.2) {
-                this.fadeSpeed = -this.fadeSpeed;
-            }
+            if (this.opacity > 1 || this.opacity < 0.2) this.fadeSpeed = -this.fadeSpeed;
         }
     }
 
     function initStars() {
         stars = [];
-        for (let i = 0; i < 60; i++) {
-            stars.push(new Star());
-        }
+        for (let i = 0; i < 60; i++) stars.push(new Star());
     }
-
     resize();
 
     class Bird {
         constructor() {
-            this.x = 60;
-            this.y = canvas.height / 2;
-            this.velocity = 0;
-            this.radius = BIRD_SIZE / 2;
+            this.x = 60; this.y = canvas.height / 2;
+            this.velocity = 0; this.radius = BIRD_SIZE / 2;
         }
-
         draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
+            ctx.save(); ctx.translate(this.x, this.y);
             let rotation = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, this.velocity * 0.1));
             ctx.rotate(rotation);
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#ff003c';
-            ctx.beginPath();
-            ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-            ctx.strokeStyle = '#ff003c';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-            ctx.beginPath();
+            ctx.shadowBlur = 15; ctx.shadowColor = '#ff003c';
+            ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill();
+            ctx.strokeStyle = '#ff003c'; ctx.lineWidth = 3; ctx.stroke();
+            ctx.shadowBlur = 0; ctx.beginPath();
             ctx.arc(this.radius * 0.4, -this.radius * 0.2, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#000';
-            ctx.fill();
-            ctx.restore();
+            ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
         }
-
         update() {
             if (isPaused) return;
-            this.velocity += GRAVITY;
-            this.y += this.velocity;
+            this.velocity += GRAVITY; this.y += this.velocity;
             if (this.y + this.radius > canvas.height) {
-                this.y = canvas.height - this.radius;
-                endGame();
+                this.y = canvas.height - this.radius; endGame();
             }
             if (this.y - this.radius < 0) {
-                this.y = this.radius;
-                this.velocity = 0;
+                this.y = this.radius; this.velocity = 0;
             }
         }
-
         jump() {
             if (gameActive && !isPaused) {
-                this.velocity = JUMP_STRENGTH;
-                playSound('jump');
+                this.velocity = JUMP_STRENGTH; playSound('jump');
             }
         }
     }
@@ -415,46 +403,22 @@
             this.topHeight = Math.random() * (canvas.height - PIPE_GAP - 150) + 75;
             this.passed = false;
         }
-
         draw() {
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = '#ff003c';
-            ctx.fillStyle = '#110000';
-            ctx.strokeStyle = '#ff003c';
-            ctx.lineWidth = 4;
+            ctx.shadowBlur = 15; ctx.shadowColor = '#ff003c';
+            ctx.fillStyle = '#110000'; ctx.strokeStyle = '#ff003c'; ctx.lineWidth = 4;
             this.drawPipeSection(this.x, 0, PIPE_WIDTH, this.topHeight, true);
             const bottomY = this.topHeight + PIPE_GAP;
-            const bottomHeight = canvas.height - bottomY;
-            this.drawPipeSection(this.x, bottomY, PIPE_WIDTH, bottomHeight, false);
+            this.drawPipeSection(this.x, bottomY, PIPE_WIDTH, canvas.height - bottomY, false);
             ctx.shadowBlur = 0;
         }
-
         drawPipeSection(x, y, w, h, isTop) {
-            ctx.fillRect(x, y, w, h);
-            ctx.strokeRect(x, y, w, h);
-            ctx.beginPath();
-            ctx.moveTo(x + w * 0.5, y);
-            ctx.lineTo(x + w * 0.5, y + h);
-            ctx.strokeStyle = 'rgba(255, 0, 60, 0.3)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
+            ctx.fillRect(x, y, w, h); ctx.strokeRect(x, y, w, h);
             const lipY = isTop ? y + h - 25 : y;
-            ctx.fillStyle = '#000';
-            ctx.strokeStyle = '#ff003c';
-            ctx.lineWidth = 4;
-            ctx.fillRect(x - 5, lipY, w + 10, 25);
-            ctx.strokeRect(x - 5, lipY, w + 10, 25);
+            ctx.fillStyle = '#000'; ctx.strokeRect(x - 5, lipY, w + 10, 25); ctx.fillRect(x - 5, lipY, w + 10, 25);
         }
-
-        update() {
-            if (isPaused) return;
-            this.x -= currentPipeSpeed;
-        }
-
+        update() { if (!isPaused) this.x -= currentPipeSpeed; }
         isColliding(bird) {
-            const bx = bird.x;
-            const by = bird.y;
-            const br = bird.radius - 4;
+            const bx = bird.x; const by = bird.y; const br = bird.radius - 4;
             if (bx + br > this.x && bx - br < this.x + PIPE_WIDTH) {
                 if (by - br < this.topHeight || by + br > this.topHeight + PIPE_GAP) return true;
             }
@@ -471,10 +435,8 @@
     }
 
     function updateSpeed() {
-        let linearIncrease = score * 0.05;
         let multiplierFactor = Math.floor(score / 5);
-        let exponentialIncrease = Math.pow(1.1, multiplierFactor);
-        currentPipeSpeed = (BASE_PIPE_SPEED + linearIncrease) * exponentialIncrease;
+        currentPipeSpeed = (BASE_PIPE_SPEED + score * 0.05) * Math.pow(1.1, multiplierFactor);
         if (currentPipeSpeed > 10) currentPipeSpeed = 10;
         spawnRate = (BASE_SPAWN_RATE * BASE_PIPE_SPEED) / currentPipeSpeed;
         speedTag.innerText = `LVL: ${multiplierFactor + 1}`;
@@ -482,36 +444,32 @@
 
     function startGame(isNew) {
         if (isNew) {
-            bird = new Bird();
-            pipes = [];
-            score = 0;
-            frameCount = 0;
-            currentPipeSpeed = BASE_PIPE_SPEED;
-            spawnRate = BASE_SPAWN_RATE;
-            initStars();
-            playSound('start');
+            bird = new Bird(); pipes = []; score = 0; frameCount = 0;
+            currentPipeSpeed = BASE_PIPE_SPEED; spawnRate = BASE_SPAWN_RATE;
+            initStars(); playSound('start');
         }
-        isPaused = false;
-        gameActive = true;
-        scoreElement.innerText = '0';
-        speedTag.innerText = 'LVL: 1';
-        startMenu.style.display = 'none';
-        pauseMenu.style.display = 'none';
-        gameOverMenu.style.display = 'none';
-        pauseBtn.style.display = 'flex';
+        isPaused = false; gameActive = true;
+        scoreElement.innerText = '0'; speedTag.innerText = 'LVL: 1';
+        startMenu.style.display = 'none'; pauseMenu.style.display = 'none';
+        gameOverMenu.style.display = 'none'; pauseBtn.style.display = 'flex';
         requestAnimationFrame(gameLoop);
     }
 
     function endGame() {
         if (!gameActive) return;
-        gameActive = false;
-        pauseBtn.style.display = 'none';
+        gameActive = false; pauseBtn.style.display = 'none';
         playSound('gameover');
         
         if (score > highScore) {
             highScore = score;
             localStorage.setItem('flappyBalls_highScore', highScore);
             showMessage("NEW BEST SCORE ACHIEVED");
+            // Log High Score to Firebase
+            db.ref('highScores').push({
+                score: highScore,
+                country: userCountry,
+                time: Date.now()
+            });
         }
         
         finalScoreText.innerText = `Score: ${score}`;
@@ -520,59 +478,34 @@
     }
 
     function showMessage(text) {
-        messageBox.innerText = text;
-        messageBox.style.opacity = '1';
+        messageBox.innerText = text; messageBox.style.opacity = '1';
         setTimeout(() => messageBox.style.opacity = '0', 2500);
     }
 
     function gameLoop() {
         if (!gameActive || isPaused) return;
-        ctx.fillStyle = '#050505';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        stars.forEach(star => {
-            star.update();
-            star.draw();
-        });
-        ctx.strokeStyle = 'rgba(255, 0, 60, 0.05)';
-        ctx.lineWidth = 1;
-        for(let i=0; i<canvas.width; i+=30) {
-            ctx.beginPath();
-            ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
-            ctx.stroke();
-        }
-        if (frameCount % Math.floor(spawnRate) === 0) {
-            pipes.push(new Pipe());
-        }
+        ctx.fillStyle = '#050505'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => { s.update(); s.draw(); });
+        if (frameCount % Math.floor(spawnRate) === 0) pipes.push(new Pipe());
         for (let i = pipes.length - 1; i >= 0; i--) {
-            pipes[i].update();
-            pipes[i].draw();
+            pipes[i].update(); pipes[i].draw();
             if (pipes[i].isColliding(bird)) endGame();
             if (!pipes[i].passed && pipes[i].x + PIPE_WIDTH < bird.x) {
-                pipes[i].passed = true;
-                score++;
-                scoreElement.innerText = score;
-                updateSpeed();
+                pipes[i].passed = true; score++;
+                scoreElement.innerText = score; updateSpeed();
             }
             if (pipes[i].x + PIPE_WIDTH < -100) pipes.splice(i, 1);
         }
-        bird.update();
-        bird.draw();
-        frameCount++;
-        requestAnimationFrame(gameLoop);
+        bird.update(); bird.draw();
+        frameCount++; requestAnimationFrame(gameLoop);
     }
 
     function handleAction(e) {
         if (e.type === 'keydown') {
-            if (e.code === 'KeyP' || e.code === 'Escape') {
-                togglePause();
-                return;
-            }
+            if (e.code === 'KeyP' || e.code === 'Escape') togglePause();
             if (e.code === 'Space' || e.code === 'ArrowUp') {
-                if (!gameActive && (gameOverMenu.style.display === 'block' || startMenu.style.display === 'block')) {
-                    startGame(true);
-                    return;
-                }
-                if (gameActive && !isPaused) bird.jump();
+                if (!gameActive && (gameOverMenu.style.display === 'block' || startMenu.style.display === 'block')) startGame(true);
+                else if (gameActive && !isPaused) bird.jump();
             }
         }
     }
@@ -581,13 +514,10 @@
     canvas.addEventListener('touchstart', (e) => {
         if (e.target.id === 'pause-btn' || e.target.classList.contains('btn')) return;
         e.preventDefault();
-        if (!gameActive && (startMenu.style.display === 'block' || gameOverMenu.style.display === 'block')) {
-            startGame(true);
-        } else if (gameActive && !isPaused) {
-            bird.jump();
-        }
+        if (!gameActive && (startMenu.style.display === 'block' || gameOverMenu.style.display === 'block')) startGame(true);
+        else if (gameActive && !isPaused) bird.jump();
     }, { passive: false });
-    
+
     canvas.addEventListener('mousedown', (e) => {
         if (e.target.id === 'pause-btn' || e.target.classList.contains('btn')) return;
         if (gameActive && !isPaused) bird.jump();

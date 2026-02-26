@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOTES HUB | DARK LOBBY</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
@@ -125,7 +129,7 @@
     </div>
 
     <div class="notes-list">
-        <div class="note-item" onclick="handleAccess('github-guide.html')">
+        <div class="note-item" onclick="handleAccess('github-guide.html', 'GitHub Guide')">
             <div class="note-info">
                 <div class="note-icon"><i class="fab fa-github"></i></div>
                 <div class="note-details"><h3>GitHub Guide</h3><span>Access Source Code</span></div>
@@ -176,11 +180,35 @@
     <div class="back-nav"><a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a></div>
 
     <script>
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+            authDomain: "website-analysis-f6451.firebaseapp.com",
+            databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+            projectId: "website-analysis-f6451",
+            storageBucket: "website-analysis-f6451.firebasestorage.app",
+            messagingSenderId: "115116599128",
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let userCountry = "Unknown";
         let currentCorrectAnswer = 0;
         let targetUrl = "";
+        let noteTitle = "";
         let attemptCount = 0;
 
-        // Check persistent lockout on load
+        // Fetch user info & Log Hub Access
+        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+            userCountry = d.country_name || "Unknown";
+            db.ref('visitorLogs').push({
+                activity: "Accessed Notes Hub",
+                country: userCountry,
+                time: Date.now()
+            });
+        });
+
         window.onload = function() {
             const unlockTime = localStorage.getItem('unlockTime');
             if (unlockTime && Date.now() < unlockTime) {
@@ -189,14 +217,15 @@
             }
         };
 
-        function handleAccess(url) {
+        function handleAccess(url, title) {
+            targetUrl = url;
+            noteTitle = title;
             const unlockTime = localStorage.getItem('unlockTime');
             if (unlockTime && Date.now() < unlockTime) {
                 const remaining = Math.ceil((unlockTime - Date.now()) / 1000);
                 startLockout(remaining);
                 document.getElementById('mathModal').style.display = 'flex';
             } else {
-                targetUrl = url;
                 generateMathQuestion();
                 document.getElementById('mathModal').style.display = 'flex';
                 document.getElementById('userAnswer').focus();
@@ -224,19 +253,25 @@
             const timestamp = document.getElementById('logTimestamp');
 
             if (userAns === currentCorrectAnswer) {
+                // SUCCESS: Log the decryption before redirecting
+                db.ref('visitorLogs').push({
+                    activity: "Decrypted Note: " + noteTitle,
+                    country: userCountry,
+                    time: Date.now()
+                });
+
                 attemptCount = 0;
                 localStorage.removeItem('lockoutLevel');
                 document.getElementById('mainModalContent').innerHTML = `
                     <div class="hacker-glitch" style="color:#0f0">ACCESS GRANTED</div>
                     <p style="color:#0f0">> BYPASSING FIREWALL...<br>> LOADING SECURE_ARCHIVE...</p>
                 `;
-                setTimeout(() => { window.location.href = targetUrl; }, 1500);
+                setTimeout(() => { window.location.href = targetUrl; }, 1200);
             } else {
                 attemptCount++;
                 timestamp.innerText = new Date().toLocaleTimeString();
                 terminal.style.display = 'block';
                 
-                // Set Attempt Message
                 if (attemptCount === 1) attemptDisplay.innerText = "[!] FIRST ATTEMPT FAILED";
                 else if (attemptCount === 2) attemptDisplay.innerText = "[!!] SECOND ATTEMPT FAILED";
                 else if (attemptCount === 3) attemptDisplay.innerText = "[!!!] THIRD ATTEMPT FAILED";
@@ -245,7 +280,7 @@
                 
                 if (attemptCount >= 3) {
                     let level = parseInt(localStorage.getItem('lockoutLevel') || 0);
-                    let waitTime = 5 * Math.pow(2, level); // 5, 10, 20...
+                    let waitTime = 5 * Math.pow(2, level);
                     const unlockAt = Date.now() + (waitTime * 60 * 1000);
                     
                     localStorage.setItem('unlockTime', unlockAt);
@@ -281,11 +316,9 @@
             document.getElementById('mathModal').style.display = 'none';
             document.getElementById('errorTerminal').style.display = 'none';
             attemptCount = 0;
-            // Clear input if closed
             document.getElementById('userAnswer').value = "";
         }
 
-        // Allow 'Enter' key to submit
         document.getElementById('userAnswer').addEventListener("keyup", function(event) {
             if (event.key === "Enter") { checkAnswer(); }
         });

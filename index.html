@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIPESH GHIMIRE | Digital Universe</title>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
@@ -17,48 +21,29 @@
             --glass: rgba(255, 255, 255, 0.05);
         }
 
+        /* Essential Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; }
         h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
 
         /* --- Hero Section --- */
         .hub-hero {
-            height: 65vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%);
-            padding: 0 5%;
+            height: 65vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%); padding: 0 5%;
         }
 
         .logo-container {
-            position: relative;
-            width: 110px; height: 110px;
-            margin-bottom: 1.5rem;
-            display: flex; justify-content: center; align-items: center;
+            position: relative; width: 110px; height: 110px;
+            margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center;
         }
 
-        .logo-container img {
-            width: 70px; z-index: 2;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
-        }
+        .logo-container img { width: 70px; z-index: 2; filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); }
 
         .logo-container::before {
-            content: ''; position: absolute;
-            width: 90px; height: 90px;
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-            animation: rotateRect 6s linear infinite;
-            z-index: 1;
+            content: ''; position: absolute; width: 90px; height: 90px;
+            border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary);
+            animation: rotateRect 6s linear infinite; z-index: 1;
         }
 
         @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -66,52 +51,27 @@
         .hub-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
         .hub-hero h1 span { color: var(--primary); }
 
-        /* --- White Typewriter Subtext --- */
         .animated-subtext {
-            color: #ffffff;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.95rem;
-            height: 1.5rem;
-            margin-bottom: 2.5rem;
-            letter-spacing: 4px;
-            font-weight: 500;
-            display: flex; align-items: center; justify-content: center;
+            color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 0.95rem;
+            height: 1.5rem; margin-bottom: 2.5rem; letter-spacing: 4px;
+            font-weight: 500; display: flex; align-items: center; justify-content: center;
         }
 
-        .animated-subtext span {
-            border-right: 3px solid var(--primary);
-            padding-right: 5px;
-            animation: blink 0.7s infinite alternate;
-        }
-
+        .animated-subtext span { border-right: 3px solid var(--primary); padding-right: 5px; animation: blink 0.7s infinite alternate; }
         @keyframes blink { from { border-color: transparent; } to { border-color: var(--primary); } }
 
         /* --- Hero Buttons --- */
         .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-        
         .btn-common {
-            padding: 10px 20px;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-            border-radius: 4px;
+            padding: 10px 20px; text-decoration: none; font-weight: bold;
+            text-transform: uppercase; font-size: 0.7rem; border-radius: 4px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            position: relative;
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; position: relative;
         }
 
-        /* Red Dot Animation */
         .pulse-dot {
-            width: 6px; height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            position: absolute;
-            top: 4px; right: 4px;
-            animation: pulseAnim 1.5s infinite;
+            width: 6px; height: 6px; background: var(--primary); border-radius: 50%;
+            position: absolute; top: 4px; right: 4px; animation: pulseAnim 1.5s infinite;
         }
 
         @keyframes pulseAnim {
@@ -120,18 +80,8 @@
             100% { transform: scale(1); opacity: 0; }
         }
 
-        .btn-dark-lobby {
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            background: rgba(255, 0, 0, 0.05);
-        }
-
-        .btn-dark-lobby:hover {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 0 20px var(--primary);
-            transform: translateY(-3px);
-        }
+        .btn-dark-lobby { border: 1px solid var(--primary); color: var(--primary); background: rgba(255, 0, 0, 0.05); }
+        .btn-dark-lobby:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); transform: translateY(-3px); }
 
         .btn-donation { border: 1px solid #FFD700; color: #FFD700; background: transparent; }
         .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); transform: translateY(-3px); }
@@ -139,104 +89,49 @@
         .btn-contact { border: 1px solid white; color: white; background: transparent; }
         .btn-contact:hover { background: white; color: black; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); transform: translateY(-3px); }
 
-        /* --- Animated Hub Cards --- */
+        /* --- Hub Cards --- */
         .grid-container {
-            padding: 20px 5% 80px 5%;
-            display: grid;
+            padding: 20px 5% 80px 5%; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 1.5rem;
-            max-width: 1300px;
-            margin: 0 auto;
+            gap: 1.5rem; max-width: 1300px; margin: 0 auto;
         }
 
         .category-card {
-            background: var(--bg-card);
-            padding: 2.5rem 1.5rem;
-            border-radius: 12px;
-            text-decoration: none;
-            color: white;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: var(--bg-card); padding: 2.5rem 1.5rem; border-radius: 12px;
+            text-decoration: none; color: white; text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease;
+            position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;
         }
 
         .category-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            transition: 0.5s;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent); transition: 0.5s;
         }
 
         .category-card:hover::before { left: 100%; }
+        .category-card:hover { transform: translateY(-10px); border-color: rgba(255, 0, 0, 0.3); background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%); }
 
-        .category-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(255, 0, 0, 0.3);
-            background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-        }
+        .category-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1.2rem; transition: 0.3s; }
+        .category-card:hover i { animation: iconPulse 1.5s infinite ease-in-out; filter: drop-shadow(0 0 10px var(--primary)); }
 
-        .category-card i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1.2rem;
-            transition: 0.3s;
-        }
+        @keyframes iconPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
-        .category-card:hover i {
-            animation: iconPulse 1.5s infinite ease-in-out;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-        }
-
-        .status-tag {
-            padding: 3px 10px; border-radius: 4px; font-size: 0.6rem;
-            font-weight: bold; margin-bottom: 15px; text-transform: uppercase;
-        }
+        .status-tag { padding: 3px 10px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
         .status-online { background: rgba(0, 255, 0, 0.1); color: #00ff00; border: 1px solid #00ff00; }
         .status-offline { background: rgba(255, 255, 255, 0.05); color: #777; border: 1px solid #444; }
 
-        /* --- Hacker Terminal --- */
+        /* --- Terminal Overlay --- */
         #terminal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 9999;
-            display: none; justify-content: center; align-items: center;
-            font-family: 'JetBrains Mono', monospace; padding: 20px;
+            background: rgba(0,0,0,0.98); z-index: 9999; display: none;
+            justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace; padding: 20px;
         }
 
-        .terminal-box {
-            width: 100%; max-width: 500px;
-            background: #050505; border: 2px solid var(--primary);
-            padding: 30px; box-shadow: 0 0 50px rgba(255,0,0,0.4);
-            position: relative;
-        }
-
-        .terminal-header {
-            position: absolute; top: -15px; left: 20px;
-            background: var(--primary); color: white;
-            padding: 2px 15px; font-size: 0.7rem;
-        }
-
+        .terminal-box { width: 100%; max-width: 500px; background: #050505; border: 2px solid var(--primary); padding: 30px; box-shadow: 0 0 50px rgba(255,0,0,0.4); position: relative; }
+        .terminal-header { position: absolute; top: -15px; left: 20px; background: var(--primary); color: white; padding: 2px 15px; font-size: 0.7rem; }
         .terminal-text { color: var(--primary); font-size: 0.85rem; line-height: 1.6; margin-bottom: 25px; }
         .terminal-btns { display: flex; flex-direction: column; gap: 12px; }
-        
-        .t-btn {
-            background: transparent; border: 1px solid var(--primary);
-            color: var(--primary); padding: 12px; cursor: pointer;
-            text-transform: uppercase; font-weight: bold; font-family: 'JetBrains Mono', monospace;
-        }
-
+        .t-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px; cursor: pointer; text-transform: uppercase; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
         .t-btn:hover { background: var(--primary); color: white; }
         .access-denied-box { color: #ff0000; font-weight: bold; text-align: center; margin-top: 15px; display: none; }
 
@@ -256,14 +151,14 @@
         </div>
         
         <div class="hero-btns">
-            <a onclick="handleLobbyEntry()" class="btn-common btn-dark-lobby">
+            <a onclick="logAction('Dark Lobby Button'); handleLobbyEntry();" class="btn-common btn-dark-lobby">
                 <span class="pulse-dot"></span>
                 <i class="fas fa-ghost"></i> ENTER DARK LOBBY
             </a>
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation">
+            <a href="https://cr8.rs/darklobby" target="_blank" onclick="logAction('Support/Donation');" class="btn-common btn-donation">
                 <i class="fas fa-heart"></i> SUPPORT
             </a>
-            <a href="contact.html" class="btn-common btn-contact">
+            <a href="contact.html" onclick="logAction('Contact Page');" class="btn-common btn-contact">
                 <i class="fas fa-envelope"></i> CONTACT
             </a>
         </div>
@@ -277,8 +172,8 @@
                 [INFO] SUBSCRIBE TO UPLINK TO BYPASS SECURITY PROTOCOLS.
             </div>
             <div class="terminal-btns">
-                <button class="t-btn" onclick="subscribeAndRedirect()">[ 01 ] SUBSCRIBE TO UPLINK</button>
-                <button class="t-btn" onclick="abortMission()" style="border-color:#444; color:#444;">[ 02 ] ABORT MISSION</button>
+                <button class="t-btn" onclick="logAction('Lobby Subscribe Click'); subscribeAndRedirect();">[ 01 ] SUBSCRIBE TO UPLINK</button>
+                <button class="t-btn" onclick="logAction('Lobby Abort Mission'); abortMission();" style="border-color:#444; color:#444;">[ 02 ] ABORT MISSION</button>
             </div>
             <div id="denied-msg" class="access-denied-box">
                 [ ALERT ] ACCESS DENIED: PROTOCOL TERMINATED.
@@ -287,28 +182,28 @@
     </div>
 
     <div class="grid-container">
-        <a href="gaming-hub.html" class="category-card">
+        <a href="gaming-hub.html" onclick="logAction('Gaming Hub Click');" class="category-card">
             <span class="status-tag status-online">ACTIVE</span>
             <i class="fas fa-crosshairs"></i>
             <h3>Gaming Hub</h3>
             <p>Tactical operations, arcade missions & highlights.</p>
         </a>
 
-        <a href="calculator.html" class="category-card">
+        <a href="calculator.html" onclick="logAction('Software Hub Click');" class="category-card">
             <span class="status-tag status-online">ACTIVE</span>
             <i class="fas fa-code"></i>
             <h3>Software Hub</h3>
             <p>Custom tools & resources.</p>
         </a>
 
-        <a href="maintenance.html" class="category-card">
+        <a href="maintenance.html" onclick="logAction('Mobile Hub Click');" class="category-card">
             <span class="status-tag status-offline">INACTIVE</span>
             <i class="fas fa-mobile-screen-button"></i>
             <h3>Mobile Hub</h3>
             <p>Apps under encryption (Maintenance).</p>
         </a>
 
-        <a href="notes-hub.html" class="category-card">
+        <a href="notes-hub.html" onclick="logAction('Notes Hub Click');" class="category-card">
             <span class="status-tag status-online">ACTIVE</span>
             <i class="fas fa-book-bookmark"></i>
             <h3>Notes Hub</h3>
@@ -321,7 +216,47 @@
     </footer>
 
     <script>
-        // TYPEWRITER EFFECT
+        // --- Firebase Configuration (Using your credentials) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+            authDomain: "website-analysis-f6451.firebaseapp.com",
+            databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+            projectId: "website-analysis-f6451",
+            storageBucket: "website-analysis-f6451.firebasestorage.app",
+            messagingSenderId: "115116599128",
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let userCountry = "Unknown";
+
+        // --- Tracking Functions ---
+        
+        // 1. Log User Visit on Page Load
+        function logVisit() {
+            fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
+                userCountry = data.country_name || "Unknown";
+                db.ref('visitorLogs').push({
+                    activity: "Visited Homepage",
+                    country: userCountry,
+                    time: Date.now()
+                });
+            }).catch(() => {
+                db.ref('visitorLogs').push({ activity: "Visited Homepage", country: "Hidden", time: Date.now() });
+            });
+        }
+
+        // 2. Log Specific Clicks
+        function logAction(actionName) {
+            db.ref('visitorLogs').push({
+                activity: actionName,
+                country: userCountry,
+                time: Date.now()
+            });
+        }
+
+        // --- Typewriter Effect ---
         const textElement = document.getElementById('typewriter');
         const words = ["CREATOR", "DEVELOPER", "GAMER"];
         let wordIndex = 0, charIndex = 0, isDeleting = false;
@@ -331,45 +266,29 @@
             const displayTxt = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
             textElement.innerHTML = `<span>${displayTxt}</span>`;
             charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
-
             let typeSpeed = isDeleting ? 80 : 150;
-            if (!isDeleting && charIndex === currentWord.length) {
-                isDeleting = true;
-                typeSpeed = 2000;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                wordIndex = (wordIndex + 1) % words.length;
-                typeSpeed = 500;
-            }
+            if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; typeSpeed = 2000; }
+            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
             setTimeout(type, typeSpeed);
         }
 
-        // LOBBY ENTRY LOGIC
+        // --- Lobby Logic ---
         const YT_URL = "https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ?sub_confirmation=1";
-
         function handleLobbyEntry() {
-            if (localStorage.getItem('is_subscribed') === 'true') {
-                window.location.href = YT_URL;
-            } else {
-                document.getElementById('terminal-overlay').style.display = 'flex';
-            }
+            if (localStorage.getItem('is_subscribed') === 'true') { window.location.href = YT_URL; }
+            else { document.getElementById('terminal-overlay').style.display = 'flex'; }
         }
-
-        function subscribeAndRedirect() {
-            localStorage.setItem('is_subscribed', 'true');
-            window.location.href = YT_URL;
-        }
-
+        function subscribeAndRedirect() { localStorage.setItem('is_subscribed', 'true'); window.location.href = YT_URL; }
         function abortMission() {
             const msg = document.getElementById('denied-msg');
             msg.style.display = 'block';
-            setTimeout(() => {
-                msg.style.display = 'none';
-                document.getElementById('terminal-overlay').style.display = 'none';
-            }, 2000);
+            setTimeout(() => { msg.style.display = 'none'; document.getElementById('terminal-overlay').style.display = 'none'; }, 2000);
         }
 
-        window.onload = type;
+        window.onload = () => {
+            type();
+            logVisit();
+        };
     </script>
 </body>
 </html>

@@ -6,6 +6,10 @@
     <title>SOFTWARE HUB | DARK LOBBY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
         :root {
             --primary: #FF0000;
@@ -25,7 +29,7 @@
             min-height: 100vh;
         }
 
-        /* --- Header Section with Logo on Left --- */
+        /* --- Header Section --- */
         .header-container {
             display: flex;
             align-items: center;
@@ -35,7 +39,6 @@
             padding-top: 20px;
         }
 
-        /* Small Animated Logo Box */
         .logo-box-small {
             position: relative;
             width: 80px;
@@ -176,7 +179,6 @@
     </div>
 
     <div class="software-list">
-        
         <div class="app-item">
             <div class="app-info">
                 <div class="app-icon"><i class="fas fa-calculator"></i></div>
@@ -185,7 +187,7 @@
                     <span>v1.0.0 | Password ZIP | 43.4 MB</span>
                 </div>
             </div>
-            <button class="dl-trigger" onclick="openModal('downloads/ScientificCalculator.zip')">
+            <button class="dl-trigger" onclick="openModal('downloads/ScientificCalculator.zip', 'Scientific Calculator')">
                 <i class="fas fa-download"></i> DOWNLOAD
             </button>
         </div>
@@ -198,26 +200,23 @@
                     <span>v1.0.0 | Password ZIP | 16.9 MB</span>
                 </div>
             </div>
-            <button class="dl-trigger" onclick="openModal('downloads/Nepali-Calendar-Dipesh.zip')">
+            <button class="dl-trigger" onclick="openModal('downloads/Nepali-Calendar-Dipesh.zip', 'Nepali Calendar')">
                 <i class="fas fa-download"></i> DOWNLOAD
             </button>
         </div>
-
     </div>
 
     <div class="modal-overlay" id="downloadModal">
         <div class="modal-content">
-            <i class="fas fa-shield-check security-icon"></i>
+            <i class="fas fa-shield-halved security-icon" style="color: #00ff00; font-size: 3rem; margin-bottom: 15px; display: block;"></i>
             <h2>SAFE & VERIFIED</h2>
-            <p>
-                This is a secure zip file. If prompted with “Keep or Discard,” select <strong>Keep</strong>. No risk to your system.
-            </p>
+            <p>This is a secure zip file. If prompted with “Keep or Discard,” select <strong>Keep</strong>. No risk to your system.</p>
             
             <p style="margin-bottom: 5px; font-size: 0.8rem; color: var(--dim);">ZIP EXTRACTION PASSWORD:</p>
             <div class="password-box">darklobby</div>
 
             <div class="modal-btns">
-                <a href="#" download id="finalDownload" class="btn-confirm" onclick="closeModal()">PROCEED</a>
+                <a href="#" download id="finalDownload" class="btn-confirm">PROCEED</a>
                 <button class="btn-cancel" onclick="closeModal()">CANCEL</button>
             </div>
         </div>
@@ -228,10 +227,58 @@
     </div>
 
     <script>
-        function openModal(filePath) {
+        // --- 1. Firebase Configuration (Matches your real ID) ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+            authDomain: "website-analysis-f6451.firebaseapp.com",
+            databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+            projectId: "website-analysis-f6451",
+            storageBucket: "website-analysis-f6451.firebasestorage.app",
+            messagingSenderId: "115116599128",
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentFileName = "";
+        let userCountry = "Unknown";
+
+        // --- 2. Track Visitor & Country on Load ---
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                userCountry = data.country_name || "Unknown";
+                // Update total visits in DB
+                db.ref('stats/totalVisits').transaction(c => (c || 0) + 1);
+                // Log visitor
+                db.ref('visitorLogs').push({
+                    country: userCountry,
+                    time: Date.now()
+                });
+            }).catch(e => console.log("Tracking error"));
+
+        // --- 3. Modal & Download Logic ---
+        function openModal(filePath, fileName) {
+            currentFileName = fileName;
             document.getElementById('finalDownload').href = filePath;
             document.getElementById('downloadModal').style.display = 'flex';
         }
+
+        // When "PROCEED" is clicked
+        document.getElementById('finalDownload').addEventListener('click', function() {
+            // Update stats
+            db.ref('stats/totalDownloads').transaction(c => (c || 0) + 1);
+            
+            // Log the download with file name and country
+            db.ref('downloadLogs').push({
+                fileName: currentFileName,
+                country: userCountry,
+                time: Date.now()
+            });
+            
+            setTimeout(closeModal, 500);
+        });
 
         function closeModal() {
             document.getElementById('downloadModal').style.display = 'none';
@@ -242,6 +289,5 @@
             if (event.target == modal) { closeModal(); }
         }
     </script>
-
 </body>
 </html>
