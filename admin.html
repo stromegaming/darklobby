@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARK LOBBY | Admin Command Center</title>
+    <title>DARK LOBBY | Security Command Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -11,11 +11,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <style>
-        :root { --primary: #FF0000; --bg: #050505; --card: #111; --text: #fff; --accent: #ffd700; --glass: rgba(255,255,255,0.05); }
+        :root { --primary: #FF0000; --bg: #050505; --card: #111; --text: #fff; --accent: #ffd700; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
 
-        /* --- Login Overlay (Design from your code) --- */
+        /* --- Hacker Countdown Screen --- */
+        #hacker-screen {
+            position: fixed; inset: 0; background: #000; color: #f00; z-index: 99999;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Orbitron'; text-align: center; border: 10px solid #f00;
+        }
+        #countdown-box { font-size: 3.5rem; margin: 20px 0; text-shadow: 0 0 20px #f00; font-weight: 900; }
+        .danger-anim { animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        /* --- Login Overlay --- */
         #login-overlay {
             position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; align-items: center; justify-content: center;
@@ -37,51 +47,43 @@
         input {
             width: 100%; padding: 14px; margin: 12px 0; background: #000;
             border: 1px solid #333; color: white; border-radius: 8px; outline: none;
-            transition: 0.3s;
         }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(255,0,0,0.2); }
         .login-btn {
             width: 100%; padding: 14px; background: var(--primary); color: white;
-            border: none; font-weight: bold; cursor: pointer; border-radius: 8px;
-            font-family: 'Orbitron'; margin-top: 15px; letter-spacing: 1px;
-        }
-
-        /* --- Hacker Lockdown View --- */
-        #hacker-screen {
-            position: fixed; inset: 0; background: #000; color: #f00; z-index: 10001;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Orbitron'; text-align: center;
+            border: none; font-weight: bold; cursor: pointer; border-radius: 8px; font-family: 'Orbitron';
         }
 
         /* --- Dashboard --- */
-        #admin-content { display: none; padding: 5% 8%; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
-        
+        #admin-content { display: none; padding: 3% 5%; height: 100vh; overflow-y: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .stat-card { 
-            background: var(--card); padding: 2rem; border-radius: 12px; 
-            border: 1px solid var(--glass); position: relative; cursor: pointer; transition: 0.3s;
+            background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer; transition: 0.3s;
         }
-        .stat-card:hover { border-color: var(--primary); transform: translateY(-5px); background: #161616; }
-        .stat-card h3 { font-family: 'Orbitron'; font-size: 0.7rem; color: #888; letter-spacing: 1px; }
-        .stat-card .value { font-size: 2.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
-        
-        /* Modal for Detailed View */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: #111; border: 1px solid var(--primary); width: 100%; max-width: 600px; border-radius: 15px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; }
-        .modal-header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 20px; overflow-y: auto; }
-        .log-item { padding: 12px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.85rem; }
+        .stat-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .stat-card h3 { font-family: 'Orbitron'; font-size: 0.7rem; color: #888; }
+        .stat-card .value { font-size: 2.2rem; font-weight: 900; color: var(--primary); margin: 5px 0; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; align-items: center; justify-content: center; }
+        .modal-box { background: #111; border: 1px solid var(--primary); width: 90%; max-width: 500px; border-radius: 15px; }
+        .modal-header { padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; }
+        .modal-body { padding: 15px; max-height: 300px; overflow-y: auto; font-size: 13px; }
+        .log-row { padding: 10px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
     <div id="hacker-screen">
-        <i class="fas fa-user-secret fa-5x mb-6"></i>
-        <h1 id="hacker-title">DATA_BREACH_DETECTED</h1>
-        <p id="hacker-msg" style="margin: 20px 0; letter-spacing: 5px;"></p>
-        <div style="border: 1px solid #f00; padding: 15px; font-size: 10px;">
-            IP: LOGGED_IN_SERVER <br> STATUS: ACCESS_REVOKED_FOR_24H
+        <i class="fas fa-skull-crossbones fa-4x danger-anim"></i>
+        <h1 style="margin-top:20px; letter-spacing:5px;">[ ACCESS_REVOKED ]</h1>
+        <div id="countdown-box">00:00:00</div>
+        <p id="hacker-status" style="color:#888; margin-bottom:20px;">SYSTEM BREACH DETECTED - ALERT SENT</p>
+        <div style="border:1px solid #f00; padding:15px; background:rgba(255,0,0,0.1); font-size:11px;">
+            PROTOCOL: ANTI-BRUTEFORCE ACTIVE <br>
+            IP: LOGGED_BY_DARK_LOBBY <br>
+            STATUS: SYSTEM_SELF_PROTECTION
         </div>
     </div>
 
@@ -100,19 +102,19 @@
 
     <div id="admin-content">
         <div class="header">
-            <h1 style="font-family:'Orbitron'; font-size: 1.5rem;">DARK LOBBY <span style="color:var(--primary)">COMMAND</span></h1>
+            <h1 style="font-family:'Orbitron'; font-size: 1.3rem;">DARK LOBBY <span style="color:var(--primary)">COMMAND</span></h1>
             <div style="display:flex; gap:10px;">
-                <button onclick="connectYT()" style="background:#f00; border:none; color:white; padding:10px 15px; cursor:pointer; font-family:'Orbitron'; border-radius: 5px; font-size: 10px;"><i class="fab fa-youtube"></i> SYNC YT</button>
-                <button onclick="location.reload()" style="background:#222; border:none; color:white; padding:10px 15px; cursor:pointer; font-family:'Orbitron'; border-radius: 5px; font-size: 10px;">EXIT</button>
+                <button onclick="connectYT()" style="background:#f00; border:none; color:white; padding:8px 15px; cursor:pointer; font-family:'Orbitron'; border-radius: 5px; font-size:9px;">SYNC YOUTUBE</button>
+                <button onclick="location.reload()" style="background:#222; border:none; color:white; padding:8px 15px; cursor:pointer; font-family:'Orbitron'; border-radius: 5px; font-size:9px;">EXIT</button>
             </div>
         </div>
 
-        <h2 style="font-family:'Orbitron'; font-size: 0.8rem; margin-bottom: 20px; color: var(--accent);">WEBSITE TRAFFIC & INTERACTION</h2>
+        <h2 style="font-family:'Orbitron'; font-size: 0.8rem; margin-bottom: 20px; color: var(--accent);">TRAFFIC ANALYTICS</h2>
         <div class="grid">
             <div class="stat-card" onclick="openDetails('Visited-Homepage')">
                 <h3>TOTAL VISITS</h3>
                 <div class="value" id="visit-count">0</div>
-                <p style="font-size: 9px; color: #555;">CLICK TO SEE COUNTRIES</p>
+                <p style="font-size: 9px; color: #444;">VIEW LOCATIONS</p>
             </div>
             <div class="stat-card" onclick="openDetails('Gaming-Hub-Click')">
                 <h3>GAMING HUB</h3>
@@ -122,20 +124,24 @@
                 <h3>SOFTWARE HUB</h3>
                 <div class="value" id="software-count">0</div>
             </div>
+            <div class="stat-card" onclick="openDetails('Notes-Hub-Click')">
+                <h3>NOTES HUB</h3>
+                <div class="value" id="notes-count">0</div>
+            </div>
         </div>
 
-        <h2 style="font-family:'Orbitron'; font-size: 0.8rem; margin-top: 40px; margin-bottom: 20px; color: var(--primary);">YOUTUBE ANALYTICS (LIVE)</h2>
+        <h2 style="font-family:'Orbitron'; font-size: 0.8rem; margin-top: 40px; margin-bottom: 20px; color: var(--primary);">YOUTUBE LIVE</h2>
         <div class="grid">
-            <div class="stat-card"><h3>SUBSCRIBERS</h3><div class="value" id="sub-count">...</div></div>
-            <div class="stat-card"><h3>TOTAL VIEWS</h3><div class="value" id="view-count">...</div></div>
-            <div class="stat-card"><h3>LIKES (EST)</h3><div class="value">LIVE</div></div>
+            <div class="stat-card"><h3>SUBS</h3><div class="value" id="sub-count">...</div></div>
+            <div class="stat-card"><h3>VIEWS</h3><div class="value" id="view-count">...</div></div>
+            <div class="stat-card"><h3>VIDEOS</h3><div class="value" id="video-count">...</div></div>
         </div>
     </div>
 
     <div id="detail-modal" class="modal">
         <div class="modal-box">
             <div class="modal-header">
-                <h3 id="modal-title" style="font-family:'Orbitron'; color:var(--primary); font-size: 12px;">DETAILS</h3>
+                <h3 id="modal-title" style="font-family:'Orbitron'; color:var(--primary); font-size:12px;">DETAILS</h3>
                 <button onclick="closeModal()" style="background:none; border:none; color:#555; font-size: 25px; cursor:pointer;">&times;</button>
             </div>
             <div class="modal-body" id="modal-content"></div>
@@ -143,8 +149,8 @@
     </div>
 
     <script>
-        // --- INITIALIZATION ---
-        emailjs.init("YOUR_PUBLIC_KEY"); // Replace with EmailJS Public Key
+        // --- SECURITY CONFIG ---
+        emailjs.init("zGThnJ58dGKA7gOve"); // Your Public Key
 
         const firebaseConfig = {
             apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
@@ -157,21 +163,15 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
+        
         let attempts = 0;
         let allLogs = [];
+        let timerInterval;
 
-        // --- LOGIN & SECURITY ---
         function checkLogin() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
             const err = document.getElementById('error-msg');
-
-            // 24hr Lock Check
-            if (localStorage.getItem('lockdown_24h') > Date.now()) {
-                triggerHackerMode("SITE_LOCKED: BREACH_DETECTED");
-                return;
-            }
 
             if (u === "admin" && p === "darklobby123") {
                 document.getElementById('login-overlay').style.display = 'none';
@@ -180,91 +180,105 @@
             } else {
                 attempts++;
                 if (attempts === 3) {
-                    triggerHackerMode("HOLDING: 30 SECONDS");
-                    setTimeout(() => {
-                        document.getElementById('hacker-screen').style.display = 'none';
-                    }, 30000);
+                    sendEmailAlert(u, p, "30s_HOLD");
+                    startCountdown(30);
                 } else if (attempts > 3) {
-                    localStorage.setItem('lockdown_24h', Date.now() + 86400000);
-                    triggerHackerMode("PERMANENT_LOCK: 24 HOURS");
-                    sendSecurityAlert(u, p);
+                    const lockExpiry = Date.now() + (24 * 60 * 60 * 1000);
+                    localStorage.setItem('lockdown_expiry', lockExpiry);
+                    sendEmailAlert(u, p, "24h_BAN");
+                    startCountdown(24 * 60 * 60);
                 } else {
-                    err.innerText = `ACCESS DENIED: ${3-attempts} LEFT`;
+                    err.innerText = `ACCESS_DENIED: ${3-attempts} LEFT`;
                 }
             }
         }
 
-        function triggerHackerMode(msg) {
-            document.getElementById('hacker-msg').innerText = msg;
+        function sendEmailAlert(u, p, type) {
+            emailjs.send("service_je9gw5g", "TEMPLATE_ID", { // TEMPLATE_ID halnu hola
+                attempt_user: u,
+                attempt_pass: p,
+                lock_type: type,
+                time: new Date().toLocaleString()
+            }).then(() => console.log("Alert Sent")).catch(err => console.log(err));
+        }
+
+        function startCountdown(seconds) {
             document.getElementById('hacker-screen').style.display = 'flex';
+            document.getElementById('login-overlay').style.display = 'none';
+            clearInterval(timerInterval);
+            let timeLeft = seconds;
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('hacker-screen').style.display = 'none';
+                    document.getElementById('login-overlay').style.display = 'flex';
+                    return;
+                }
+                timeLeft--;
+                const h = Math.floor(timeLeft / 3600);
+                const m = Math.floor((timeLeft % 3600) / 60);
+                const s = timeLeft % 60;
+                document.getElementById('countdown-box').innerText = 
+                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
         }
 
-        function sendSecurityAlert(u, p) {
-            emailjs.send("SERVICE_ID", "TEMPLATE_ID", { user: u, pass: p });
-        }
-
-        // --- DASHBOARD DATA ---
         function startDashboard() {
             db.ref('visitorLogs').on('value', snap => {
-                const data = snap.val() || {};
-                allLogs = Object.values(data);
-                updateStats();
+                allLogs = Object.values(snap.val() || {});
+                const counts = { "Visited-Homepage": 0, "Gaming-Hub-Click": 0, "Software-Hub-Click": 0, "Notes-Hub-Click": 0 };
+                allLogs.forEach(l => {
+                    const key = l.activity.replace(/\s+/g, '-');
+                    if(counts.hasOwnProperty(key)) counts[key]++;
+                });
+                document.getElementById('visit-count').innerText = counts["Visited-Homepage"];
+                document.getElementById('gaming-count').innerText = counts["Gaming-Hub-Click"];
+                document.getElementById('software-count').innerText = counts["Software-Hub-Click"];
+                document.getElementById('notes-count').innerText = counts["Notes-Hub-Click"];
             });
-
-            // Auto-check YouTube if token in URL
             const token = new URLSearchParams(window.location.hash.substring(1)).get('access_token');
-            if(token) fetchYouTube(token);
-        }
-
-        function updateStats() {
-            const counts = { "Visited-Homepage": 0, "Gaming-Hub-Click": 0, "Software-Hub-Click": 0 };
-            allLogs.forEach(l => {
-                const key = l.activity.replace(/\s+/g, '-');
-                if(counts.hasOwnProperty(key)) counts[key]++;
-            });
-            document.getElementById('visit-count').innerText = counts["Visited-Homepage"];
-            document.getElementById('gaming-count').innerText = counts["Gaming-Hub-Click"];
-            document.getElementById('software-count').innerText = counts["Software-Hub-Click"];
+            if(token) fetchYT(token);
         }
 
         function openDetails(filter) {
             const modal = document.getElementById('detail-modal');
-            const content = document.getElementById('modal-content');
             document.getElementById('modal-title').innerText = filter.replace(/-/g, ' ');
             modal.style.display = 'flex';
-
             const filtered = allLogs.filter(l => l.activity.replace(/\s+/g, '-') === filter).reverse();
-            content.innerHTML = filtered.map(l => `
-                <div class="log-item">
+            document.getElementById('modal-content').innerHTML = filtered.map(l => `
+                <div class="log-row">
                     <span><i class="fas fa-map-marker-alt" style="color:red"></i> ${l.country}</span>
-                    <span style="color:#555">${new Date(l.time).toLocaleTimeString()}</span>
+                    <span style="color:#555">${new Date(l.time).toLocaleString()}</span>
                 </div>
             `).join('');
         }
 
         function closeModal() { document.getElementById('detail-modal').style.display = 'none'; }
 
-        // --- YOUTUBE API ---
         function connectYT() {
-            const clientID = "590601285053-0nerss3mb2uqdvv9ur2ctltc0i4sq0k3.apps.googleusercontent.com";
-            const redirect = window.location.origin + window.location.pathname;
-            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientID}&redirect_uri=${encodeURIComponent(redirect)}&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`;
+            const cid = "590601285053-0nerss3mb2uqdvv9ur2ctltc0i4sq0k3.apps.googleusercontent.com";
+            const uri = window.location.origin + window.location.pathname;
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${encodeURIComponent(uri)}&response_type=token&scope=https://www.googleapis.com/auth/youtube.readonly`;
         }
 
-        async function fetchYouTube(token) {
+        async function fetchYT(token) {
             try {
                 const res = await fetch('https://www.googleapis.com/youtube/v3/channels?part=statistics&mine=true', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
-                const stats = data.items[0].statistics;
-                document.getElementById('sub-count').innerText = Number(stats.subscriberCount).toLocaleString();
-                document.getElementById('view-count').innerText = Number(stats.viewCount).toLocaleString();
+                const s = data.items[0].statistics;
+                document.getElementById('sub-count').innerText = Number(s.subscriberCount).toLocaleString();
+                document.getElementById('view-count').innerText = Number(s.viewCount).toLocaleString();
+                document.getElementById('video-count').innerText = s.videoCount;
             } catch(e) {}
         }
 
         window.onload = () => {
-            if (localStorage.getItem('lockdown_24h') > Date.now()) triggerHackerMode("SITE_LOCKED_24H");
+            const expiry = localStorage.getItem('lockdown_expiry');
+            if (expiry && Date.now() < expiry) {
+                startCountdown(Math.floor((expiry - Date.now()) / 1000));
+            }
         };
     </script>
 </body>
