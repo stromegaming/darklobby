@@ -19,6 +19,8 @@
             --text-light: #ffffff;
             --text-dim: #b3b3b3;
             --glass: rgba(255, 255, 255, 0.05);
+            --strome: #00d4ff;
+            --online-green: #00ff88;
         }
 
         /* Essential Reset */
@@ -28,7 +30,7 @@
 
         /* --- Hero Section --- */
         .hub-hero {
-            height: 65vh; display: flex; flex-direction: column;
+            height: 70vh; display: flex; flex-direction: column;
             justify-content: center; align-items: center; text-align: center;
             background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%); padding: 0 5%;
         }
@@ -61,7 +63,7 @@
         @keyframes blink { from { border-color: transparent; } to { border-color: var(--primary); } }
 
         /* --- Hero Buttons --- */
-        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
         .btn-common {
             padding: 10px 20px; text-decoration: none; font-weight: bold;
             text-transform: uppercase; font-size: 0.7rem; border-radius: 4px;
@@ -69,6 +71,35 @@
             display: inline-flex; align-items: center; gap: 8px; cursor: pointer; position: relative;
         }
 
+        /* --- Strome Active Animation --- */
+        .btn-strome { 
+            border: 1px solid var(--strome); 
+            color: var(--strome); 
+            background: rgba(0, 212, 255, 0.05);
+            animation: stromeGlow 2s infinite alternate;
+        }
+
+        .btn-strome:hover { background: var(--strome); color: white; box-shadow: 0 0 25px var(--strome); transform: translateY(-3px); }
+
+        @keyframes stromeGlow {
+            from { box-shadow: 0 0 5px rgba(0, 212, 255, 0.2); }
+            to { box-shadow: 0 0 15px rgba(0, 212, 255, 0.5); border-color: #fff; }
+        }
+
+        .online-indicator {
+            width: 8px; height: 8px; background: var(--online-green); 
+            border-radius: 50%; display: inline-block;
+            box-shadow: 0 0 10px var(--online-green);
+            animation: pulseGreen 1.5s infinite;
+        }
+
+        @keyframes pulseGreen {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- Dark Lobby Pulse --- */
         .pulse-dot {
             width: 6px; height: 6px; background: var(--primary); border-radius: 50%;
             position: absolute; top: 4px; right: 4px; animation: pulseAnim 1.5s infinite;
@@ -151,13 +182,20 @@
         </div>
         
         <div class="hero-btns">
+            <a href="https://www.youtube.com/channel/UC_Odlbv91upe_E3O0Yv7D5g?sub_confirmation=1" target="_blank" onclick="logAction('Strome Gaming Button');" class="btn-common btn-strome">
+                <span class="online-indicator"></span>
+                <i class="fas fa-gamepad"></i> STROME GAMING
+            </a>
+
             <a onclick="logAction('Dark Lobby Button'); handleLobbyEntry();" class="btn-common btn-dark-lobby">
                 <span class="pulse-dot"></span>
                 <i class="fas fa-ghost"></i> ENTER DARK LOBBY
             </a>
+
             <a href="https://cr8.rs/darklobby" target="_blank" onclick="logAction('Support/Donation');" class="btn-common btn-donation">
                 <i class="fas fa-heart"></i> SUPPORT
             </a>
+
             <a href="contact.html" onclick="logAction('Contact Page');" class="btn-common btn-contact">
                 <i class="fas fa-envelope"></i> CONTACT
             </a>
@@ -216,7 +254,6 @@
     </footer>
 
     <script>
-        // --- Firebase Configuration (Using your credentials) ---
         const firebaseConfig = {
             apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
             authDomain: "website-analysis-f6451.firebaseapp.com",
@@ -231,32 +268,19 @@
 
         let userCountry = "Unknown";
 
-        // --- Tracking Functions ---
-        
-        // 1. Log User Visit on Page Load
         function logVisit() {
             fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
                 userCountry = data.country_name || "Unknown";
-                db.ref('visitorLogs').push({
-                    activity: "Visited Homepage",
-                    country: userCountry,
-                    time: Date.now()
-                });
+                db.ref('visitorLogs').push({ activity: "Visited Homepage", country: userCountry, time: Date.now() });
             }).catch(() => {
                 db.ref('visitorLogs').push({ activity: "Visited Homepage", country: "Hidden", time: Date.now() });
             });
         }
 
-        // 2. Log Specific Clicks
         function logAction(actionName) {
-            db.ref('visitorLogs').push({
-                activity: actionName,
-                country: userCountry,
-                time: Date.now()
-            });
+            db.ref('visitorLogs').push({ activity: actionName, country: userCountry, time: Date.now() });
         }
 
-        // --- Typewriter Effect ---
         const textElement = document.getElementById('typewriter');
         const words = ["CREATOR", "DEVELOPER", "GAMER"];
         let wordIndex = 0, charIndex = 0, isDeleting = false;
@@ -272,7 +296,6 @@
             setTimeout(type, typeSpeed);
         }
 
-        // --- Lobby Logic ---
         const YT_URL = "https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ?sub_confirmation=1";
         function handleLobbyEntry() {
             if (localStorage.getItem('is_subscribed') === 'true') { window.location.href = YT_URL; }
@@ -285,10 +308,7 @@
             setTimeout(() => { msg.style.display = 'none'; document.getElementById('terminal-overlay').style.display = 'none'; }, 2000);
         }
 
-        window.onload = () => {
-            type();
-            logVisit();
-        };
+        window.onload = () => { type(); logVisit(); };
     </script>
 </body>
 </html>
