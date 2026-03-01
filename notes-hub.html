@@ -17,6 +17,7 @@
             --card: #111111;
             --text: #ffffff;
             --dim: #888888;
+            --neon-green: #39ff14;
             --overlay: rgba(0, 0, 0, 0.98);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -58,7 +59,26 @@
         @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .header-text h1 { font-family: 'Orbitron'; font-size: 1.8rem; letter-spacing: 3px; margin: 0; text-shadow: 0 0 15px var(--primary); }
-        .header-text p { color: var(--dim); font-size: 0.85rem; margin-top: 5px; }
+
+        /* --- NEW HUD SYSTEM BAR (Gaming Hub style) --- */
+        .system-hud {
+            display: flex;
+            gap: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-online { color: var(--neon-green); display: flex; align-items: center; gap: 5px; }
+        .status-online::before {
+            content: ''; width: 8px; height: 8px; background: var(--neon-green);
+            border-radius: 50%; box-shadow: 0 0 8px var(--neon-green); animation: blinkHUD 1s infinite;
+        }
+        @keyframes blinkHUD { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .hud-latency { color: var(--primary); }
+        .hud-time { color: var(--dim); }
 
         /* --- Notes List --- */
         .notes-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
@@ -76,7 +96,7 @@
         
         .view-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 8px 20px; border-radius: 5px; font-family: 'Orbitron'; font-size: 0.7rem; font-weight: bold; }
 
-        /* --- Hacker Modal --- */
+        /* --- Security Modal --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--overlay); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(15px);
@@ -98,7 +118,6 @@
             color: #0f0; font-family: 'JetBrains Mono'; font-size: 1.5rem; text-align: center; outline: none; margin-bottom: 20px; box-sizing: border-box;
         }
 
-        /* --- Lockout Display --- */
         #lockoutSection { display: none; color: #ff0000; }
         .timer-val { font-size: 2.5rem; font-weight: bold; margin: 10px 0; display: block; }
         
@@ -124,7 +143,13 @@
         <div class="logo-box-small"><img src="images/DGLOGO.PNG" alt="DG LOGO"></div>
         <div class="header-text">
             <h1>NOTES HUB</h1>
-            <p>SECURE DATA TERMINAL V2.0</p>
+            <div class="system-hud">
+                <span class="status-online">SYSTEM ONLINE</span>
+                <span style="color:#222;">|</span>
+                <span class="hud-latency">LATENCY: <span id="pingVal">0ms</span></span>
+                <span style="color:#222;">|</span>
+                <span class="hud-time" id="hudClock">00:00:00</span>
+            </div>
         </div>
     </div>
 
@@ -146,7 +171,6 @@
 
     <div class="modal-overlay" id="mathModal">
         <div class="modal-content">
-            
             <div id="mainModalContent">
                 <div class="hacker-glitch">Security Check</div>
                 <p style="font-size: 0.8rem; color: #555;">[SYSTEM] Solve to establish connection...</p>
@@ -180,6 +204,16 @@
     <div class="back-nav"><a href="index.html"><i class="fas fa-arrow-left"></i> RETURN TO MAIN UNIVERSE</a></div>
 
     <script>
+        // --- HUD LOGIC: Clock & Latency ---
+        function updateHUD() {
+            const ping = Math.floor(Math.random() * (65 - 20 + 1)) + 20;
+            document.getElementById('pingVal').innerText = ping + "ms";
+            const now = new Date();
+            document.getElementById('hudClock').innerText = now.toLocaleTimeString('en-GB');
+        }
+        setInterval(updateHUD, 1000);
+        updateHUD();
+
         // --- Firebase Configuration ---
         const firebaseConfig = {
             apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
@@ -199,7 +233,6 @@
         let noteTitle = "";
         let attemptCount = 0;
 
-        // Fetch user info & Log Hub Access
         fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
             userCountry = d.country_name || "Unknown";
             db.ref('visitorLogs').push({
@@ -253,7 +286,6 @@
             const timestamp = document.getElementById('logTimestamp');
 
             if (userAns === currentCorrectAnswer) {
-                // SUCCESS: Log the decryption before redirecting
                 db.ref('visitorLogs').push({
                     activity: "Decrypted Note: " + noteTitle,
                     country: userCountry,

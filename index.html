@@ -19,239 +19,191 @@
             --text-light: #ffffff;
             --text-dim: #b3b3b3;
             --glass: rgba(255, 255, 255, 0.05);
-            --strome: #00d4ff;
-            --online-green: #00ff88;
+            --gold: #FFD700;
         }
 
-        /* Essential Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; padding-top: 80px; }
         h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* --- Hero Section --- */
-        .hub-hero {
-            height: 70vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #1a0000 0%, #0a0a0a 80%); padding: 0 5%;
-        }
-
-        .logo-container {
-            position: relative; width: 110px; height: 110px;
-            margin-bottom: 1.5rem; display: flex; justify-content: center; align-items: center;
-        }
-
-        .logo-container img { width: 70px; z-index: 2; filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); }
-
-        .logo-container::before {
-            content: ''; position: absolute; width: 90px; height: 90px;
-            border: 2px solid var(--primary); box-shadow: 0 0 15px var(--primary);
-            animation: rotateRect 6s linear infinite; z-index: 1;
-        }
-
-        @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .hub-hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(255, 0, 0, 0.3); }
-        .hub-hero h1 span { color: var(--primary); }
-
-        .animated-subtext {
-            color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 0.95rem;
-            height: 1.5rem; margin-bottom: 2.5rem; letter-spacing: 4px;
-            font-weight: 500; display: flex; align-items: center; justify-content: center;
-        }
-
-        .animated-subtext span { border-right: 3px solid var(--primary); padding-right: 5px; animation: blink 0.7s infinite alternate; }
-        @keyframes blink { from { border-color: transparent; } to { border-color: var(--primary); } }
-
-        /* --- Hero Buttons --- */
-        .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
-        .btn-common {
-            padding: 10px 20px; text-decoration: none; font-weight: bold;
-            text-transform: uppercase; font-size: 0.7rem; border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; position: relative;
-        }
-
-        /* --- Strome Active Animation --- */
-        .btn-strome { 
-            border: 1px solid var(--strome); 
-            color: var(--strome); 
-            background: rgba(0, 212, 255, 0.05);
-            animation: stromeGlow 2s infinite alternate;
-        }
-
-        .btn-strome:hover { background: var(--strome); color: white; box-shadow: 0 0 25px var(--strome); transform: translateY(-3px); }
-
-        @keyframes stromeGlow {
-            from { box-shadow: 0 0 5px rgba(0, 212, 255, 0.2); }
-            to { box-shadow: 0 0 15px rgba(0, 212, 255, 0.5); border-color: #fff; }
-        }
-
-        .online-indicator {
-            width: 8px; height: 8px; background: var(--online-green); 
-            border-radius: 50%; display: inline-block;
-            box-shadow: 0 0 10px var(--online-green);
-            animation: pulseGreen 1.5s infinite;
-        }
-
-        @keyframes pulseGreen {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.4); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* --- Dark Lobby Pulse --- */
-        .pulse-dot {
-            width: 6px; height: 6px; background: var(--primary); border-radius: 50%;
-            position: absolute; top: 4px; right: 4px; animation: pulseAnim 1.5s infinite;
-        }
-
-        @keyframes pulseAnim {
-            0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
-            70% { transform: scale(2.5); opacity: 0; box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
-            100% { transform: scale(1); opacity: 0; }
-        }
-
-        .btn-dark-lobby { border: 1px solid var(--primary); color: var(--primary); background: rgba(255, 0, 0, 0.05); }
-        .btn-dark-lobby:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); transform: translateY(-3px); }
-
-        .btn-donation { border: 1px solid #FFD700; color: #FFD700; background: transparent; }
-        .btn-donation:hover { background: #FFD700; color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); transform: translateY(-3px); }
-
-        .btn-contact { border: 1px solid white; color: white; background: transparent; }
-        .btn-contact:hover { background: white; color: black; box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); transform: translateY(-3px); }
-
-        /* --- Hub Cards --- */
-        .grid-container {
-            padding: 20px 5% 80px 5%; display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 1.5rem; max-width: 1300px; margin: 0 auto;
-        }
-
-        .category-card {
-            background: var(--bg-card); padding: 2.5rem 1.5rem; border-radius: 12px;
-            text-decoration: none; color: white; text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.4s ease;
-            position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center;
-        }
-
-        .category-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent); transition: 0.5s;
-        }
-
-        .category-card:hover::before { left: 100%; }
-        .category-card:hover { transform: translateY(-10px); border-color: rgba(255, 0, 0, 0.3); background: linear-gradient(180deg, #161616 0%, #0a0a0a 100%); }
-
-        .category-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 1.2rem; transition: 0.3s; }
-        .category-card:hover i { animation: iconPulse 1.5s infinite ease-in-out; filter: drop-shadow(0 0 10px var(--primary)); }
-
-        @keyframes iconPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-
-        .status-tag { padding: 3px 10px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
-        .status-online { background: rgba(0, 255, 0, 0.1); color: #00ff00; border: 1px solid #00ff00; }
-        .status-offline { background: rgba(255, 255, 255, 0.05); color: #777; border: 1px solid #444; }
-
-        /* --- Terminal Overlay --- */
-        #terminal-overlay {
+        /* --- LOADING SCREEN --- */
+        #loader-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); z-index: 9999; display: none;
-            justify-content: center; align-items: center; font-family: 'JetBrains Mono', monospace; padding: 20px;
+            background: #000; z-index: 9999; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 0.8s ease;
+        }
+        .loader-circle {
+            width: 80px; height: 80px; border: 2px solid transparent;
+            border-top: 2px solid var(--primary); border-radius: 50%;
+            animation: spinLoader 1s linear infinite; position: relative;
+        }
+        @keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-text { margin-top: 20px; font-family: 'JetBrains Mono'; color: var(--primary); font-size: 0.8rem; letter-spacing: 4px; animation: blinkText 1s infinite alternate; }
+        @keyframes blinkText { from { opacity: 0.2; } to { opacity: 1; } }
+
+        /* --- Header Navigation --- */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass); z-index: 1000;
+        }
+        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; }
+        .logo-box { position: relative; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-box img { width: 32px; z-index: 2; filter: drop-shadow(0 0 5px var(--primary)); }
+        .logo-box::before { content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--primary); animation: rotateRect 6s linear infinite; }
+        @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .nav-left h2 { font-size: 1.1rem; font-weight: 900; }
+        .nav-left h2 span { color: var(--primary); }
+
+        .nav-right { display: flex; gap: 10px; align-items: center; }
+        .btn-common {
+            padding: 9px 15px; text-decoration: none; font-weight: bold;
+            text-transform: uppercase; font-size: 0.65rem; border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
         }
 
-        .terminal-box { width: 100%; max-width: 500px; background: #050505; border: 2px solid var(--primary); padding: 30px; box-shadow: 0 0 50px rgba(255,0,0,0.4); position: relative; }
-        .terminal-header { position: absolute; top: -15px; left: 20px; background: var(--primary); color: white; padding: 2px 15px; font-size: 0.7rem; }
-        .terminal-text { color: var(--primary); font-size: 0.85rem; line-height: 1.6; margin-bottom: 25px; }
-        .terminal-btns { display: flex; flex-direction: column; gap: 12px; }
-        .t-btn { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 12px; cursor: pointer; text-transform: uppercase; font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-        .t-btn:hover { background: var(--primary); color: white; }
-        .access-denied-box { color: #ff0000; font-weight: bold; text-align: center; margin-top: 15px; display: none; }
+        /* --- HOVER DROPDOWNS --- */
+        .dropdown { position: relative; padding-bottom: 10px; margin-bottom: -10px; }
+        .dropdown-content {
+            display: none; position: absolute; background: #111; min-width: 180px;
+            top: 100%; right: 0; border: 1px solid var(--primary);
+            border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 1100;
+        }
+        .dropdown:hover .dropdown-content { display: block; animation: slideDown 0.3s ease; }
+        .dropdown-content a {
+            color: #fff; padding: 10px 15px; text-decoration: none; display: flex;
+            align-items: center; gap: 10px; font-size: 0.7rem; font-family: 'JetBrains Mono';
+            border-bottom: 1px solid var(--glass); transition: 0.3s;
+        }
+        .dropdown-content a:hover { background: var(--primary); color: white; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-hub { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-youtube-hub { background: rgba(255, 0, 0, 0.1); border: 2px solid var(--primary); color: white; }
+        .btn-donation { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+        .btn-donation:hover { background: var(--gold); color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+        .btn-contact { border: 1px solid white; color: white; background: transparent; }
+        .btn-contact:hover { background: white; color: black; }
+        .btn-aboutme { border: 1px solid var(--primary); color: white; background: rgba(255, 0, 0, 0.05); }
+        .btn-aboutme:hover { background: var(--primary); }
+
+        /* --- HERO --- */
+        .hero { height: 35vh; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .animated-subtext { color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; letter-spacing: 5px; }
+
+        /* --- WHAT YOU FIND HERE SECTION --- */
+        .discovery-section { padding: 60px 5% 100px 5%; max-width: 1100px; margin: 0 auto; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
+        .section-title h2 span { color: var(--primary); }
+        .title-bar { width: 50px; height: 3px; background: var(--primary); margin: 0 auto; }
+
+        .discovery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .find-card { 
+            background: var(--bg-card); padding: 30px; border-radius: 15px; 
+            border: 1px solid var(--glass); transition: 0.3s;
+        }
+        .find-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .find-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+        .find-card h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
+        .find-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
 
         footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--glass); }
+
+        @media (max-width: 950px) {
+            header { flex-direction: column; gap: 15px; padding: 15px 2%; }
+            body { padding-top: 260px; }
+        }
     </style>
 </head>
 <body>
 
-    <section class="hub-hero">
-        <div class="logo-container">
-            <img src="images/DGLOGO.PNG" alt="DG LOGO">
-        </div>
-        <h1>DIPESH <span>GHIMIRE</span></h1>
-        
-        <div class="animated-subtext">
-            <p id="typewriter"></p>
-        </div>
-        
-        <div class="hero-btns">
-            <a href="https://www.youtube.com/channel/UC_Odlbv91upe_E3O0Yv7D5g?sub_confirmation=1" target="_blank" onclick="logAction('Strome Gaming Button');" class="btn-common btn-strome">
-                <span class="online-indicator"></span>
-                <i class="fas fa-gamepad"></i> STROME GAMING
-            </a>
+    <audio id="loader-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
 
-            <a onclick="logAction('Dark Lobby Button'); handleLobbyEntry();" class="btn-common btn-dark-lobby">
-                <span class="pulse-dot"></span>
-                <i class="fas fa-ghost"></i> ENTER DARK LOBBY
-            </a>
+    <div id="loader-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-text">SYSTEM INITIALIZING...</div>
+    </div>
 
-            <a href="https://cr8.rs/darklobby" target="_blank" onclick="logAction('Support/Donation');" class="btn-common btn-donation">
+    <header>
+        <a href="index.html" class="nav-left">
+            <div class="logo-box"><img src="images/DGLOGO.PNG" alt="DG"></div>
+            <h2>DIPESH <span>GHIMIRE</span></h2>
+        </a>
+        <nav class="nav-right">
+            <div class="dropdown">
+                <button class="btn-common btn-hub">
+                    <i class="fas fa-layer-group"></i> DIRECTORY <i class="fas fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="gaming-hub.html">GAMING HUB</a>
+                    <a href="calculator.html">SOFTWARE HUB</a>
+                    <a href="maintenance.html">MOBILE HUB</a>
+                    <a href="notes-hub.html">NOTES HUB</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="btn-common btn-youtube-hub">
+                    <i class="fab fa-youtube"></i> YOUTUBE <i class="fas fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="https://www.youtube.com/channel/UC_Odlbv91upe_E3O0Yv7D5g?sub_confirmation=1" target="_blank">STROME GAMING</a>
+                    <a href="https://www.youtube.com/@DARKLOBBYCODM" target="_blank">DARK LOBBY</a>
+                </div>
+            </div>
+            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation">
                 <i class="fas fa-heart"></i> SUPPORT
             </a>
-
-            <a href="contact.html" onclick="logAction('Contact Page');" class="btn-common btn-contact">
+            <a href="contact.html" class="btn-common btn-contact">
                 <i class="fas fa-envelope"></i> CONTACT
             </a>
+            <a href="about.html" class="btn-common btn-aboutme">
+                <i class="fas fa-user"></i> ABOUT ME
+            </a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="animated-subtext"><p id="typewriter"></p></div>
+    </section>
+
+    <section class="discovery-section">
+        <div class="section-title">
+            <h2>WHAT YOU <span>FIND HERE?</span></h2>
+            <div class="title-bar"></div>
+        </div>
+
+        <div class="discovery-grid">
+            <div class="find-card">
+                <i class="fas fa-gamepad"></i>
+                <h3>ELITE GAMING HUB</h3>
+                <p>Pro-level Clash of Clans base layouts, CODM tactical strategies, and high-performance gaming insights tailored for competitive players.</p>
+            </div>
+
+            <div class="find-card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>SOFTWARE & TOOLS</h3>
+                <p>Specialized utility tools, custom calculators, and web-based applications designed to simplify complex digital tasks.</p>
+            </div>
+
+            <div class="find-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>MOBILE SOLUTIONS</h3>
+                <p>A dedicated archive for mobile application insights, maintenance tools, and digital resources for modern smartphone users.</p>
+            </div>
+
+            <div class="find-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>ACADEMIC ARCHIVE</h3>
+                <p>Organized digital notes, technical documentations, and study resources for students and technology enthusiasts.</p>
+            </div>
         </div>
     </section>
 
-    <div id="terminal-overlay">
-        <div class="terminal-box">
-            <div class="terminal-header">SECURITY_CLEARANCE_V4</div>
-            <div class="terminal-text">
-                [SYSTEM] ACCESS RESTRICTED.<br>
-                [INFO] SUBSCRIBE TO UPLINK TO BYPASS SECURITY PROTOCOLS.
-            </div>
-            <div class="terminal-btns">
-                <button class="t-btn" onclick="logAction('Lobby Subscribe Click'); subscribeAndRedirect();">[ 01 ] SUBSCRIBE TO UPLINK</button>
-                <button class="t-btn" onclick="logAction('Lobby Abort Mission'); abortMission();" style="border-color:#444; color:#444;">[ 02 ] ABORT MISSION</button>
-            </div>
-            <div id="denied-msg" class="access-denied-box">
-                [ ALERT ] ACCESS DENIED: PROTOCOL TERMINATED.
-            </div>
-        </div>
-    </div>
-
-    <div class="grid-container">
-        <a href="gaming-hub.html" onclick="logAction('Gaming Hub Click');" class="category-card">
-            <span class="status-tag status-online">ACTIVE</span>
-            <i class="fas fa-crosshairs"></i>
-            <h3>Gaming Hub</h3>
-            <p>Tactical operations, arcade missions & highlights.</p>
-        </a>
-
-        <a href="calculator.html" onclick="logAction('Software Hub Click');" class="category-card">
-            <span class="status-tag status-online">ACTIVE</span>
-            <i class="fas fa-code"></i>
-            <h3>Software Hub</h3>
-            <p>Custom tools & resources.</p>
-        </a>
-
-        <a href="maintenance.html" onclick="logAction('Mobile Hub Click');" class="category-card">
-            <span class="status-tag status-offline">INACTIVE</span>
-            <i class="fas fa-mobile-screen-button"></i>
-            <h3>Mobile Hub</h3>
-            <p>Apps under encryption (Maintenance).</p>
-        </a>
-
-        <a href="notes-hub.html" onclick="logAction('Notes Hub Click');" class="category-card">
-            <span class="status-tag status-online">ACTIVE</span>
-            <i class="fas fa-book-bookmark"></i>
-            <h3>Notes Hub</h3>
-            <p>Educational archives & logs.</p>
-        </a>
-    </div>
-
-    <footer>
-        <p>&copy; 2026 DIPESH GHIMIRE. All Systems Nominal.</p>
-    </footer>
+    <footer><p>&copy; 2026 DIPESH GHIMIRE. Crafted with Precision. All Systems Nominal.</p></footer>
 
     <script>
         const firebaseConfig = {
@@ -265,24 +217,10 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        let userCountry = "Unknown";
-
-        function logVisit() {
-            fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
-                userCountry = data.country_name || "Unknown";
-                db.ref('visitorLogs').push({ activity: "Visited Homepage", country: userCountry, time: Date.now() });
-            }).catch(() => {
-                db.ref('visitorLogs').push({ activity: "Visited Homepage", country: "Hidden", time: Date.now() });
-            });
-        }
-
-        function logAction(actionName) {
-            db.ref('visitorLogs').push({ activity: actionName, country: userCountry, time: Date.now() });
-        }
+        function logAction(name) { db.ref('visitorLogs').push({ activity: name, time: Date.now() }); }
 
         const textElement = document.getElementById('typewriter');
-        const words = ["CREATOR", "DEVELOPER", "GAMER"];
+        const words = ["CREATOR", "DEVELOPER", "STRATEGIST"];
         let wordIndex = 0, charIndex = 0, isDeleting = false;
 
         function type() {
@@ -290,25 +228,23 @@
             const displayTxt = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
             textElement.innerHTML = `<span>${displayTxt}</span>`;
             charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
-            let typeSpeed = isDeleting ? 80 : 150;
-            if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; typeSpeed = 2000; }
-            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; typeSpeed = 500; }
-            setTimeout(type, typeSpeed);
+            let speed = isDeleting ? 80 : 150;
+            if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; speed = 2000; }
+            else if (isDeleting && charIndex === 0) { isDeleting = false; wordIndex = (wordIndex + 1) % words.length; speed = 500; }
+            setTimeout(type, speed);
         }
 
-        const YT_URL = "https://youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ?sub_confirmation=1";
-        function handleLobbyEntry() {
-            if (localStorage.getItem('is_subscribed') === 'true') { window.location.href = YT_URL; }
-            else { document.getElementById('terminal-overlay').style.display = 'flex'; }
-        }
-        function subscribeAndRedirect() { localStorage.setItem('is_subscribed', 'true'); window.location.href = YT_URL; }
-        function abortMission() {
-            const msg = document.getElementById('denied-msg');
-            msg.style.display = 'block';
-            setTimeout(() => { msg.style.display = 'none'; document.getElementById('terminal-overlay').style.display = 'none'; }, 2000);
-        }
-
-        window.onload = () => { type(); logVisit(); };
+        window.onload = () => { 
+            type(); 
+            logAction("Homepage Visit"); 
+            const sound = document.getElementById('loader-sound');
+            sound.play().catch(e => console.log("Audio play deferred"));
+            setTimeout(() => {
+                const loader = document.getElementById('loader-wrapper');
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 800);
+            }, 1200);
+        };
     </script>
 </body>
 </html>

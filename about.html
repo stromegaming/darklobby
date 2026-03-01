@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABOUT ME | DIPESH GHIMIRE</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Orbitron:wght@500;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #FF0000;
+            --bg-dark: #050505;
+            --bg-card: #0f0f0f;
+            --text-light: #ffffff;
+            --text-dim: #b3b3b3;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background Animation */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(var(--glass) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--glass) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        /* Navigation Bar (Index.html style) */
+        nav {
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; }
+        .logo-box { position: relative; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
+        .logo-box img { width: 32px; z-index: 2; filter: drop-shadow(0 0 5px var(--primary)); }
+        .logo-box::before { content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--primary); animation: rotateRect 6s linear infinite; }
+        @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .nav-left h2 { font-size: 1.1rem; font-weight: 900; font-family: 'Orbitron'; }
+        .nav-left h2 span { color: var(--primary); }
+
+        .back-btn { 
+            color: white; text-decoration: none; font-family: 'JetBrains Mono'; 
+            font-size: 0.75rem; border: 1px solid var(--primary); padding: 8px 18px;
+            border-radius: 4px; transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--primary); box-shadow: var(--glow); }
+
+        /* Profile Header */
+        .profile-container {
+            max-width: 1100px; margin: 80px auto; padding: 0 20px;
+            display: grid; grid-template-columns: 350px 1fr; gap: 60px;
+            align-items: flex-start;
+        }
+        .profile-card {
+            background: var(--bg-card); padding: 40px 30px; border-radius: 20px;
+            border: 1px solid var(--glass); position: relative;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .profile-card h1 { font-family: 'Orbitron'; font-size: 1.6rem; margin-bottom: 10px; letter-spacing: 1px; }
+        .profile-card .tagline { color: var(--primary); font-family: 'JetBrains Mono'; font-size: 0.9rem; margin-bottom: 30px; display: block; }
+        
+        .contact-me-btn {
+            display: block; width: 100%; padding: 15px;
+            background: transparent; border: 1px solid var(--primary);
+            color: white; text-decoration: none; font-family: 'Orbitron';
+            font-size: 0.8rem; border-radius: 8px; transition: 0.4s;
+            letter-spacing: 2px;
+        }
+        .contact-me-btn:hover { background: var(--primary); box-shadow: var(--glow); transform: scale(1.02); }
+
+        /* Info Section */
+        .info-section h2 { font-family: 'Orbitron'; color: var(--primary); margin-bottom: 25px; font-size: 1.8rem; }
+        .info-section .bio { font-size: 1.1rem; color: var(--text-dim); margin-bottom: 35px; line-height: 1.8; }
+
+        /* Skill Tags */
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+        .skill-item {
+            background: rgba(255,0,0,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px; font-size: 0.75rem; font-family: 'JetBrains Mono';
+            border-radius: 5px; display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .skill-item:hover { border-color: var(--primary); background: rgba(255,0,0,0.1); }
+        .skill-item i { color: var(--primary); }
+
+        /* Hobby Box */
+        .hobbies-wrap {
+            background: rgba(255,255,255,0.02); border-radius: 15px;
+            padding: 30px; border-left: 5px solid var(--primary);
+        }
+        .hobbies-wrap h3 { font-family: 'Orbitron'; font-size: 1rem; margin-bottom: 20px; color: #fff; }
+        .hobby-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .hobby-list div { font-size: 0.95rem; color: var(--text-dim); display: flex; align-items: center; gap: 12px; }
+        .hobby-list i { color: var(--primary); width: 20px; font-size: 1.1rem; }
+
+        footer { text-align: center; padding: 60px; color: #333; font-size: 0.8rem; font-family: 'JetBrains Mono'; }
+
+        @media (max-width: 850px) {
+            .profile-container { grid-template-columns: 1fr; margin-top: 40px; }
+            .info-section { text-align: center; }
+            .skills-grid { justify-content: center; }
+            .hobby-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+
+    <nav>
+        <a href="index.html" class="nav-left">
+            <div class="logo-box"><img src="images/DGLOGO.PNG" alt="DG"></div>
+            <h2>DIPESH <span>GHIMIRE</span></h2>
+        </a>
+        <a href="index.html" class="back-btn"><i class="fas fa-home"></i> HOME</a>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <h1>DIPESH GHIMIRE</h1>
+            <span class="tagline">DEVELOPER & GAMER</span>
+            
+            <a href="index.html#contact-section" class="contact-me-btn">
+                <i class="fas fa-paper-plane"></i> CONTACT ME
+            </a>
+        </div>
+
+        <div class="info-section">
+            <h2>SYSTEM PROFILE</h2>
+            <p class="bio">
+                I am a professional <strong>Software and Webpage Designer</strong> with a deep-rooted passion for the digital ecosystem. I bridge the gap between creative aesthetics and technical functionality. When not building software, I am dominating the battlefield as an elite <strong>COC and CODM player</strong>.
+            </p>
+
+            <div class="skills-grid">
+                <div class="skill-item"><i class="fas fa-code"></i> WEBPAGE DESIGNER</div>
+                <div class="skill-item"><i class="fas fa-desktop"></i> SOFTWARE DESIGNER</div>
+                <div class="skill-item"><i class="fas fa-mobile-alt"></i> MOBILE APP DESIGNER</div>
+                <div class="skill-item"><i class="fas fa-gamepad"></i> COC PLAYER</div>
+                <div class="skill-item"><i class="fas fa-crosshairs"></i> CODM PLAYER</div>
+            </div>
+
+            <div class="hobbies-wrap">
+                <h3>CORE INTERESTS</h3>
+                <div class="hobby-list">
+                    <div><i class="fas fa-microchip"></i> Hanging with Computers</div>
+                    <div><i class="fas fa-film"></i> Watching Movies</div>
+                    <div><i class="fas fa-keyboard"></i> Playing Games</div>
+                    <div><i class="fas fa-book-open"></i> Eager to gain Knowledge</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 DIPESH GHIMIRE. Crafted for the Digital Frontier.</p>
+    </footer>
+
+</body>
+</html>

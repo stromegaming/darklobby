@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOFTWARE HUB | DARK LOBBY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -17,6 +17,7 @@
             --card: #111111;
             --text: #ffffff;
             --dim: #888888;
+            --neon-green: #39ff14;
             --overlay: rgba(0, 0, 0, 0.9);
         }
 
@@ -79,7 +80,26 @@
             margin: 0;
             text-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
-        .header-text p { color: var(--dim); font-size: 0.85rem; margin-top: 5px; }
+
+        /* --- NEW HUD SYSTEM BAR --- */
+        .system-hud {
+            display: flex;
+            gap: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-online { color: var(--neon-green); display: flex; align-items: center; gap: 5px; }
+        .status-online::before {
+            content: ''; width: 8px; height: 8px; background: var(--neon-green);
+            border-radius: 50%; box-shadow: 0 0 8px var(--neon-green); animation: blinkHUD 1s infinite;
+        }
+        @keyframes blinkHUD { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .hud-latency { color: var(--primary); }
+        .hud-time { color: var(--dim); }
 
         /* --- Software List --- */
         .software-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
@@ -163,6 +183,7 @@
             .header-text { text-align: center; }
             .app-item { flex-direction: column; text-align: center; gap: 15px; }
             .app-info { flex-direction: column; gap: 10px; }
+            .system-hud { justify-content: center; font-size: 0.65rem; }
         }
     </style>
 </head>
@@ -174,7 +195,13 @@
         </div>
         <div class="header-text">
             <h1>SOFTWARE HUB</h1>
-            <p>RESOURCES & CORE APPLICATIONS</p>
+            <div class="system-hud">
+                <span class="status-online">SYSTEM ONLINE</span>
+                <span style="color:#222;">|</span>
+                <span class="hud-latency">LATENCY: <span id="pingVal">0ms</span></span>
+                <span style="color:#222;">|</span>
+                <span class="hud-time" id="hudClock">00:00:00</span>
+            </div>
         </div>
     </div>
 
@@ -227,7 +254,17 @@
     </div>
 
     <script>
-        // --- 1. Firebase Configuration (Matches your real ID) ---
+        // --- HUD LOGIC: Clock & Latency ---
+        function updateHUD() {
+            const ping = Math.floor(Math.random() * (65 - 20 + 1)) + 20;
+            document.getElementById('pingVal').innerText = ping + "ms";
+            const now = new Date();
+            document.getElementById('hudClock').innerText = now.toLocaleTimeString('en-GB');
+        }
+        setInterval(updateHUD, 1000);
+        updateHUD();
+
+        // --- Firebase Configuration ---
         const firebaseConfig = {
             apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
             authDomain: "website-analysis-f6451.firebaseapp.com",
@@ -244,39 +281,33 @@
         let currentFileName = "";
         let userCountry = "Unknown";
 
-        // --- 2. Track Visitor & Country on Load ---
+        // Track Visitor & Country on Load
         fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(data => {
                 userCountry = data.country_name || "Unknown";
-                // Update total visits in DB
                 db.ref('stats/totalVisits').transaction(c => (c || 0) + 1);
-                // Log visitor
                 db.ref('visitorLogs').push({
+                    activity: "Entered Software Hub",
                     country: userCountry,
                     time: Date.now()
                 });
             }).catch(e => console.log("Tracking error"));
 
-        // --- 3. Modal & Download Logic ---
+        // Modal & Download Logic
         function openModal(filePath, fileName) {
             currentFileName = fileName;
             document.getElementById('finalDownload').href = filePath;
             document.getElementById('downloadModal').style.display = 'flex';
         }
 
-        // When "PROCEED" is clicked
         document.getElementById('finalDownload').addEventListener('click', function() {
-            // Update stats
             db.ref('stats/totalDownloads').transaction(c => (c || 0) + 1);
-            
-            // Log the download with file name and country
             db.ref('downloadLogs').push({
                 fileName: currentFileName,
                 country: userCountry,
                 time: Date.now()
             });
-            
             setTimeout(closeModal, 500);
         });
 
