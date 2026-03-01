@@ -355,5 +355,17 @@
             if (event.key === "Enter") { checkAnswer(); }
         });
     </script>
+<script>
+    // Theme apply garne function
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem('userTheme');
+        if (savedTheme) {
+            document.documentElement.style.setProperty('--primary', savedTheme);
+        }
+    }
+
+    // Page load huda theme check garne
+    window.addEventListener('DOMContentLoaded', applySavedTheme);
+</script>
 </body>
 </html>

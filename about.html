@@ -138,7 +138,7 @@
             <h1>DIPESH GHIMIRE</h1>
             <span class="tagline">DEVELOPER & GAMER</span>
             
-            <a href="index.html#contact-section" class="contact-me-btn">
+            <a href="contact.html" class="contact-me-btn">
                 <i class="fas fa-paper-plane"></i> CONTACT ME
             </a>
         </div>
@@ -173,5 +173,17 @@
         <p>&copy; 2026 DIPESH GHIMIRE. Crafted for the Digital Frontier.</p>
     </footer>
 
+<script>
+    // Theme apply garne function
+    function applySavedTheme() {
+        const savedTheme = localStorage.getItem('userTheme');
+        if (savedTheme) {
+            document.documentElement.style.setProperty('--primary', savedTheme);
+        }
+    }
+
+    // Page load huda theme check garne
+    window.addEventListener('DOMContentLoaded', applySavedTheme);
+</script>
 </body>
 </html>

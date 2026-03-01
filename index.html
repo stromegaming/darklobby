@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DIPESH GHIMIRE | Digital Universe</title>
 
+    <link rel="icon" type="image/png" href="images/DGLOGO.PNG">
+
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
@@ -24,108 +26,132 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Inter', sans-serif; overflow-x: hidden; padding-top: 80px; }
-        h1, h2, h3 { font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; }
-
-        /* --- LOADING SCREEN --- */
+        
+        /* --- LOADER --- */
         #loader-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999; display: flex; flex-direction: column;
             justify-content: center; align-items: center; transition: opacity 0.8s ease;
         }
-        .loader-circle {
-            width: 80px; height: 80px; border: 2px solid transparent;
-            border-top: 2px solid var(--primary); border-radius: 50%;
-            animation: spinLoader 1s linear infinite; position: relative;
-        }
-        @keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loader-text { margin-top: 20px; font-family: 'JetBrains Mono'; color: var(--primary); font-size: 0.8rem; letter-spacing: 4px; animation: blinkText 1s infinite alternate; }
-        @keyframes blinkText { from { opacity: 0.2; } to { opacity: 1; } }
+        .scanner-loader { width: 120px; height: 120px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .loader-ring { position: absolute; width: 100%; height: 100%; border: 4px solid var(--glass); border-radius: 50%; }
+        .loader-ring::before { content: ""; position: absolute; top: -4px; left: -4px; width: 100%; height: 100%; border: 4px solid transparent; border-top: 4px solid var(--primary); border-radius: 50%; animation: scan 1.5s linear infinite; }
+        @keyframes scan { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-logo { position: absolute; width: 50px; filter: drop-shadow(0 0 10px var(--primary)); animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.1); opacity: 1; } }
+        .loader-text { margin-top: 20px; font-family: 'JetBrains Mono'; color: var(--primary); font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; }
 
-        /* --- Header Navigation --- */
+        #enter-btn {
+            margin-top: 30px; padding: 10px 25px; background: transparent; 
+            border: 1px solid var(--primary); color: var(--primary);
+            font-family: 'Orbitron'; font-size: 0.8rem; cursor: pointer;
+            letter-spacing: 2px; transition: 0.3s; opacity: 0; pointer-events: none;
+        }
+        #enter-btn.visible { opacity: 1; pointer-events: auto; }
+        #enter-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
+
+        /* --- HEADER & BUTTONS --- */
         header {
             position: fixed; top: 0; left: 0; width: 100%;
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 5%; background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass); z-index: 1000;
         }
-        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; }
+        .nav-left { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; transition: 0.3s; }
         .logo-box { position: relative; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; }
         .logo-box img { width: 32px; z-index: 2; filter: drop-shadow(0 0 5px var(--primary)); }
         .logo-box::before { content: ''; position: absolute; width: 40px; height: 40px; border: 2px solid var(--primary); animation: rotateRect 6s linear infinite; }
         @keyframes rotateRect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .nav-left h2 { font-size: 1.1rem; font-weight: 900; }
+        .nav-left h2 { font-family: 'Orbitron'; font-size: 1.1rem; font-weight: 900; }
         .nav-left h2 span { color: var(--primary); }
 
-        .nav-right { display: flex; gap: 10px; align-items: center; }
-        .btn-common {
-            padding: 9px 15px; text-decoration: none; font-weight: bold;
-            text-transform: uppercase; font-size: 0.65rem; border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-        }
+        .nav-right { display: flex; gap: 12px; align-items: center; }
 
-        /* --- HOVER DROPDOWNS --- */
-        .dropdown { position: relative; padding-bottom: 10px; margin-bottom: -10px; }
+        .theme-selector { display: flex; gap: 8px; margin-right: 10px; }
+        .color-dot { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.2); transition: 0.3s; }
+        .color-dot:hover { transform: scale(1.3); border-color: white; }
+
+        /* BUTTON FILL EFFECT */
+        .btn-common {
+            padding: 10px 18px; text-decoration: none; font-weight: bold;
+            text-transform: uppercase; font-size: 0.65rem; border-radius: 6px;
+            transition: all 0.4s ease; 
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+            position: relative; overflow: hidden; z-index: 1;
+        }
+        .btn-common::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: var(--primary); transition: all 0.4s ease; z-index: -1;
+        }
+        .btn-common:hover { color: #fff !important; transform: translateY(-3px); box-shadow: 0 0 15px var(--primary); }
+        .btn-common:hover::before { left: 0; }
+
+        .btn-tools { border: 1px solid var(--primary); color: white; background: rgba(255, 255, 255, 0.05); }
+        .btn-hub { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
+        .btn-youtube-hub { background: rgba(255, 0, 0, 0.05); border: 1px solid var(--primary); color: white; }
+        .btn-donation { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
+        .btn-donation::before { background: var(--gold); }
+        .btn-donation:hover { color: #000 !important; box-shadow: 0 0 15px var(--gold); }
+        .btn-contact { border: 1px solid white; color: white; background: transparent; }
+        .btn-contact::before { background: white; }
+        .btn-contact:hover { color: #000 !important; }
+        .btn-aboutme { border: 1px solid var(--primary); color: white; background: transparent; }
+
+        /* DROPDOWN LOGIC */
+        .dropdown { position: relative; }
         .dropdown-content {
             display: none; position: absolute; background: #111; min-width: 180px;
             top: 100%; right: 0; border: 1px solid var(--primary);
-            border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            z-index: 1100;
+            border-radius: 8px; overflow: hidden; z-index: 1100; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .dropdown:hover .dropdown-content { display: block; animation: slideDown 0.3s ease; }
         .dropdown-content a {
-            color: #fff; padding: 10px 15px; text-decoration: none; display: flex;
+            color: #fff; padding: 12px 15px; text-decoration: none; display: flex;
             align-items: center; gap: 10px; font-size: 0.7rem; font-family: 'JetBrains Mono';
-            border-bottom: 1px solid var(--glass); transition: 0.3s;
+            border-bottom: 1px solid var(--glass); transition: 0.3s; background: #111;
         }
-        .dropdown-content a:hover { background: var(--primary); color: white; }
+        .dropdown-content a:hover { background: var(--primary); padding-left: 20px; color: white; }
+
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .btn-hub { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
-        .btn-youtube-hub { background: rgba(255, 0, 0, 0.1); border: 2px solid var(--primary); color: white; }
-        .btn-donation { border: 1px solid var(--gold); color: var(--gold); background: transparent; }
-        .btn-donation:hover { background: var(--gold); color: black; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
-        .btn-contact { border: 1px solid white; color: white; background: transparent; }
-        .btn-contact:hover { background: white; color: black; }
-        .btn-aboutme { border: 1px solid var(--primary); color: white; background: rgba(255, 0, 0, 0.05); }
-        .btn-aboutme:hover { background: var(--primary); }
-
-        /* --- HERO --- */
+        /* CONTENT JASTA KO TESTAI */
         .hero { height: 35vh; display: flex; justify-content: center; align-items: center; text-align: center; }
         .animated-subtext { color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; letter-spacing: 5px; }
 
-        /* --- WHAT YOU FIND HERE SECTION --- */
-        .discovery-section { padding: 60px 5% 100px 5%; max-width: 1100px; margin: 0 auto; }
+        .discovery-section { padding: 60px 0; overflow: hidden; }
         .section-title { text-align: center; margin-bottom: 50px; }
-        .section-title h2 { font-size: 1.5rem; color: #fff; margin-bottom: 10px; }
+        .section-title h2 { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; }
         .section-title h2 span { color: var(--primary); }
-        .title-bar { width: 50px; height: 3px; background: var(--primary); margin: 0 auto; }
+        .title-bar { width: 50px; height: 3px; background: var(--primary); margin: 10px auto; }
 
-        .discovery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .find-card { 
-            background: var(--bg-card); padding: 30px; border-radius: 15px; 
-            border: 1px solid var(--glass); transition: 0.3s;
-        }
-        .find-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .scroll-wrapper { display: flex; width: 100%; overflow: hidden; }
+        .discovery-grid { display: flex; gap: 25px; padding: 20px; animation: infiniteScroll 20s linear infinite; }
+        .discovery-grid:hover { animation-play-state: paused; }
+        .find-card { flex: 0 0 320px; background: var(--bg-card); padding: 30px; border-radius: 15px; border: 1px solid var(--glass); transition: 0.4s ease; cursor: pointer;}
+        .find-card:hover { border-color: var(--primary); transform: translateY(-10px); }
         .find-card i { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
-        .find-card h3 { font-size: 1rem; margin-bottom: 15px; color: #fff; }
-        .find-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
+        .find-card h3 { font-family: 'Orbitron'; font-size: 1rem; color: #fff; margin-bottom: 15px; }
+        .find-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
 
-        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.75rem; border-top: 1px solid var(--glass); }
+        @keyframes infiniteScroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-345px * 4)); } }
+        footer { text-align: center; padding: 40px; color: var(--text-dim); font-size: 0.7rem; border-top: 1px solid var(--glass); font-family: 'JetBrains Mono'; }
 
-        @media (max-width: 950px) {
-            header { flex-direction: column; gap: 15px; padding: 15px 2%; }
-            body { padding-top: 260px; }
-        }
+        @media (max-width: 950px) { header { flex-direction: column; gap: 15px; padding: 15px 2%; } body { padding-top: 320px; } }
     </style>
 </head>
 <body>
 
-    <audio id="loader-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="loader-sound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" preload="auto"></audio>
+    <audio id="click-sound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+    <audio id="hover-sound" src="https://assets.mixkit.co/active_storage/sfx/2578/2578-preview.mp3" preload="auto"></audio>
 
     <div id="loader-wrapper">
-        <div class="loader-circle"></div>
-        <div class="loader-text">SYSTEM INITIALIZING...</div>
+        <div class="scanner-loader">
+            <div class="loader-ring"></div>
+            <img src="images/DGLOGO.PNG" alt="Logo" class="loader-logo">
+        </div>
+        <div class="loader-text" id="status-text">SYSTEM STANDBY...</div>
+        <button id="enter-btn">ENTER SYSTEM</button>
     </div>
 
     <header>
@@ -134,35 +160,42 @@
             <h2>DIPESH <span>GHIMIRE</span></h2>
         </a>
         <nav class="nav-right">
+            <div class="theme-selector">
+                <div class="color-dot" style="background: #FF0000;" onclick="changeTheme('#FF0000')"></div>
+                <div class="color-dot" style="background: #00E5FF;" onclick="changeTheme('#00E5FF')"></div>
+                <div class="color-dot" style="background: #7000FF;" onclick="changeTheme('#7000FF')"></div>
+                <div class="color-dot" style="background: #00FF41;" onclick="changeTheme('#00FF41')"></div>
+            </div>
+
             <div class="dropdown">
-                <button class="btn-common btn-hub">
-                    <i class="fas fa-layer-group"></i> DIRECTORY <i class="fas fa-caret-down"></i>
-                </button>
+                <button class="btn-common btn-tools"><i class="fas fa-tools"></i> TOOLS <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
-                    <a href="gaming-hub.html">GAMING HUB</a>
-                    <a href="calculator.html">SOFTWARE HUB</a>
-                    <a href="maintenance.html">MOBILE HUB</a>
-                    <a href="notes-hub.html">NOTES HUB</a>
+                    <a href="date converter.html"><i class="fas fa-calendar-alt"></i> DATE CONVERTER</a>
+                    <a href="imageresize.html"><i class="fas fa-compress-arrows-alt"></i> IMAGE RESIZER</a>
                 </div>
             </div>
+
             <div class="dropdown">
-                <button class="btn-common btn-youtube-hub">
-                    <i class="fab fa-youtube"></i> YOUTUBE <i class="fas fa-caret-down"></i>
-                </button>
+                <button class="btn-common btn-hub"><i class="fas fa-layer-group"></i> DIRECTORY <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="gaming-hub.html"><i class="fas fa-gamepad"></i> GAMING HUB</a>
+                    <a href="calculator.html"><i class="fas fa-calculator"></i> SOFTWARE HUB</a>
+                    <a href="maintenance.html"><i class="fas fa-mobile-alt"></i> MOBILE HUB</a>
+                    <a href="notes-hub.html"><i class="fas fa-book"></i> NOTES HUB</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn-common btn-youtube-hub"><i class="fab fa-youtube"></i> YOUTUBE <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
                     <a href="https://www.youtube.com/channel/UC_Odlbv91upe_E3O0Yv7D5g?sub_confirmation=1" target="_blank">STROME GAMING</a>
                     <a href="https://www.youtube.com/@DARKLOBBYCODM" target="_blank">DARK LOBBY</a>
                 </div>
             </div>
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation">
-                <i class="fas fa-heart"></i> SUPPORT
-            </a>
-            <a href="contact.html" class="btn-common btn-contact">
-                <i class="fas fa-envelope"></i> CONTACT
-            </a>
-            <a href="about.html" class="btn-common btn-aboutme">
-                <i class="fas fa-user"></i> ABOUT ME
-            </a>
+
+            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation"><i class="fas fa-heart"></i> SUPPORT</a>
+            <a href="contact.html" class="btn-common btn-contact"><i class="fas fa-envelope"></i> CONTACT</a>
+            <a href="about.html" class="btn-common btn-aboutme"><i class="fas fa-user"></i> ABOUT ME</a>
         </nav>
     </header>
 
@@ -175,35 +208,17 @@
             <h2>WHAT YOU <span>FIND HERE?</span></h2>
             <div class="title-bar"></div>
         </div>
-
-        <div class="discovery-grid">
-            <div class="find-card">
-                <i class="fas fa-gamepad"></i>
-                <h3>ELITE GAMING HUB</h3>
-                <p>Pro-level Clash of Clans base layouts, CODM tactical strategies, and high-performance gaming insights tailored for competitive players.</p>
-            </div>
-
-            <div class="find-card">
-                <i class="fas fa-laptop-code"></i>
-                <h3>SOFTWARE & TOOLS</h3>
-                <p>Specialized utility tools, custom calculators, and web-based applications designed to simplify complex digital tasks.</p>
-            </div>
-
-            <div class="find-card">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>MOBILE SOLUTIONS</h3>
-                <p>A dedicated archive for mobile application insights, maintenance tools, and digital resources for modern smartphone users.</p>
-            </div>
-
-            <div class="find-card">
-                <i class="fas fa-graduation-cap"></i>
-                <h3>ACADEMIC ARCHIVE</h3>
-                <p>Organized digital notes, technical documentations, and study resources for students and technology enthusiasts.</p>
+        <div class="scroll-wrapper">
+            <div class="discovery-grid">
+                <div class="find-card"><i class="fas fa-gamepad"></i><h3>ELITE GAMING HUB</h3><p>Pro-level Clash of Clans base layouts, CODM tactical strategies, and high-performance gaming insights.</p></div>
+                <div class="find-card"><i class="fas fa-laptop-code"></i><h3>SOFTWARE & TOOLS</h3><p>Specialized utility tools, custom calculators, and web-based applications designed to simplify tasks.</p></div>
+                <div class="find-card"><i class="fas fa-mobile-alt"></i><h3>MOBILE SOLUTIONS</h3><p>A dedicated archive for mobile application insights and digital resources for modern users.</p></div>
+                <div class="find-card"><i class="fas fa-graduation-cap"></i><h3>ACADEMIC ARCHIVE</h3><p>Organized digital notes, technical documentations, and study resources for technology enthusiasts.</p></div>
             </div>
         </div>
     </section>
 
-    <footer><p>&copy; 2026 DIPESH GHIMIRE. Crafted with Precision. All Systems Nominal.</p></footer>
+    <footer><p>&copy; 2026 DIPESH GHIMIRE. Crafted with Precision.</p></footer>
 
     <script>
         const firebaseConfig = {
@@ -216,17 +231,44 @@
             appId: "1:115116599128:web:9ea566870aa624453f272d"
         };
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        function logAction(name) { db.ref('visitorLogs').push({ activity: name, time: Date.now() }); }
 
-        const textElement = document.getElementById('typewriter');
+        function changeTheme(color) {
+            document.documentElement.style.setProperty('--primary', color);
+            localStorage.setItem('userTheme', color);
+        }
+
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('userTheme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--primary', savedTheme);
+            }
+        }
+
+        function checkLoader() {
+            const hasLoaded = sessionStorage.getItem('hasLoaded');
+            const loader = document.getElementById('loader-wrapper');
+            if (hasLoaded) {
+                loader.style.display = 'none';
+            } else {
+                setTimeout(() => {
+                    document.getElementById('status-text').innerText = "READY TO LAUNCH";
+                    document.getElementById('enter-btn').classList.add('visible');
+                }, 1500);
+                document.getElementById('enter-btn').addEventListener('click', () => {
+                    document.getElementById('loader-sound').play();
+                    sessionStorage.setItem('hasLoaded', 'true');
+                    loader.style.opacity = '0';
+                    setTimeout(() => { loader.style.display = 'none'; }, 800);
+                });
+            }
+        }
+
         const words = ["CREATOR", "DEVELOPER", "STRATEGIST"];
         let wordIndex = 0, charIndex = 0, isDeleting = false;
-
         function type() {
             const currentWord = words[wordIndex];
             const displayTxt = isDeleting ? currentWord.substring(0, charIndex - 1) : currentWord.substring(0, charIndex + 1);
-            textElement.innerHTML = `<span>${displayTxt}</span>`;
+            document.getElementById('typewriter').innerHTML = `<span>${displayTxt}</span>`;
             charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
             let speed = isDeleting ? 80 : 150;
             if (!isDeleting && charIndex === currentWord.length) { isDeleting = true; speed = 2000; }
@@ -234,17 +276,28 @@
             setTimeout(type, speed);
         }
 
-        window.onload = () => { 
-            type(); 
-            logAction("Homepage Visit"); 
-            const sound = document.getElementById('loader-sound');
-            sound.play().catch(e => console.log("Audio play deferred"));
-            setTimeout(() => {
-                const loader = document.getElementById('loader-wrapper');
-                loader.style.opacity = '0';
-                setTimeout(() => { loader.style.display = 'none'; }, 800);
-            }, 1200);
-        };
+        window.addEventListener('DOMContentLoaded', () => {
+            applySavedTheme();
+            checkLoader();
+            type();
+
+            const clickSound = document.getElementById('click-sound');
+            const hoverSound = document.getElementById('hover-sound');
+            const elements = document.querySelectorAll('a, button, .find-card, .btn-common, .color-dot');
+            
+            elements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    hoverSound.currentTime = 0;
+                    hoverSound.volume = 0.2;
+                    hoverSound.play().catch(()=>{});
+                });
+                el.addEventListener('click', () => {
+                    clickSound.currentTime = 0;
+                    clickSound.volume = 1.0;
+                    clickSound.play().catch(()=>{});
+                });
+            });
+        });
     </script>
 </body>
 </html>
