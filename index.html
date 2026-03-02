@@ -113,12 +113,19 @@
 
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .hero { height: 35vh; display: flex; justify-content: center; align-items: center; text-align: center; }
-        .animated-subtext { color: #ffffff; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; letter-spacing: 5px; }
+        /* --- HERO & TYPEWRITER UPDATED --- */
+        .hero { height: 25vh; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .animated-subtext { 
+            color: var(--primary); /* Now dynamic */
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 1.5rem; /* Slightly larger */
+            font-weight: 900; /* Extra bold */
+            letter-spacing: 5px; 
+            text-shadow: 0 0 10px var(--primary); /* Glow effect */
+        }
 
-        /* --- UPDATED INFINITE SCROLL SECTION --- */
-        .discovery-section { padding: 60px 0; overflow: hidden; }
-        .section-title { text-align: center; margin-bottom: 50px; }
+        .discovery-section { padding: 30px 0 60px 0; overflow: hidden; }
+        .section-title { text-align: center; margin-bottom: 30px; }
         .section-title h2 { font-family: 'Orbitron'; font-size: 1.5rem; color: #fff; }
         .section-title h2 span { color: var(--primary); }
         .title-bar { width: 50px; height: 3px; background: var(--primary); margin: 10px auto; }
@@ -133,7 +140,7 @@
         .discovery-grid { 
             display: flex; 
             gap: 25px; 
-            padding: 20px; 
+            padding: 10px 20px; 
             flex-shrink: 0;
             animation: infiniteScroll 30s linear infinite; 
         }
@@ -269,6 +276,7 @@
         };
         firebase.initializeApp(firebaseConfig);
 
+        /* UPDATED THEME CHANGE TO AFFECT TYPEWRITER */
         function changeTheme(color) {
             document.documentElement.style.setProperty('--primary', color);
             localStorage.setItem('userTheme', color);
@@ -300,7 +308,8 @@
             }
         }
 
-        const words = ["CREATOR", "DEVELOPER", "STRATEGIST"];
+        /* TEXT ARRAY WITH GAMER */
+        const words = ["CREATOR", "DEVELOPER", "STRATEGIST", "GAMER"];
         let wordIndex = 0, charIndex = 0, isDeleting = false;
         function type() {
             const currentWord = words[wordIndex];
@@ -320,7 +329,6 @@
 
             const clickSound = document.getElementById('click-sound');
             const hoverSound = document.getElementById('hover-sound');
-            // Select all interactive elements including new dropdown items
             const elements = document.querySelectorAll('a, button, .find-card, .btn-common, .color-dot');
             
             elements.forEach(el => {
