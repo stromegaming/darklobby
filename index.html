@@ -218,7 +218,14 @@
                 </div>
             </div>
 
-            <a href="https://cr8.rs/darklobby" target="_blank" class="btn-common btn-donation"><i class="fas fa-heart"></i> SUPPORT</a>
+            <div class="dropdown">
+                <button class="btn-common btn-donation"><i class="fas fa-heart"></i> SUPPORT <i class="fas fa-caret-down"></i></button>
+                <div class="dropdown-content">
+                    <a href="https://ko-fi.com/stromegaming" target="_blank"><i class="fas fa-coffee"></i> KO-FI</a>
+                    <a href="https://cr8rs.app/darklobby/tip" target="_blank"><i class="fas fa-rocket"></i> CR8RS</a>
+                </div>
+            </div>
+
             <a href="contact.html" class="btn-common btn-contact"><i class="fas fa-envelope"></i> CONTACT</a>
             <a href="about.html" class="btn-common btn-aboutme"><i class="fas fa-user"></i> ABOUT ME</a>
         </nav>
@@ -313,6 +320,7 @@
 
             const clickSound = document.getElementById('click-sound');
             const hoverSound = document.getElementById('hover-sound');
+            // Select all interactive elements including new dropdown items
             const elements = document.querySelectorAll('a, button, .find-card, .btn-common, .color-dot');
             
             elements.forEach(el => {
