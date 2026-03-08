@@ -12,13 +12,45 @@
         // Set worker for PDF.js
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     </script>
+    
+    <style>
+        .logo-box { 
+            position: relative; 
+            width: 55px; 
+            height: 55px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .logo-box img { 
+            max-height: 40px; 
+            z-index: 2; 
+            filter: drop-shadow(0 0 8px #ef4444); 
+            object-fit: contain;
+        }
+        .logo-box::before { 
+            content: ''; 
+            position: absolute; 
+            width: 50px; 
+            height: 50px; 
+            border: 2px solid #ef4444; 
+            animation: rotateRect 6s linear infinite; 
+        }
+        @keyframes rotateRect { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-gray-200 font-sans antialiased min-h-screen flex flex-col">
 
     <header class="bg-gray-800 shadow-md border-b border-gray-700">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            
             <div class="flex items-center">
-                <img src="DGLOGO.PNG" alt="DG Logo" class="h-12 object-contain" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50/111827/ef4444?text=DGLOGO.PNG';">
+                <div class="logo-box">
+                    <img src="images/DGLOGO.PNG" alt="DG Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50/111827/ef4444?text=DG';">
+                </div>
             </div>
             
             <nav>
@@ -141,7 +173,6 @@
             isPdfInput = file.type === 'application/pdf';
 
             if (isPdfInput) {
-                // PDF Extract Logic (Reads first page)
                 const reader = new FileReader();
                 reader.onload = async function(e) {
                     const typedarray = new Uint8Array(e.target.result);
@@ -168,7 +199,6 @@
                 };
                 reader.readAsArrayBuffer(file);
             } else {
-                // Standard Image Logic
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     originalImage.src = e.target.result;
