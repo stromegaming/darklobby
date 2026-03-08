@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thumbnail Grabber | Dark Lobby</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="dg-logo-container">
+                <div class="red-square-anim"></div>
+                <img src="images/DGLOGO.PNG" alt="DG Logo" class="dg-logo">
+            </div>
+            
+            <h1>Thumbnail <span class="accent">Grabber</span></h1>
+            <p>Paste any YouTube link to instantly download the high-res thumbnail.</p>
+        </header>
+
+        <main>
+            <div class="input-group">
+                <input type="text" id="yt-url" placeholder="Enter YouTube Video URL here...">
+                <button id="fetch-btn">Get Thumbnail</button>
+            </div>
+
+            <div id="result-area" class="hidden">
+                <div class="preview-canvas">
+                    <img id="thumbnail-preview" src="" alt="YouTube Thumbnail Preview">
+                </div>
+                
+                <div class="download-controls">
+                    <select id="resolution-select" class="dropdown-style">
+                        <option value="maxres">Max Resolution (1080p)</option>
+                        <option value="hq">High Quality (720p)</option>
+                        <option value="mq">Standard (480p)</option>
+                    </select>
+
+                    <select id="format-select" class="dropdown-style">
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp">WEBP</option>
+                        <option value="pdf">PDF</option>
+                    </select>
+
+                    <button id="download-btn" class="download-btn primary">Download</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Built by DIPESH GHIMIRE. All Rights Reserved.</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
