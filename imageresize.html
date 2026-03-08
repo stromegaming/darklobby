@@ -223,18 +223,31 @@
         function compressImage() {
             if(!originalImage.src) return;
 
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = originalImage.width;
-            canvas.height = originalImage.height;
-            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
-            
             const quality = qualitySlider.value / 100;
             
             let mimeType = isPdfInput ? 'image/jpeg' : originalFile.type; 
             if (formatSelect.value !== 'original' && formatSelect.value !== 'application/pdf') {
                 mimeType = formatSelect.value;
             }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // PNG Fix: PNG doesn't support 'quality' reduction natively.
+            // We scale down the physical resolution mathematically to reduce file size.
+            let renderWidth = originalImage.width;
+            let renderHeight = originalImage.height;
+            
+            if (mimeType === 'image/png' && quality < 1) {
+                // Using Math.sqrt so the size reduction correlates linearly with the slider
+                const scale = Math.sqrt(quality);
+                renderWidth = originalImage.width * scale;
+                renderHeight = originalImage.height * scale;
+            }
+
+            canvas.width = renderWidth;
+            canvas.height = renderHeight;
+            ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
 
             if (formatSelect.value === 'application/pdf') {
                 const { jsPDF } = window.jspdf;
