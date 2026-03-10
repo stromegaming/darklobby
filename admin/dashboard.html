@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-layer-group"></i> <h2>Admin</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><i class="fa-solid fa-border-all"></i> Dashboard</li>
+                <li><i class="fa-solid fa-thumbtack"></i> Posts</li>
+                <li><i class="fa-solid fa-image"></i> Media</li>
+                <li><i class="fa-solid fa-file-lines"></i> Pages</li>
+                <li><i class="fa-solid fa-comments"></i> Messages <span class="badge" id="sidebar-msg-badge">0</span></li>
+                <li><i class="fa-solid fa-user"></i> Users</li>
+                <li><i class="fa-solid fa-gear"></i> Settings</li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="topbar-right">
+                    <i class="fa-solid fa-bell"></i><span class="notification-dot"></span>
+                    <div class="profile">
+                        <img src="https://via.placeholder.com/30" alt="Profile">
+                        <span>Admin <i class="fa-solid fa-chevron-down"></i></span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                
+                <div class="stat-cards">
+                    <div class="card"><div class="icon-bg blue"><i class="fa-solid fa-list"></i></div><div><p>Total Posts</p><h3 id="stat-posts">120</h3></div></div>
+                    <div class="card"><div class="icon-bg light-blue"><i class="fa-solid fa-message"></i></div><div><p>Messages</p><h3 id="stat-comments">0</h3></div></div>
+                    <div class="card"><div class="icon-bg green"><i class="fa-solid fa-user-plus"></i></div><div><p>New Users</p><h3 id="stat-users">12</h3></div></div>
+                    <div class="card"><div class="icon-bg dark-blue"><i class="fa-solid fa-chart-line"></i></div><div><p>Site Visits</p><h3 id="stat-visits">8.5K</h3></div></div>
+                </div>
+
+                <div class="main-grid">
+                    
+                    <div class="left-col">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <h3>Recent Posts</h3>
+                                <a href="#">View All</a>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr><th>Title</th><th>Author</th><th>Status</th><th>Date</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Summer Travel Guide</td><td>Admin</td><td><span class="status published">Published</span></td><td>Mar 20, 2026</td></tr>
+                                    <tr><td>Healthy Recipes</td><td>John</td><td><span class="status draft">Draft</span></td><td>Mar 18, 2026</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header"><h3>Latest Messages</h3></div>
+                            <ul class="comment-list" id="messages-list">
+                                <li>
+                                    <div class="comment-info" style="color: gray;">Loading messages from database...</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="right-col">
+                        <div class="panel">
+                            <div class="panel-header"><h3>Site Statistics</h3></div>
+                            <canvas id="visitorChart"></canvas>
+                        </div>
+                        
+                        <div class="bottom-grid">
+                            <div class="panel">
+                                <h3>Quick Actions</h3>
+                                <button class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i> New Post</button>
+                                <button class="btn btn-secondary"><i class="fa-solid fa-eye"></i> Add Media</button>
+                            </div>
+                            <div class="panel">
+                                <h3>Tasks</h3>
+                                <label><input type="checkbox" checked> Update About Page</label>
+                                <label><input type="checkbox" checked> Review Draft Posts</label>
+                                <label><input type="checkbox"> Backup Website</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+
+    <script>
+        // 1. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+            authDomain: "website-analysis-f6451.firebaseapp.com",
+            databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+            projectId: "website-analysis-f6451",
+            storageBucket: "website-analysis-f6451.firebasestorage.app",
+            messagingSenderId: "115116599128",
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
+        };
+
+        // 2. Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        
+        // 3. Database बाट Messages तान्ने
+        const messagesRef = db.ref('messages');
+        
+        messagesRef.on('value', (snapshot) => {
+            const messagesList = document.getElementById('messages-list');
+            const statComments = document.getElementById('stat-comments'); 
+            const sidebarBadge = document.getElementById('sidebar-msg-badge');
+            
+            messagesList.innerHTML = ''; // Loading text हटाउने
+            
+            if (!snapshot.exists()) {
+                messagesList.innerHTML = '<li><div class="comment-info" style="color: gray;">No messages found.</div></li>';
+                if(statComments) statComments.innerText = "0";
+                if(sidebarBadge) sidebarBadge.innerText = "0";
+                return;
+            }
+
+            let totalMessages = 0;
+
+            // प्रत्येक म्यासेजलाई HTML मा बदल्ने
+            snapshot.forEach((childSnapshot) => {
+                const data = childSnapshot.val();
+                totalMessages++;
+                
+                const li = document.createElement('li');
+                
+                // म्यासेजको डिजाइन
+                li.innerHTML = `
+                    <div class="comment-info">
+                        <strong>${data.name}</strong> 
+                        <span style="font-size: 0.8em; color: gray;">(${data.subject || 'General'})</span><br>
+                        <span style="display:block; margin: 5px 0; color: #555;">"${data.message}"</span>
+                        <small style="color: #3b82f6;">${data.email}</small>
+                    </div>
+                    <span class="status pending" style="height: fit-content;">New</span>
+                `;
+                
+                // नयाँ म्यासेजलाई लिस्टको माथि राख्ने
+                messagesList.prepend(li);
+            });
+
+            // Stat Card र Sidebar मा जम्मा म्यासेजको संख्या अपडेट गर्ने
+            if(statComments) statComments.innerText = totalMessages;
+            if(sidebarBadge) sidebarBadge.innerText = totalMessages;
+        });
+    </script>
+</body>
+</html>

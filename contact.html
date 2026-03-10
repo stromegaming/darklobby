@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TERMINAL | CONTACT</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Orbitron:wght@500;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
     
@@ -156,6 +160,21 @@
     </div>
 
     <script>
+        // === FIREBASE INITIALIZATION ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
+            authDomain: "website-analysis-f6451.firebaseapp.com",
+            databaseURL: "https://website-analysis-f6451-default-rtdb.firebaseio.com",
+            projectId: "website-analysis-f6451",
+            storageBucket: "website-analysis-f6451.firebasestorage.app",
+            messagingSenderId: "115116599128",
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const messagesRef = db.ref('messages'); // Messages save hune folder
+
+        // Form Variables
         const form = document.getElementById('contactForm');
         const alertScreen = document.getElementById('hackerAlert');
         const res = document.getElementById('formResponse');
@@ -165,6 +184,7 @@
 
         let correctAnswer;
 
+        // Math Logic
         function generateMath() {
             const num1 = Math.floor(Math.random() * 10);
             const num2 = Math.floor(Math.random() * 10);
@@ -184,6 +204,7 @@
 
         window.onload = generateMath;
 
+        // Form Submission to Firebase
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -193,59 +214,49 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "TRANSMITTING...";
+            btn.innerText = "TRANSMITTING TO DATABASE...";
 
             const formData = new FormData(form);
-            const object = Object.fromEntries(formData);
-            // Access Key thapeko
-            object.access_key = "8d715c6b-c36a-479b-bec7-05f392ebe0f4";
-            const json = JSON.stringify(object);
+            const nameData = formData.get('name');
+            const emailData = formData.get('email');
+            const subjectData = formData.get('subject');
+            const messageData = formData.get('message');
 
-            fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: json
-            })
-            .then(async (response) => {
-                let json = await response.json();
-                if (response.status == 200) {
-                    res.style.display = "block";
-                    res.style.color = "#00ff41";
-                    res.style.borderColor = "#00ff41";
-                    res.innerHTML = "> ACCESS GRANTED: SIGNAL DISPATCHED.";
-                    form.reset();
-                    generateMath();
-                } else {
-                    res.innerHTML = "> ERROR: " + json.message;
-                    res.style.display = "block";
-                    res.style.color = "red";
-                }
-            })
-            .catch(error => {
+            // Save to Firebase
+            messagesRef.push({
+                name: nameData,
+                email: emailData,
+                subject: subjectData,
+                message: messageData,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                res.style.display = "block";
+                res.style.color = "#00ff41";
+                res.style.borderColor = "#00ff41";
+                res.innerHTML = "> ACCESS GRANTED: SIGNAL SAVED IN DATABASE.";
+                form.reset();
+                generateMath();
+            }).catch((error) => {
                 res.style.display = "block";
                 res.style.color = "red";
-                res.innerHTML = "> ERROR: CONNECTION REFUSED. CHECK NETWORK.";
-            })
-            .finally(() => {
+                res.innerHTML = "> ERROR: " + error.message;
+            }).finally(() => {
                 btn.disabled = false;
                 btn.innerText = "EXECUTE TRANSMISSION";
             });
         });
     </script>
-<script>
-    // Theme apply garne function
-    function applySavedTheme() {
-        const savedTheme = localStorage.getItem('userTheme');
-        if (savedTheme) {
-            document.documentElement.style.setProperty('--primary', savedTheme);
+    <script>
+        // Theme apply garne function
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('userTheme');
+            if (savedTheme) {
+                document.documentElement.style.setProperty('--primary', savedTheme);
+            }
         }
-    }
 
-    // Page load huda theme check garne
-    window.addEventListener('DOMContentLoaded', applySavedTheme);
-</script>
+        // Page load huda theme check garne
+        window.addEventListener('DOMContentLoaded', applySavedTheme);
+    </script>
 </body>
 </html>

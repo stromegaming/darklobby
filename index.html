@@ -116,12 +116,12 @@
         /* --- HERO & TYPEWRITER UPDATED --- */
         .hero { height: 25vh; display: flex; justify-content: center; align-items: center; text-align: center; }
         .animated-subtext { 
-            color: var(--primary); /* Now dynamic */
+            color: var(--primary);
             font-family: 'Orbitron', sans-serif; 
-            font-size: 1.5rem; /* Slightly larger */
-            font-weight: 900; /* Extra bold */
+            font-size: 1.5rem;
+            font-weight: 900;
             letter-spacing: 5px; 
-            text-shadow: 0 0 10px var(--primary); /* Glow effect */
+            text-shadow: 0 0 10px var(--primary);
         }
 
         .discovery-section { padding: 30px 0 60px 0; overflow: hidden; }
@@ -135,6 +135,7 @@
             display: flex; 
             overflow: hidden; 
             mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
         }
         
         .discovery-grid { 
@@ -221,7 +222,7 @@
             <div class="dropdown">
                 <button class="btn-common btn-youtube-hub"><i class="fab fa-youtube"></i> YOUTUBE <i class="fas fa-caret-down"></i></button>
                 <div class="dropdown-content">
-                    <a href="https://www.youtube.com/channel/UC_Odlbv91upe_E3O0Yv7D5g?sub_confirmation=1" target="_blank">STROME GAMING</a>
+                    <a href="https://www.youtube.com/channel/UC-A6-4UrizOPvqMPzFQOiYQ?sub_confirmation=1" target="_blank">STROME GAMING</a>
                     <a href="https://www.youtube.com/@DARKLOBBYCODM" target="_blank">DARK LOBBY</a>
                 </div>
             </div>
@@ -266,6 +267,7 @@
     <footer><p>&copy; 2026 DIPESH GHIMIRE. All rights reserved. Crafted with Precision.</p></footer>
 
     <script>
+        // === FIREBASE LINKING START ===
         const firebaseConfig = {
             apiKey: "AIzaSyD0eeboKkkcKIokuMtt9IRGq99JW7dz5_4",
             authDomain: "website-analysis-f6451.firebaseapp.com",
@@ -275,7 +277,9 @@
             messagingSenderId: "115116599128",
             appId: "1:115116599128:web:9ea566870aa624453f272d"
         };
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        // === FIREBASE LINKING END ===
 
         /* UPDATED THEME CHANGE TO AFFECT TYPEWRITER */
         function changeTheme(color) {
