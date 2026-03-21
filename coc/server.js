@@ -7,7 +7,7 @@ app.use(cors());
 
 // Render को दुवै सम्भावित नामहरू चेक गर्छ
 const API_TOKEN = process.env.COC_API_TOKEN || process.env.SUPERCELL_API_TOKEN;
-const PROXY_URL = 'https://cocproxy.com/v1';
+const PROXY_URL = 'https://api.clashofclans.com/v1';
 
 app.get('/api/player/:tag', async (req, res) => {
     const rawTag = req.params.tag.toUpperCase().replace(/#/g, '');
