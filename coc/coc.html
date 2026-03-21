@@ -99,6 +99,7 @@
     <div class="top-banner">
         <a href="index.html" class="home-btn">🏠 HOME</a>
         <div class="banner-content">
+            <div id="goldPassInfo" style="font-family: 'ClashFont', cursive; color: #fccb00; font-size: 12px; margin-bottom: 10px; display: none; text-align: center; background: rgba(0,0,0,0.6); padding: 6px 15px; border-radius: 20px; border: 1px solid #fccb00; box-shadow: 0 2px 5px #000; letter-spacing: 1px;"></div>
             <p class="sub-title">COC INTELLIGENCE DASHBOARD</p>
             <div class="search-container stone-panel">
                 <div class="input-group">
@@ -136,10 +137,16 @@
                 <div id="currentWarDetails" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); padding:20px; border:2px solid #e53935; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.6);"></div>
             </div>
             
+            <div id="cwlSection" style="display:none; padding:20px; padding-top:0;">
+                <div style="font-family:'ClashFont', cursive; color:#fccb00; font-size:18px; text-align:center; margin-bottom:15px; text-shadow:2px 2px 4px #000;">🏆 Clan War League</div>
+                <div id="cwlDetails" style="display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.5); padding:20px; border:2px solid #fccb00; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.6);"></div>
+            </div>
+            
             <div class="clan-tabs">
                 <button class="tab-btn active" onclick="switchTab('homeVillage')">HOME VILLAGE</button>
                 <button class="tab-btn" onclick="switchTab('builderBase')">BUILDER BASE</button>
                 <button class="tab-btn" onclick="switchTab('clanCapital')">CLAN CAPITAL</button>
+                <button class="tab-btn" onclick="switchTab('warLog')">WAR LOG</button>
             </div>
 
             <div id="homeVillageTab" class="tab-content active">
@@ -179,6 +186,7 @@
             </div>
 
             <div id="clanCapitalTab" class="tab-content">
+                <div id="capitalRaidSummary" style="display:none; margin-bottom:15px;"></div>
                 <div class="table-wrapper">
                     <table id="clanCapitalTable">
                         <thead>
@@ -189,6 +197,23 @@
                             </tr>
                         </thead>
                         <tbody id="clanCapitalList"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="warLogTab" class="tab-content">
+                <div class="table-wrapper">
+                    <table id="warLogTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('warLogTable', 0)">S.N.</th>
+                                <th onclick="sortTable('warLogTable', 1)">OPPONENT</th>
+                                <th onclick="sortTable('warLogTable', 2)">RESULT</th>
+                                <th onclick="sortTable('warLogTable', 3)">STARS</th>
+                                <th onclick="sortTable('warLogTable', 4)">DESTRUCTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warLogList"></tbody>
                     </table>
                 </div>
             </div>
@@ -253,6 +278,22 @@
             event.target.classList.add('active');
             document.getElementById(tabId + 'Tab').classList.add('active');
         }
+
+        async function fetchGoldPass() {
+            try {
+                const gpRes = await fetch(`${API_BASE}/api/goldpass/seasons/current`);
+                if (gpRes.ok) {
+                    const gpText = await gpRes.text();
+                    let gp = JSON.parse(gpText);
+                    if (gp.data) gp = gp.data;
+                    if (gp.startTime && gp.endTime) {
+                        document.getElementById('goldPassInfo').style.display = 'inline-block';
+                        document.getElementById('goldPassInfo').innerText = `🎟️ GOLD PASS SEASON ACTIVE`;
+                    }
+                }
+            } catch(e) { console.warn("Gold pass fetch error", e); }
+        }
+        fetchGoldPass();
 
         async function fetchData() {
             const pVal = document.getElementById('pInput').value.trim().toUpperCase().replace('#', '');
@@ -331,8 +372,8 @@
                     const list = document.getElementById('equipmentList');
                     
                     const equipMap = {
-                        "Barbarian Puppet": "Barbarian King", "Rage Vial": "Barbarian King", "Earthquake Boots": "Barbarian King", "Vampstache": "Barbarian King", "Giant Gauntlet": "Barbarian King", "Spiky Ball": "Barbarian King", "Snake Bracelet": "Barbarian King", "Stick Horse": "Barbarian King", "Action Figure": "Archer Queen", 
-                        "Archer Puppet": "Archer Queen", "Invisibility Vial": "Archer Queen", "Giant Arrow": "Archer Queen", "Healer Puppet": "Archer Queen", "Frozen Arrow": "Archer Queen", "Magic Mirror": "Archer Queen", "Frost Flake": "Royal Champion",
+                        "Barbarian Puppet": "Barbarian King", "Rage Vial": "Barbarian King", "Earthquake Boots": "Barbarian King", "Vampstache": "Barbarian King", "Giant Gauntlet": "Barbarian King", "Spiky Ball": "Barbarian King", "Snake Bracelet": "Barbarian King", "Stick Horse": "Barbarian King",
+                        "Archer Puppet": "Archer Queen", "Invisibility Vial": "Archer Queen", "Giant Arrow": "Archer Queen", "Healer Puppet": "Archer Queen", "Frozen Arrow": "Archer Queen", "Magic Mirror": "Archer Queen", "Action Figure": "Archer Queen", "Frost Flake": "Archer Queen",
                         "Eternal Tome": "Grand Warden", "Life Gem": "Grand Warden", "Rage Gem": "Grand Warden", "Healing Tome": "Grand Warden", "Fireball": "Grand Warden", "Lavaloon Puppet": "Grand Warden", "Heroic Torch": "Grand Warden", 
                         "Seeking Shield": "Royal Champion", "Royal Gem": "Royal Champion", "Hog Rider Puppet": "Royal Champion", "Haste Vial": "Royal Champion", "Rocket Spear": "Royal Champion", "Electro Boots": "Royal Champion",
                         "Dark Crown": "Minion Prince", "Henchmen Puppet": "Minion Prince", "Meteor Staff": "Minion Prince", "Dark Orb": "Minion Prince", "Metal Pants": "Minion Prince", "Noble Iron": "Minion Prince",
@@ -477,6 +518,88 @@
                     console.warn("Current war fetch error:", err); 
                     document.getElementById('currentWarSection').style.display = 'none';
                 }
+
+                // FETCH CWL DATA
+                try {
+                    const cwlRes = await fetch(`${API_BASE}/api/clan/${encodeURIComponent('#' + tag)}/leaguegroup`);
+                    if (cwlRes.ok) {
+                        const cwlText = await cwlRes.text();
+                        try {
+                            let cwl = JSON.parse(cwlText);
+                            if(cwl.data) cwl = cwl.data;
+                            if (cwl && cwl.state && cwl.state !== 'notInWar') {
+                                document.getElementById('cwlSection').style.display = 'block';
+                                document.getElementById('cwlDetails').innerHTML = `
+                                    <div style="flex:1; text-align:center;">
+                                        <div style="font-family:'ClashFont', cursive; color:#fccb00; font-size:16px;">SEASON: ${cwl.season}</div>
+                                        <div style="font-size:14px; color:#aaa; font-weight:bold; margin-top:10px;">STATE: <span style="color:#4fc3f7;">${cwl.state.toUpperCase()}</span></div>
+                                    </div>
+                                `;
+                            } else {
+                                document.getElementById('cwlSection').style.display = 'none';
+                            }
+                        } catch(e) {
+                            console.warn("CWL parse error:", e);
+                            document.getElementById('cwlSection').style.display = 'none';
+                        }
+                    } else {
+                        document.getElementById('cwlSection').style.display = 'none';
+                    }
+                } catch(err) { 
+                    console.warn("CWL fetch error:", err); 
+                    document.getElementById('cwlSection').style.display = 'none';
+                }
+
+                // FETCH WAR LOG DATA
+                try {
+                    const warLogRes = await fetch(`${API_BASE}/api/clan/${encodeURIComponent('#' + tag)}/warlog`);
+                    if (warLogRes.ok) {
+                        const warLogText = await warLogRes.text();
+                        let warLogData = JSON.parse(warLogText);
+                        if(warLogData.data) warLogData = warLogData.data;
+                        if (warLogData.items && warLogData.items.length > 0) {
+                            const wlList = document.getElementById('warLogList');
+                            wlList.innerHTML = '';
+                            warLogData.items.slice(0, 20).forEach((w, i) => {
+                                let resultStr = w.result ? w.result.toUpperCase() : 'UNKNOWN';
+                                let resultColor = w.result === 'win' ? '#4caf50' : (w.result === 'lose' ? '#e53935' : '#aaa');
+                                let opName = w.opponent && w.opponent.name ? w.opponent.name : 'Unknown';
+                                let starsStr = `${w.clan.stars || 0} - ${w.opponent.stars || 0}`;
+                                let destStr = `${(w.clan.destructionPercentage || 0).toFixed(2)}% - ${(w.opponent.destructionPercentage || 0).toFixed(2)}%`;
+                                wlList.innerHTML += `<tr><td>${i + 1}</td><td><strong>${opName}</strong></td><td><strong style="color:${resultColor}">${resultStr}</strong></td><td><strong>${starsStr}</strong></td><td><strong>${destStr}</strong></td></tr>`;
+                            });
+                        }
+                    }
+                } catch(err) { console.warn("War log fetch error", err); }
+
+                // FETCH CAPITAL RAID SEASONS
+                try {
+                    const raidRes = await fetch(`${API_BASE}/api/clan/${encodeURIComponent('#' + tag)}/capitalraidseasons`);
+                    if (raidRes.ok) {
+                        const raidText = await raidRes.text();
+                        let raidData = JSON.parse(raidText);
+                        if(raidData.data) raidData = raidData.data;
+                        if (raidData.items && raidData.items.length > 0) {
+                            let latestRaid = raidData.items[0];
+                            document.getElementById('capitalRaidSummary').style.display = 'block';
+                            document.getElementById('capitalRaidSummary').innerHTML = `
+                                <div style="background: rgba(0,0,0,0.5); border: 2px solid #4fc3f7; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.6);">
+                                    <div style="font-family: 'ClashFont', cursive; color: #4fc3f7; font-size: 16px; margin-bottom: 10px;">🛡️ LATEST RAID WEEKEND</div>
+                                    <div style="display: flex; justify-content: center; gap: 20px; font-size: 14px; font-weight: bold; flex-wrap: wrap;">
+                                        <div>🪙 Capital Loot: <span style="color:#fccb00;">${latestRaid.capitalTotalLoot || 0}</span></div>
+                                        <div>🏅 Offensive Medals: <span style="color:#fccb00;">${latestRaid.offensiveReward || 0}</span></div>
+                                        <div>🛡️ Defensive Medals: <span style="color:#fccb00;">${latestRaid.defensiveReward || 0}</span></div>
+                                        <div>⚔️ Attacks: <span style="color:#fccb00;">${latestRaid.totalAttacks || 0}</span></div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            document.getElementById('capitalRaidSummary').style.display = 'none';
+                        }
+                    } else {
+                        document.getElementById('capitalRaidSummary').style.display = 'none';
+                    }
+                } catch(err) { console.warn("Capital raid fetch error", err); }
 
                 try {
                     const seasonKey = getCurrentSeason();
