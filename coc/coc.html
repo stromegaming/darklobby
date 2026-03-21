@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clash of Clans Intelligence Dashboard</title>
+    <title>COC INTELLIGENCE DASHBOARD</title>
     <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -11,66 +11,83 @@
 
     <style>
         @font-face { font-family: 'ClashFont'; src: url('Supercell-Magic.ttf') format('truetype'); }
-        body { background-color: #1a1e24; background-image: url('SECONDBACKGROUND.png'); background-size: cover; background-position: center; background-attachment: fixed; color: #ffffff; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
-        .main-wrapper { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .top-banner { width: 100%; background-image: url('coc-background.png'); background-size: cover; background-position: center; border-bottom: 4px solid #000; box-shadow: 0 4px 10px rgba(0,0,0,0.8); }
-        .banner-content { max-width: 750px; margin: 0 auto; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; }
-        .sub-title { font-family: 'ClashFont', cursive; color: #fccb00; font-size: 24px; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; text-transform: uppercase; }
+        body { background-color: #1a1e24; background-image: url('SECONDBACKGROUND.png'); background-size: cover; background-position: center; background-attachment: fixed; color: #ffffff; font-family: 'Roboto', sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .main-wrapper { width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; flex: 1; }
+        .top-banner { width: 100%; background-image: url('coc-background.png'); background-size: cover; background-position: center; border-bottom: 4px solid #000; box-shadow: 0 4px 10px rgba(0,0,0,0.8); position: relative; }
+        .banner-content { max-width: 750px; margin: 0 auto; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; position: relative; }
+        
+        .home-btn { position: absolute; top: 15px; left: 15px; background: linear-gradient(to bottom, #1e88e5, #1565c0); color: white; border: 2px solid #000; border-radius: 8px; padding: 8px 20px; font-family: 'ClashFont', cursive; font-size: 14px; text-decoration: none; box-shadow: 0 4px 0 #000; transition: 0.2s; display: flex; align-items: center; gap: 5px; }
+        .home-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
+
+        .sub-title { font-family: 'ClashFont', cursive; color: #fccb00; font-size: 28px; text-shadow: 2px 2px 4px #000; margin-bottom: 20px; text-transform: uppercase; text-align: center; }
         .stone-panel { background-image: linear-gradient(to bottom, #2b323c, #1f242b); border: 3px solid #5a6470; border-radius: 10px; padding: 20px; }
-        .search-container { display: flex; gap: 10px; width: 100%; }
-        .input-group { display: flex; flex: 1; background: rgba(255, 255, 255, 0.95); border-radius: 6px; border: 2px solid #fccb00; box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 5px rgba(252, 203, 0, 0.2); overflow: hidden; }
+        .search-container { display: flex; gap: 10px; width: 100%; flex-wrap: wrap; justify-content: center; }
+        .input-group { display: flex; flex: 1; min-width: 250px; background: rgba(255, 255, 255, 0.95); border-radius: 6px; border: 2px solid #fccb00; overflow: hidden; }
         .input-icon { width: 45px; display: flex; align-items: center; justify-content: center; border-right: 2px solid #fccb00; }
         .player-bg { background: #1e88e5; } .clan-bg { background: #d32f2f; }
-        .input-icon img { width: 32px; height: 32px; object-fit: contain; }
-        .input-group input { flex: 1; border: none; padding: 12px; font-size: 14px; font-family: 'ClashFont', cursive; outline: none; color: #222; text-transform: uppercase; letter-spacing: 0.5px; }
-        .search-btn { background: linear-gradient(to bottom, #e53935, #b71c1c); color: white; border: 2px solid #4a0000; border-radius: 8px; padding: 0 25px; font-family: 'ClashFont', cursive; cursor: pointer; text-shadow: 1px 1px 2px black; box-shadow: 0 4px 0 #4a0000; }
-        .panel { background-color: rgba(0, 0, 0, 0.5); border: 2px solid #8b6b23; border-radius: 5px; margin-top: 20px; display: none; overflow: hidden; }
-        .panel-header-custom { background: linear-gradient(to bottom, #4a3e20, #2c2411); color: #fce879; font-family: 'ClashFont', cursive; padding: 10px 15px; border-bottom: 2px solid #fccb00; font-size: 18px; text-transform: uppercase; }
+        .input-icon img { width: 30px; height: 30px; object-fit: contain; }
+        .input-group input { flex: 1; border: none; padding: 12px; font-size: 14px; font-family: 'ClashFont', cursive; outline: none; color: #222; text-transform: uppercase; }
+        .search-btn { background: linear-gradient(to bottom, #e53935, #b71c1c); color: white; border: 2px solid #4a0000; border-radius: 8px; padding: 10px 30px; font-family: 'ClashFont', cursive; cursor: pointer; box-shadow: 0 4px 0 #4a0000; transition: 0.2s; }
+        .search-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #4a0000; }
+        
+        .panel { background-color: rgba(0, 0, 0, 0.7); border: 2px solid #8b6b23; border-radius: 8px; margin-top: 20px; display: none; overflow: hidden; backdrop-filter: blur(5px); }
+        .panel-header-custom { background: linear-gradient(to bottom, #4a3e20, #2c2411); color: #fce879; font-family: 'ClashFont', cursive; padding: 12px 15px; border-bottom: 2px solid #fccb00; font-size: 18px; text-transform: uppercase; }
         .summary-box { display: flex; gap: 25px; padding: 20px; align-items: center; background: rgba(0,0,0,0.3); }
-        .badge-frame { width: 150px; height: 150px; display: flex; justify-content: center; align-items: center; flex-shrink: 0; position: relative; }
+        .badge-frame { width: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; position: relative; }
         .info-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; }
-        .name-title-match { grid-column: span 2; font-size: 36px; font-family: 'ClashFont', cursive; color: white; text-shadow: 3px 3px 0 #000; margin-bottom: 5px; }
-        .info-item { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: bold; }
+        .name-title-match { grid-column: span 2; font-size: 32px; font-family: 'ClashFont', cursive; color: white; text-shadow: 3px 3px 0 #000; margin-bottom: 5px; }
+        .info-item { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold; }
         .info-item strong { color: #fccb00; }
+        
         .data-section { padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); }
-        .data-title { font-family: 'ClashFont', cursive; color: #fce879; font-size: 16px; margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
+        .data-title { font-family: 'ClashFont', cursive; color: #fce879; font-size: 16px; margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; }
         .data-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; border: 2px solid #444; text-align: center; position: relative; }
-        .data-card img { width: 75px; height: 75px; object-fit: contain; }
-        .item-name-top { font-family: 'ClashFont', cursive; font-size: 9px; color: #eee; margin-bottom: 5px; }
-        .lvl-badge { position: absolute; bottom: 2px; left: 2px; background: rgba(0, 0, 0, 0.85); color: white; padding: 1px 6px; border-radius: 3px; font-family: 'ClashFont', cursive; font-size: 10px; border: 1px solid #fccb00; }
-        .lvl-max-fire { box-shadow: 0 0 8px #ff9800, inset 0 0 4px #ff5722; }
-        .th-badge { padding: 3px 8px; border-radius: 4px; font-weight: bold; color: white; text-shadow: 1px 1px 1px black; }
+        .data-card img { width: 65px; height: 65px; object-fit: contain; }
+        .item-name-top { font-family: 'ClashFont', cursive; font-size: 8px; color: #ccc; margin-bottom: 5px; height: 20px; display: block; overflow: hidden; }
+        
+        .lvl-badge { position: absolute; bottom: 5px; left: 5px; background: rgba(0, 0, 0, 0.9); color: white; padding: 2px 6px; border-radius: 4px; font-family: 'ClashFont', cursive; font-size: 10px; border: 1px solid #fccb00; z-index: 2; }
+        .lvl-max-fire { color: #ffeb3b; border-color: #ff9800; box-shadow: 0 0 10px #ff5722, inset 0 0 5px #ff5722; animation: burn 1.5s infinite alternate; }
+        @keyframes burn { from { box-shadow: 0 0 8px #ff5722; } to { box-shadow: 0 0 15px #ffeb3b; } }
+
+        .xp-display-attractive { margin-top: 10px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: white; padding: 5px 15px; border-radius: 20px; font-family: 'ClashFont', cursive; font-size: 14px; border: 2px solid #ffffff; box-shadow: 0 0 15px #0288d1, inset 0 0 5px #ffffff; text-shadow: 1px 1px 2px #000; display: inline-block; }
+        .equip-hero-title { width: 100%; font-family: 'ClashFont', cursive; color: #fccb00; font-size: 11px; margin: 15px 0 10px 0; border-left: 4px solid #fccb00; padding-left: 10px; grid-column: 1 / -1; background: rgba(255,203,0,0.05); }
+
+        .th-badge { padding: 3px 10px; border-radius: 5px; font-weight: bold; color: white; text-shadow: 1px 1px 1px black; display: flex; align-items: center; gap: 5px; }
         .th-gold { background: linear-gradient(45deg, #fbc02d, #f9a825); } 
         .th-purple { background: linear-gradient(45deg, #9c27b0, #673ab7); } 
         .th-blue { background: linear-gradient(45deg, #1e88e5, #1565c0); } 
         .th-green { background: linear-gradient(45deg, #4caf50, #2e7d32); } 
-        .copy-icon-btn { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; padding: 4px; vertical-align: middle; }
-        .copy-svg { width: 20px; height: 20px; fill: #fccb00; }
-        #errorOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 9999; }
-        .error-box { background: #2c323c; border: 4px solid #fccb00; border-radius: 12px; padding: 30px; text-align: center; min-width: 300px; }
-        .error-msg { font-family: 'ClashFont', cursive; color: #ffffff; font-size: 18px; margin-bottom: 20px; }
-        .error-close { background: #fccb00; color: #000; border: none; padding: 10px 25px; border-radius: 6px; font-family: 'ClashFont', cursive; cursor: pointer; font-weight: bold; }
-        .season-history-row { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 15px; }
-        .season-tag { font-family: 'ClashFont', cursive; font-size: 10px; color: #fccb00; margin-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.2); font-size: 14px; margin-top: 10px; }
-        th { background: rgba(62, 74, 89, 0.8); color: #fce879; padding: 12px; text-align: left; font-family: 'ClashFont', cursive; font-size: 10px; cursor: pointer; }
+
+        .copy-icon-btn { background: none; border: none; cursor: pointer; padding: 2px; vertical-align: middle; }
+        .copy-svg { width: 18px; height: 18px; fill: #fccb00; }
+
+        table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.2); font-size: 14px; }
+        th { background: rgba(62, 74, 89, 0.9); color: #fce879; padding: 12px; text-align: left; font-family: 'ClashFont', cursive; font-size: 10px; cursor: pointer; }
         td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        tr:hover { background: rgba(255,255,255,0.05); }
+
+        #errorOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 10000; }
+        .error-box { background: #2c323c; border: 4px solid #fccb00; border-radius: 12px; padding: 30px; text-align: center; }
+        .error-msg { font-family: 'ClashFont', cursive; color: #ffffff; font-size: 18px; margin-bottom: 20px; }
+        .error-close { background: #fccb00; color: #000; border: none; padding: 10px 25px; border-radius: 6px; font-family: 'ClashFont', cursive; cursor: pointer; }
+        
+        .footer { text-align: center; padding: 20px; font-family: 'ClashFont', cursive; font-size: 12px; color: #fccb00; text-shadow: 1px 1px 2px #000; background: rgba(0,0,0,0.5); margin-top: auto; }
     </style>
 </head>
 <body>
 
     <div id="errorOverlay">
         <div class="error-box">
-            <div class="error-msg" id="errorMsg">WRONG TAG!</div>
-            <button class="error-close" id="errorBtn" onclick="closeError()">OK</button>
+            <div class="error-msg" id="errorMsg">INVALID REQUEST</div>
+            <button class="error-close" onclick="closeError()">OK</button>
         </div>
     </div>
 
     <div class="top-banner">
+        <a href="index.html" class="home-btn">🏠 HOME</a>
         <div class="banner-content">
-            <img src="coc-logo.png" style="max-width: 250px;" onerror="this.style.display='none'">
-            <p class="sub-title">Intel Dashboard</p>
+            <p class="sub-title">COC INTELLIGENCE DASHBOARD</p>
             <div class="search-container stone-panel">
                 <div class="input-group">
                     <div class="input-icon player-bg"><img src="playerprofile.png" id="pSearchIcon"></div>
@@ -89,36 +106,45 @@
         <div class="panel" id="playerPanel">
             <div class="panel-header-custom">Player Profile</div>
             <div id="playerSummary"></div>
-            <div id="heroesSection" class="data-section" style="display:none;"><div class="data-title" id="heroesHeader"><img src="HEROES/HEROESICON.png" style="width:22px; height:22px; margin-right:8px;" onerror="this.style.display='none'"><span>Heroes</span></div><div id="heroesList" class="data-grid"></div></div>
-            <div id="superTroopsSection" class="data-section" style="display:none;"><div class="data-title" id="superTroopsHeader"><img src="supertroops/supericon.png" style="width:22px; height:22px; margin-right:8px;" onerror="this.style.display='none'"><span>Super Troops</span></div><div id="superTroopsList" class="data-grid"></div></div>
-            <div id="troopsSection" class="data-section" style="display:none;"><div class="data-title" id="troopsHeader"><span>Troops</span></div><div id="troopsList" class="data-grid"></div></div>
-            <div id="spellsSection" class="data-section" style="display:none;"><div class="data-title" id="spellsHeader"><span>Spells</span></div><div id="spellsList" class="data-grid"></div></div>
-            <div id="siegeSection" class="data-section" style="display:none;"><div class="data-title" id="siegeHeader"><span>Siege Machines</span></div><div id="siegeList" class="data-grid"></div></div>
-            <div id="petsSection" class="data-section" style="display:none;"><div class="data-title" id="petsHeader"><span>Pets</span></div><div id="petsList" class="data-grid"></div></div>
+            <div id="heroesSection" class="data-section" style="display:none;"><div class="data-title"><span>Heroes</span></div><div id="heroesList" class="data-grid"></div></div>
+            <div id="petsSection" class="data-section" style="display:none;"><div class="data-title"><span>Pets</span></div><div id="petsList" class="data-grid"></div></div>
+            <div id="equipmentSection" class="data-section" style="display:none;"><div class="data-title"><span>Equipment</span></div><div id="equipmentList" class="data-grid"></div></div>
+            <div id="troopsSection" class="data-section" style="display:none;"><div class="data-title"><span>Troops</span></div><div id="troopsList" class="data-grid"></div></div>
+            <div id="superTroopsSection" class="data-section" style="display:none;"><div class="data-title"><span>Super Troops</span></div><div id="superTroopsList" class="data-grid"></div></div>
+            <div id="spellsSection" class="data-section" style="display:none;"><div class="data-title"><span>Spells</span></div><div id="spellsList" class="data-grid"></div></div>
+            <div id="siegeSection" class="data-section" style="display:none;"><div class="data-title"><span>Siege Machines</span></div><div id="siegeList" class="data-grid"></div></div>
         </div>
         
         <div class="panel" id="clanPanel">
-            <div class="panel-header-custom">Clan Intelligence Summary</div>
-            <div class="summary-box" id="clanSummary"></div>
-            <div id="warLeagueSection" class="data-section" style="display:none; border-bottom: 2px solid #8b6b23;">
-                <div class="data-title">🛡️ War League Intelligence</div>
+            <div class="panel-header-custom">Clan Summary</div>
+            <div id="clanSummary"></div>
+            <div id="warLeagueSection" class="data-section" style="display:none;">
+                <div class="data-title">🛡️ War League History</div>
                 <div id="warLeagueHistoryCont"></div>
             </div>
             <div class="table-wrapper">
                 <table id="memberTable">
                     <thead>
                         <tr>
-                            <th onclick="sortTable(0)">MEMBER</th>
-                            <th onclick="sortTable(1)">TAG</th>
-                            <th onclick="sortTable(2)">TH</th>
-                            <th onclick="sortTable(3)">ROLE</th>
-                            <th onclick="sortTable(4)">🏆 TROPHY</th>
+                            <th onclick="sortTable(0)">S.N.</th>
+                            <th onclick="sortTable(1)">MEMBER</th>
+                            <th onclick="sortTable(2)">TAG</th>
+                            <th onclick="sortTable(3)">TH</th>
+                            <th onclick="sortTable(4)">ROLE</th>
+                            <th onclick="sortTable(5)">📤 DONATED</th>
+                            <th onclick="sortTable(6)">📥 RECEIVED</th>
+                            <th onclick="sortTable(7)">🏆 TROPHY</th>
+                            <th onclick="sortTable(8)">STATUS</th>
                         </tr>
                     </thead>
                     <tbody id="memberList"></tbody>
                 </table>
             </div>
         </div>
+    </div>
+
+    <div class="footer">
+        COPYRIGHT DIPESH GHIMIRE © 2026 ALL RIGHTS RESERVED
     </div>
 
     <script>
@@ -129,8 +155,7 @@
             projectId: "website-analysis-f6451",
             storageBucket: "website-analysis-f6451.firebasestorage.app",
             messagingSenderId: "115116599128",
-            appId: "1:115116599128:web:9ea566870aa624453f272d",
-            measurementId: "G-ZFPN20TE0Q"
+            appId: "1:115116599128:web:9ea566870aa624453f272d"
         };
         
         firebase.initializeApp(firebaseConfig);
@@ -139,7 +164,19 @@
 
         function showError(msg) { document.getElementById('errorMsg').innerText = msg; document.getElementById('errorOverlay').style.display = 'flex'; }
         function closeError() { document.getElementById('errorOverlay').style.display = 'none'; }
-        function getCurrentSeason() { const now = new Date(); const m = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"]; return `${m[now.getMonth()]} ${now.getFullYear()}`; }
+        function getCurrentSeason() { const now = new Date(); const m = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]; return `${m[now.getMonth()]} ${now.getFullYear()}`; }
+        
+        function copyTag(tag, type) {
+            navigator.clipboard.writeText(tag).then(() => {
+                const pInput = document.getElementById('pInput');
+                const cInput = document.getElementById('cInput');
+                if (type === 'player') { pInput.value = tag.replace('#', ''); cInput.value = ''; } 
+                else { cInput.value = tag.replace('#', ''); pInput.value = ''; }
+                fetchData();
+            });
+        }
+
+        const copyIconSVG = `<svg class="copy-svg" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" /></svg>`;
 
         function getTHClass(level) {
             if (level >= 14) return 'th-gold';
@@ -149,17 +186,8 @@
         }
 
         function getRoleHTML(role) {
-            if (role === 'leader') return '<span class="role-icon">👑</span>Leader';
-            if (role === 'coLeader') return '<span class="role-icon">🛡️</span>Co-Leader';
-            if (role === 'admin') return '<span class="role-icon">⭐</span>Elder';
-            return 'Member';
-        }
-
-        function smartSearch(tag, type) {
-            const cleanTag = tag.replace('#', '');
-            if (type === 'player') { document.getElementById('pInput').value = cleanTag; document.getElementById('cInput').value = ''; }
-            else { document.getElementById('cInput').value = cleanTag; document.getElementById('pInput').value = ''; }
-            fetchData();
+            const roles = { 'leader': '👑 Leader', 'coLeader': '🛡️ Co-Leader', 'admin': '⭐ Elder' };
+            return roles[role] || 'Member';
         }
 
         async function fetchData() {
@@ -171,77 +199,123 @@
 
         async function getPlayer(tag) {
             try {
-                const res = await fetch(`${API_BASE}/api/player/%23${tag}`);
-                if (!res.ok) { showError("TAG NOT FOUND OR UNAUTHORIZED"); return; }
+                const res = await fetch(`${API_BASE}/api/player/${encodeURIComponent('#' + tag)}`);
+                if (!res.ok) { showError("PLAYER NOT FOUND"); return; }
                 const d = await res.json();
                 closeError();
+                
                 document.getElementById('clanPanel').style.display = 'none';
                 document.getElementById('playerPanel').style.display = 'block';
 
                 const leagueIcon = d.league ? d.league.iconUrls.medium : 'playerprofile.png';
-                document.getElementById('pSearchIcon').src = leagueIcon;
 
                 document.getElementById('playerSummary').innerHTML = `
                     <div class="summary-box">
-                        <div class="badge-frame"><img src="${leagueIcon}" style="width:110px;"></div>
+                        <div class="badge-frame">
+                            <img src="${leagueIcon}" style="width:90px;">
+                            <div class="xp-display-attractive">LVL ${d.expLevel}</div>
+                        </div>
                         <div class="info-grid">
                             <div class="name-title-match">${d.name}</div>
-                            <div class="info-item">🏠 TH: <strong class="th-badge ${getTHClass(d.townHallLevel)}">${d.townHallLevel}</strong></div>
-                            <div class="info-item">🏆 Trophy: <strong>${d.trophies}</strong></div>
-                            <div class="info-item" style="grid-column:span 2; color:#fccb00;">🏷️ Tag: ${d.tag} <button class="copy-icon-btn" onclick="smartSearch('${d.tag}', 'player')"><svg class="copy-svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></div>
+                            <div class="info-item">🏠 TH: <strong class="th-badge ${getTHClass(d.townHallLevel)}"><img src="townhall/townhall${d.townHallLevel}.png" style="width:20px; height:20px; object-fit:contain;" onerror="this.style.display='none'"> ${d.townHallLevel}</strong></div>
+                            <div class="info-item">🏆 League: <strong>${d.league ? d.league.name : 'Unranked'}</strong></div>
+                            <div class="info-item">⭐ War Stars: <strong>${d.warStars}</strong></div>
+                            <div class="info-item">📤 Donated: <strong>${d.donations}</strong></div>
+                            <div class="info-item">📥 Received: <strong>${d.donationsReceived}</strong></div>
+                            <div class="info-item">🛡️ Clan: <strong>${d.clan ? d.clan.name : 'No Clan'}</strong></div>
+                            <div class="info-item">👤 Role: <strong>${getRoleHTML(d.role)}</strong></div>
+                            <div class="info-item" style="grid-column:span 2; color:#fccb00;">🏷️ Tag: ${d.tag} <button class="copy-icon-btn" onclick="copyTag('${d.tag}', 'player')">${copyIconSVG}</button></div>
+                            <div class="info-item" style="grid-column:span 2; color:#fccb00;">🛡️ Clan Tag: ${d.clan ? d.clan.tag : 'N/A'} ${d.clan ? `<button class="copy-icon-btn" onclick="copyTag('${d.clan.tag}', 'clan')">${copyIconSVG}</button>` : ''}</div>
                         </div>
                     </div>`;
 
-                const counts = { heroes: 0, superTroops: 0, troops: 0, siege: 0, pets: 0, spells: 0 };
-                const sections = ["heroes", "superTroops", "troops", "siege", "pets", "spells"];
+                const sections = ["heroes", "pets", "equipment", "troops", "superTroops", "spells", "siege"];
                 sections.forEach(s => { document.getElementById(s+'List').innerHTML = ''; document.getElementById(s+'Section').style.display = 'none'; });
 
-                if(d.heroes) d.heroes.forEach(h => {
-                    if(h.village === "home") {
-                        counts.heroes++; document.getElementById('heroesSection').style.display = 'block';
-                        const isMax = (h.level === h.maxLevel);
-                        document.getElementById('heroesList').innerHTML += `<div class="data-card"><span class="item-name-top">${h.name}</span><img src="HEROES/${h.name}.png" onerror="this.src='playerprofile.png'"><span class="lvl-badge ${isMax?'lvl-max-fire':''}">${h.level}</span></div>`;
-                    }
-                });
+                const baseMapping = {
+                    "Super Barbarian": "Barbarian", "Super Archer": "Archer", "Super Giant": "Giant", "Sneaky Goblin": "Goblin", "Super Wall Breaker": "Wall Breaker", "Super Wizard": "Wizard", "Super Dragon": "Dragon", "Inferno Dragon": "Baby Dragon", "Super Minion": "Minion", "Super Valkyrie": "Valkyrie", "Super Witch": "Witch", "Ice Hound": "Lava Hound", "Super Bowler": "Bowler", "Super Balloon": "Balloon", "Super Land Miner": "Miner", "Super Hog Rider": "Hog Rider", "Rocket Balloon": "Balloon", "Super Miner": "Miner", "Super Yeti": "Yeti"
+                };
 
-                if(d.troops) d.troops.forEach(t => {
-                    if(t.village === "home") {
-                        let sId = "";
-                        const superNames = ["Super Barbarian", "Super Archer", "Super Giant", "Sneaky Goblin", "Super Wall Breaker", "Super Wizard", "Super Dragon", "Inferno Dragon", "Super Minion", "Super Valkyrie", "Super Witch", "Ice Hound", "Super Bowler", "Super Balloon", "Super Land Miner", "Super Hog Rider", "Rocket Balloon", "Super Miner", "Super Yeti"];
-                        const siegeNames = ["Wall Wrecker", "Battle Blimp", "Stone Slammer", "Siege Barracks", "Log Launcher", "Flame Flinger", "Battle Drill"];
-                        const petNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Frosty", "Diggy", "Poison Lizard", "Phoenix", "Spirit Fox", "Angry Jelly", "Sneezy", "Greedy Raven"];
-                        
-                        if (superNames.includes(t.name)) sId = 'superTroops';
-                        else if (petNames.includes(t.name)) sId = 'pets';
-                        else if (siegeNames.includes(t.name)) sId = 'siege';
-                        else sId = 'troops';
+                const renderItems = (items, sId, displayName) => {
+                    if(!items || items.length === 0) return;
+                    const list = document.getElementById(sId+'List');
+                    items.forEach(item => {
+                        if(item.village === "home" || sId === 'spells') {
+                            document.getElementById(sId+'Section').style.display = 'block';
+                            let displayLvl = item.level;
+                            let maxLvl = item.maxLevel;
+                            if(sId === 'superTroops' && baseMapping[item.name]) {
+                                const base = d.troops.find(t => t.name === baseMapping[item.name]);
+                                if(base) { displayLvl = base.level; maxLvl = base.maxLevel; }
+                            }
+                            const isMax = displayLvl === maxLvl;
+                            let folder = 'TROOPS/';
+                            if (sId === 'heroes') folder = 'HEROES/';
+                            if (sId === 'superTroops') folder = 'supertroops/';
+                            if (sId === 'spells') folder = 'Spells/';
+                            if (sId === 'siege') folder = 'Siege Machines/';
+                            if (sId === 'pets') folder = 'pets/';
+                            list.innerHTML += `<div class="data-card"><span class="item-name-top">${item.name}</span><img src="${folder}${item.name}.png" onerror="this.src='playerprofile.png'"><span class="lvl-badge ${isMax?'lvl-max-fire':''}">${displayLvl}${isMax?' MAX':''}</span></div>`;
+                        }
+                    });
+                    document.querySelector(`#${sId}Section .data-title span`).innerText = displayName;
+                };
 
-                        counts[sId]++; document.getElementById(sId+'Section').style.display = 'block';
-                        const isMax = (t.level === t.maxLevel);
-                        const path = (sId==='superTroops') ? 'supertroops/' : '';
-                        document.getElementById(sId+'List').innerHTML += `<div class="data-card"><span class="item-name-top">${t.name}</span><img src="${path}${t.name}.png" onerror="this.src='playerprofile.png'"><span class="lvl-badge ${isMax?'lvl-max-fire':''}">${t.level}</span></div>`;
-                    }
-                });
+                const renderEquipment = (equipList) => {
+                    if(!equipList || equipList.length === 0) return;
+                    document.getElementById('equipmentSection').style.display = 'block';
+                    const list = document.getElementById('equipmentList');
+                    
+                    const equipMap = {
+                        "Barbarian Puppet": "Barbarian King", "Rage Vial": "Barbarian King", "Earthquake Boots": "Barbarian King", "Vampstache": "Barbarian King", "Giant Gauntlet": "Barbarian King", "Spiky Ball": "Barbarian King", "Snake Bracelet": "Barbarian King", "Stick Horse": "Barbarian King", "Action Figure": "Archer Queen", 
+                        "Archer Puppet": "Archer Queen", "Invisibility Vial": "Archer Queen", "Giant Arrow": "Archer Queen", "Healer Puppet": "Archer Queen", "Frozen Arrow": "Archer Queen", "Magic Mirror": "Archer Queen", "Frost Flake": "Royal Champion",
+                        "Eternal Tome": "Grand Warden", "Life Gem": "Grand Warden", "Rage Gem": "Grand Warden", "Healing Tome": "Grand Warden", "Fireball": "Grand Warden", "Lavaloon Puppet": "Grand Warden", "Heroic Torch": "Grand Warden", 
+                        "Seeking Shield": "Royal Champion", "Royal Gem": "Royal Champion", "Hog Rider Puppet": "Royal Champion", "Haste Vial": "Royal Champion", "Rocket Spear": "Royal Champion", "Electro Boots": "Royal Champion",
+                        "Dark Crown": "Minion Prince", "Henchmen Puppet": "Minion Prince", "Meteor Staff": "Minion Prince", "Dark Orb": "Minion Prince", "Metal Pants": "Minion Prince", "Noble Iron": "Minion Prince",
+                        "Fire Heart": "Dragon Duke", "Stun Blaster": "Dragon Duke", "Flame Blower": "Dragon Duke"
+                    };
 
-                if(d.spells) d.spells.forEach(s => {
-                    counts.spells++; document.getElementById('spellsSection').style.display = 'block';
-                    const isMax = (s.level === s.maxLevel);
-                    document.getElementById('spellsList').innerHTML += `<div class="data-card"><span class="item-name-top">${s.name}</span><img src="${s.name}.png" onerror="this.src='playerprofile.png'"><span class="lvl-badge ${isMax?'lvl-max-fire':''}">${s.level}</span></div>`;
-                });
+                    const groups = {};
+                    equipList.forEach(e => {
+                        const hero = equipMap[e.name] || "Other Heroes";
+                        if(!groups[hero]) groups[hero] = [];
+                        groups[hero].push(e);
+                    });
+                    
+                    document.querySelector(`#equipmentSection .data-title span`).innerText = "Equipment";
+                    
+                    const heroOrder = ["Barbarian King", "Archer Queen", "Grand Warden", "Royal Champion", "Minion Prince", "Dragon Duke", "Other Heroes"];
+                    heroOrder.forEach(hero => {
+                        if(groups[hero] && groups[hero].length > 0) {
+                            list.innerHTML += `<div class="equip-hero-title">${hero} Equipment</div>`;
+                            groups[hero].forEach(item => {
+                                const isMax = item.level === item.maxLevel;
+                                list.innerHTML += `<div class="data-card"><span class="item-name-top">${item.name}</span><img src="equipment/${item.name}.png" onerror="this.src='playerprofile.png'"><span class="lvl-badge ${isMax?'lvl-max-fire':''}">${item.level}${isMax?' MAX':''}</span></div>`;
+                            });
+                        }
+                    });
+                };
 
-                document.querySelector('#heroesHeader span').innerText = `Heroes (${counts.heroes})`;
-                document.querySelector('#superTroopsHeader span').innerText = `Super Troops (${counts.superTroops})`;
-                document.querySelector('#troopsHeader span').innerText = `Troops (${counts.troops})`;
-                document.querySelector('#siegeHeader span').innerText = `Siege Machines (${counts.siege})`;
-                document.querySelector('#petsHeader span').innerText = `Pets (${counts.pets})`;
-                document.querySelector('#spellsHeader span').innerText = `Spells (${counts.spells})`;
+                const petNames = ["L.A.S.S.I", "Electro Owl", "Mighty Yak", "Unicorn", "Frosty", "Diggy", "Poison Lizard", "Phoenix", "Spirit Fox", "Angry Jelly", "Sneezy", "Greedy Raven"];
+                const superNames = Object.keys(baseMapping);
+                const siegeNames = ["Wall Wrecker", "Battle Blimp", "Stone Slammer", "Siege Barracks", "Log Launcher", "Flame Flinger", "Battle Drill", "Troop Launcher"];
 
-            } catch(e) { showError("BACKEND ERROR: Please use Live Server/Hosting"); }
+                renderItems(d.heroes, 'heroes', 'Heroes');
+                if(d.troops) {
+                    renderItems(d.troops.filter(t => petNames.includes(t.name)), 'pets', 'Pets');
+                    renderEquipment(d.heroEquipment);
+                    renderItems(d.troops.filter(t => !superNames.includes(t.name) && !siegeNames.includes(t.name) && !petNames.includes(t.name) && t.village === "home"), 'troops', 'Troops');
+                    renderItems(d.troops.filter(t => superNames.includes(t.name)), 'superTroops', 'Super Troops');
+                    renderItems(d.spells, 'spells', 'Spells');
+                    renderItems(d.troops.filter(t => siegeNames.includes(t.name)), 'siege', 'Siege Machines');
+                }
+
+            } catch(e) { showError("BACKEND ERROR: Data Load Failed"); }
         }
 
         async function getClan(tag) {
             try {
-                const res = await fetch(`${API_BASE}/api/clan/%23${tag}`);
+                const res = await fetch(`${API_BASE}/api/clan/${encodeURIComponent('#' + tag)}`);
                 if (!res.ok) { showError("CLAN NOT FOUND"); return; }
                 const d = await res.json();
                 closeError();
@@ -249,35 +323,67 @@
                 document.getElementById('clanPanel').style.display = 'block';
                 document.getElementById('cSearchIcon').src = d.badgeUrls.medium;
 
+                let labelsHtml = '';
+                if (d.labels && d.labels.length > 0) {
+                    labelsHtml = d.labels.map(l => `<span style="display:inline-flex; align-items:center; background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:12px; font-size:11px; margin-right:5px; border:1px solid #fccb00; color:#fff;"><img src="${l.iconUrls.small}" style="width:14px; height:14px; margin-right:4px;"> ${l.name}</span>`).join('');
+                }
+
+                let warLossDisplay = d.warLosses !== undefined ? d.warLosses : 'Hidden';
+                let winRatioDisplay = 'Hidden';
+                if (d.warLosses !== undefined) {
+                    let totalWars = (d.warWins || 0) + (d.warLosses || 0) + (d.warTies || 0);
+                    winRatioDisplay = totalWars > 0 ? ((d.warWins / totalWars) * 100).toFixed(1) + '%' : '0%';
+                }
+
                 document.getElementById('clanSummary').innerHTML = `
-                    <div class="badge-frame"><img src="${d.badgeUrls.medium}" style="width:100px;"></div>
-                    <div class="info-grid">
-                        <div class="name-title-match">${d.name}</div>
-                        <div class="info-item">⭐ Level: <strong>${d.clanLevel}</strong></div>
-                        <div class="info-item">👥 Members: <strong>${d.members}/50</strong></div>
-                        <div class="info-item" style="grid-column:span 2; font-size:14px; color:#fccb00;">🏷️ Tag: ${d.tag} <button class="copy-icon-btn" onclick="smartSearch('${d.tag}', 'clan')"><svg class="copy-svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg></button></div>
+                    <div class="summary-box" style="flex-direction: column; align-items: stretch; gap: 15px;">
+                        <div style="display: flex; gap: 25px; align-items: center; flex-wrap: wrap;">
+                            <div class="badge-frame"><img src="${d.badgeUrls.medium}" style="width:100px;"></div>
+                            <div class="info-grid">
+                                <div class="name-title-match">${d.name}</div>
+                                <div class="info-item">⭐ Level: <strong>${d.clanLevel}</strong></div>
+                                <div class="info-item">👥 Members: <strong>${d.members}/50</strong></div>
+                                <div class="info-item">🛡️ War League: <strong>${d.warLeague ? d.warLeague.name : 'Unranked'}</strong></div>
+                                <div class="info-item">⚔️ War Wins: <strong>${d.warWins || 0}</strong></div>
+                                <div class="info-item">💔 War Losses: <strong>${warLossDisplay}</strong></div>
+                                <div class="info-item">📈 Win Ratio: <strong>${winRatioDisplay}</strong></div>
+                                <div class="info-item">📍 Location: <strong>${d.location ? d.location.name : 'Not Set'}</strong></div>
+                                <div class="info-item">💬 Language: <strong>${d.chatLanguage ? d.chatLanguage.name : 'Not Set'}</strong></div>
+                                <div class="info-item">🤝 Type: <strong>${d.type ? d.type.toUpperCase() : 'N/A'}</strong></div>
+                                <div class="info-item">🏆 Req. Trophies: <strong>${d.requiredTrophies || 0}</strong></div>
+                                <div class="info-item">🛠️ Req. Builder: <strong>${d.requiredBuilderBaseTrophies || 0}</strong></div>
+                                <div class="info-item">🏠 Req. TH Level: <strong class="th-badge th-gold"><img src="townhall/townhall${d.requiredTownhallLevel || 1}.png" style="width:20px; height:20px; object-fit:contain;" onerror="this.style.display='none'"> ${d.requiredTownhallLevel || 0}</strong></div>
+                                <div class="info-item" style="grid-column:span 2; color:#fccb00;">🏷️ Clan Tag: ${d.tag} <button class="copy-icon-btn" onclick="copyTag('${d.tag}', 'clan')">${copyIconSVG}</button></div>
+                                ${labelsHtml ? `<div class="info-item" style="grid-column:span 2; margin-top:5px;">${labelsHtml}</div>` : ''}
+                            </div>
+                        </div>
+                        ${d.description ? `<div style="padding: 15px; background: rgba(0,0,0,0.4); border-left: 4px solid #fccb00; border-radius: 6px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #ddd;">${d.description}</div>` : ''}
                     </div>`;
 
-                const seasonKey = getCurrentSeason();
-                const cleanTag = tag.replace('#', '');
-                const clanRef = db.ref(`clan_history/${cleanTag}`);
-                await clanRef.child(seasonKey).update({ league: d.warLeague?d.warLeague.name:'Unranked', members: d.members });
-
-                clanRef.on('value', (snap) => {
-                    const history = snap.val();
-                    const cont = document.getElementById('warLeagueHistoryCont'); cont.innerHTML = '';
-                    document.getElementById('warLeagueSection').style.display = 'block';
-                    if(history) Object.keys(history).reverse().forEach(k => {
-                        const s = history[k];
-                        cont.innerHTML += `<div class="season-history-row"><div class="season-tag">${k}</div><div class="data-grid"><div class="data-card"><span class="item-name-top">LEAGUE</span><span style="color:#fccb00;">${s.league}</span></div><div class="data-card"><span class="item-name-top">MEMBERS</span><span style="color:#fccb00;">${s.members}</span></div></div></div>`;
+                try {
+                    const seasonKey = getCurrentSeason();
+                    const clanRef = db.ref(`clan_history/${tag.replace('#', '')}`);
+                    await clanRef.child(seasonKey).update({ league: d.warLeague?d.warLeague.name:'Unranked', members: d.members });
+                    clanRef.on('value', (snap) => {
+                        const history = snap.val();
+                        const cont = document.getElementById('warLeagueHistoryCont'); 
+                        if(cont) {
+                            cont.innerHTML = '';
+                            document.getElementById('warLeagueSection').style.display = 'block';
+                            if(history) Object.keys(history).reverse().forEach(k => {
+                                const s = history[k];
+                                cont.innerHTML += `<div class="season-history-row"><div class="season-tag">${k}</div><div class="data-grid"><div class="data-card"><span class="item-name-top">LEAGUE</span><span style="color:#fccb00;">${s.league}</span></div><div class="data-card"><span class="item-name-top">MEMBERS</span><span style="color:#fccb00;">${s.members}</span></div></div></div>`;
+                            });
+                        }
                     });
-                });
+                } catch(fErr) { console.warn("Firebase limited."); }
 
                 const list = document.getElementById('memberList'); list.innerHTML = '';
-                d.memberList.forEach(m => {
-                    list.innerHTML += `<tr><td><strong>${m.name}</strong></td><td><span style="font-size:11px; color:#aaa;">${m.tag}</span></td><td><span class="th-badge ${getTHClass(m.townHallLevel)}">${m.townHallLevel}</span></td><td>${getRoleHTML(m.role)}</td><td><strong style="color:#fccb00;">${m.trophies}</strong></td></tr>`;
+                d.memberList.forEach((m, index) => {
+                    let activeStatus = (m.donations > 0 || m.donationsReceived > 0) ? '<span style="color:#4caf50;">Active</span>' : '<span style="color:#e53935;">Inactive</span>';
+                    list.innerHTML += `<tr><td>${index + 1}</td><td><strong>${m.name}</strong></td><td>${m.tag} <button class="copy-icon-btn" onclick="copyTag('${m.tag}', 'player')">${copyIconSVG}</button></td><td><span class="th-badge ${getTHClass(m.townHallLevel)}"><img src="townhall/townhall${m.townHallLevel}.png" style="width:16px; height:16px; vertical-align:middle; object-fit:contain;" onerror="this.style.display='none'"> ${m.townHallLevel}</span></td><td>${getRoleHTML(m.role)}</td><td><strong style="color:#4caf50;">${m.donations || 0}</strong></td><td><strong style="color:#e53935;">${m.donationsReceived || 0}</strong></td><td><strong style="color:#fccb00;">${m.trophies}</strong></td><td><strong>${activeStatus}</strong></td></tr>`;
                 });
-            } catch(e) { showError("BACKEND ERROR: Use Live Server"); }
+            } catch(e) { showError("CLAN FETCH ERROR"); }
         }
 
         function sortTable(n) {
@@ -289,7 +395,7 @@
                 for (i = 1; i < (rows.length - 1); i++) {
                     shouldSwitch = false; x = rows[i].getElementsByTagName("TD")[n]; y = rows[i + 1].getElementsByTagName("TD")[n];
                     let xVal = x.innerText.toLowerCase(); let yVal = y.innerText.toLowerCase();
-                    if ([2, 4].includes(n)) { xVal = parseInt(xVal.replace(/,/g, '')) || 0; yVal = parseInt(yVal.replace(/,/g, '')) || 0; }
+                    if ([0, 3, 5, 6, 7].includes(n)) { xVal = parseInt(xVal.replace(/,/g, '')) || 0; yVal = parseInt(yVal.replace(/,/g, '')) || 0; }
                     if (dir == "asc") { if (xVal > yVal) { shouldSwitch = true; break; } } else if (dir == "desc") { if (xVal < yVal) { shouldSwitch = true; break; } }
                 }
                 if (shouldSwitch) { rows[i].parentNode.insertBefore(rows[i + 1], rows[i]); switching = true; switchcount ++; } else { if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; } }
