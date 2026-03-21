@@ -51,9 +51,13 @@
         @keyframes burn { from { box-shadow: 0 0 8px #ff5722; } to { box-shadow: 0 0 15px #ffeb3b; } }
 
         .xp-display-attractive { margin-top: 10px; background: linear-gradient(135deg, #1e88e5, #1565c0); color: white; padding: 5px 15px; border-radius: 20px; font-family: 'ClashFont', cursive; font-size: 14px; border: 2px solid #ffffff; box-shadow: 0 0 15px #0288d1, inset 0 0 5px #ffffff; text-shadow: 1px 1px 2px #000; display: inline-block; }
+        
+        /* Small XP Badge for Table */
+        .table-xp-badge { background: linear-gradient(135deg, #1e88e5, #1565c0); color: white; padding: 2px 6px; border-radius: 4px; font-family: 'ClashFont', cursive; font-size: 10px; border: 1px solid #4fc3f7; margin-right: 5px; display: inline-block; vertical-align: middle; }
+
         .equip-hero-title { width: 100%; font-family: 'ClashFont', cursive; color: #fccb00; font-size: 11px; margin: 15px 0 10px 0; border-left: 4px solid #fccb00; padding-left: 10px; grid-column: 1 / -1; background: rgba(255,203,0,0.05); }
 
-        .th-badge { padding: 3px 10px; border-radius: 5px; font-weight: bold; color: white; text-shadow: 1px 1px 1px black; display: flex; align-items: center; gap: 5px; }
+        .th-badge { padding: 3px 10px; border-radius: 5px; font-weight: bold; color: white; text-shadow: 1px 1px 1px black; display: flex; align-items: center; gap: 5px; justify-content: center; }
         .th-gold { background: linear-gradient(45deg, #fbc02d, #f9a825); } 
         .th-purple { background: linear-gradient(45deg, #9c27b0, #673ab7); } 
         .th-blue { background: linear-gradient(45deg, #1e88e5, #1565c0); } 
@@ -62,9 +66,17 @@
         .copy-icon-btn { background: none; border: none; cursor: pointer; padding: 2px; vertical-align: middle; }
         .copy-svg { width: 18px; height: 18px; fill: #fccb00; }
 
+        /* Clan Tabs */
+        .clan-tabs { display: flex; justify-content: center; gap: 10px; margin: 20px 0 10px 0; }
+        .tab-btn { background: #2c323c; color: #fff; border: 2px solid #5a6470; border-radius: 8px; padding: 10px 20px; font-family: 'ClashFont', cursive; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .tab-btn.active { background: linear-gradient(to bottom, #1e88e5, #1565c0); border-color: #fccb00; color: #fccb00; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         table { width: 100%; border-collapse: collapse; background: rgba(0,0,0,0.2); font-size: 14px; }
-        th { background: rgba(62, 74, 89, 0.9); color: #fce879; padding: 12px; text-align: left; font-family: 'ClashFont', cursive; font-size: 10px; cursor: pointer; }
-        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        th { background: rgba(62, 74, 89, 0.9); color: #fce879; padding: 12px; text-align: center; font-family: 'ClashFont', cursive; font-size: 10px; cursor: pointer; }
+        th:nth-child(2), td:nth-child(2) { text-align: left; } /* Keep Member name left aligned */
+        td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
         tr:hover { background: rgba(255,255,255,0.05); }
 
         #errorOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 10000; }
@@ -118,27 +130,72 @@
         <div class="panel" id="clanPanel">
             <div class="panel-header-custom">Clan Summary</div>
             <div id="clanSummary"></div>
-            <div id="warLeagueSection" class="data-section" style="display:none;">
+            
+            <div id="currentWarSection" style="display:none; padding:20px;">
+                <div style="font-family:'ClashFont', cursive; color:#e53935; font-size:18px; text-align:center; margin-bottom:15px; text-shadow:2px 2px 4px #000;">⚔️ Current Clan War</div>
+                <div id="currentWarDetails" style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.5); padding:20px; border:2px solid #e53935; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.6);"></div>
+            </div>
+            
+            <div class="clan-tabs">
+                <button class="tab-btn active" onclick="switchTab('homeVillage')">HOME VILLAGE</button>
+                <button class="tab-btn" onclick="switchTab('builderBase')">BUILDER BASE</button>
+                <button class="tab-btn" onclick="switchTab('clanCapital')">CLAN CAPITAL</button>
+            </div>
+
+            <div id="homeVillageTab" class="tab-content active">
+                <div class="table-wrapper">
+                    <table id="homeVillageTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('homeVillageTable', 0)">S.N.</th>
+                                <th onclick="sortTable('homeVillageTable', 1)">MEMBER</th>
+                                <th onclick="sortTable('homeVillageTable', 2)">TAG</th>
+                                <th onclick="sortTable('homeVillageTable', 3)">TH</th>
+                                <th onclick="sortTable('homeVillageTable', 4)">ROLE</th>
+                                <th onclick="sortTable('homeVillageTable', 5)">📤 DONATED</th>
+                                <th onclick="sortTable('homeVillageTable', 6)">📥 RECEIVED</th>
+                                <th onclick="sortTable('homeVillageTable', 7)">🏆 TROPHY</th>
+                                <th onclick="sortTable('homeVillageTable', 8)">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="homeVillageList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="builderBaseTab" class="tab-content">
+                <div class="table-wrapper">
+                    <table id="builderBaseTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('builderBaseTable', 0)">S.N.</th>
+                                <th onclick="sortTable('builderBaseTable', 1)">MEMBER</th>
+                                <th onclick="sortTable('builderBaseTable', 2)">🏆 BUILDER TROPHY</th>
+                            </tr>
+                        </thead>
+                        <tbody id="builderBaseList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="clanCapitalTab" class="tab-content">
+                <div class="table-wrapper">
+                    <table id="clanCapitalTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('clanCapitalTable', 0)">S.N.</th>
+                                <th onclick="sortTable('clanCapitalTable', 1)">MEMBER</th>
+                                <th onclick="sortTable('clanCapitalTable', 2)">🪙 TOTAL CONTRIBUTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clanCapitalList"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="warLeagueSection" class="data-section" style="display:none; margin-top:20px;">
                 <div class="data-title">🛡️ War League History</div>
                 <div id="warLeagueHistoryCont"></div>
-            </div>
-            <div class="table-wrapper">
-                <table id="memberTable">
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable(0)">S.N.</th>
-                            <th onclick="sortTable(1)">MEMBER</th>
-                            <th onclick="sortTable(2)">TAG</th>
-                            <th onclick="sortTable(3)">TH</th>
-                            <th onclick="sortTable(4)">ROLE</th>
-                            <th onclick="sortTable(5)">📤 DONATED</th>
-                            <th onclick="sortTable(6)">📥 RECEIVED</th>
-                            <th onclick="sortTable(7)">🏆 TROPHY</th>
-                            <th onclick="sortTable(8)">STATUS</th>
-                        </tr>
-                    </thead>
-                    <tbody id="memberList"></tbody>
-                </table>
             </div>
         </div>
     </div>
@@ -188,6 +245,13 @@
         function getRoleHTML(role) {
             const roles = { 'leader': '👑 Leader', 'coLeader': '🛡️ Co-Leader', 'admin': '⭐ Elder' };
             return roles[role] || 'Member';
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabId + 'Tab').classList.add('active');
         }
 
         async function fetchData() {
@@ -347,6 +411,8 @@
                                 <div class="info-item">⚔️ War Wins: <strong>${d.warWins || 0}</strong></div>
                                 <div class="info-item">💔 War Losses: <strong>${warLossDisplay}</strong></div>
                                 <div class="info-item">📈 Win Ratio: <strong>${winRatioDisplay}</strong></div>
+                                <div class="info-item">🪙 Capital Hall: <strong>${d.clanCapital && d.clanCapital.capitalHallLevel ? d.clanCapital.capitalHallLevel : 0}</strong></div>
+                                <div class="info-item">🏅 Capital Lg: <strong>${d.capitalLeague && d.capitalLeague.name ? d.capitalLeague.name : 'Unranked'}</strong></div>
                                 <div class="info-item">📍 Location: <strong>${d.location ? d.location.name : 'Not Set'}</strong></div>
                                 <div class="info-item">💬 Language: <strong>${d.chatLanguage ? d.chatLanguage.name : 'Not Set'}</strong></div>
                                 <div class="info-item">🤝 Type: <strong>${d.type ? d.type.toUpperCase() : 'N/A'}</strong></div>
@@ -359,6 +425,58 @@
                         </div>
                         ${d.description ? `<div style="padding: 15px; background: rgba(0,0,0,0.4); border-left: 4px solid #fccb00; border-radius: 6px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; color: #ddd;">${d.description}</div>` : ''}
                     </div>`;
+
+                try {
+                    const warRes = await fetch(`${API_BASE}/api/clan/${encodeURIComponent('#' + tag)}/currentwar`);
+                    if (warRes.ok) {
+                        const warText = await warRes.text();
+                        try {
+                            let war = JSON.parse(warText);
+                            if(war.data) war = war.data;
+                            if (war && war.state && war.state !== 'notInWar') {
+                                document.getElementById('currentWarSection').style.display = 'block';
+                                
+                                let cName = war.clan && war.clan.name ? war.clan.name : (d.name || 'Clan');
+                                let cStars = war.clan && war.clan.stars ? war.clan.stars : 0;
+                                let cDest = war.clan && war.clan.destructionPercentage ? parseFloat(war.clan.destructionPercentage) : 0;
+                                
+                                let oName = war.opponent && war.opponent.name ? war.opponent.name : 'Unknown';
+                                let oStars = war.opponent && war.opponent.stars ? war.opponent.stars : 0;
+                                let oDest = war.opponent && war.opponent.destructionPercentage ? parseFloat(war.opponent.destructionPercentage) : 0;
+                                
+                                let tSize = war.teamSize ? war.teamSize : 0;
+                                let stateStr = war.state.toUpperCase();
+
+                                document.getElementById('currentWarDetails').innerHTML = `
+                                    <div style="flex:1; text-align:center;">
+                                        <div style="font-family:'ClashFont', cursive; color:#4fc3f7; font-size:14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${cName}</div>
+                                        <div style="font-size:22px; font-weight:bold; color:#fccb00; margin:10px 0; text-shadow:1px 1px 2px #000;">${cStars} ⭐</div>
+                                        <div style="font-size:14px; color:#aaa; font-weight:bold;">${cDest.toFixed(2)}%</div>
+                                    </div>
+                                    <div style="flex:1; text-align:center; border-left:2px solid #555; border-right:2px solid #555; padding:0 10px;">
+                                        <div style="font-family:'ClashFont', cursive; color:#e53935; font-size:12px;">${stateStr}</div>
+                                        <div style="font-size:12px; color:#ccc; margin-top:10px; font-weight:bold;">${tSize} v ${tSize}</div>
+                                    </div>
+                                    <div style="flex:1; text-align:center;">
+                                        <div style="font-family:'ClashFont', cursive; color:#e53935; font-size:14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${oName}</div>
+                                        <div style="font-size:22px; font-weight:bold; color:#fccb00; margin:10px 0; text-shadow:1px 1px 2px #000;">${oStars} ⭐</div>
+                                        <div style="font-size:14px; color:#aaa; font-weight:bold;">${oDest.toFixed(2)}%</div>
+                                    </div>
+                                `;
+                            } else {
+                                document.getElementById('currentWarSection').style.display = 'none';
+                            }
+                        } catch(e) {
+                            console.warn("War parse error:", e);
+                            document.getElementById('currentWarSection').style.display = 'none';
+                        }
+                    } else {
+                        document.getElementById('currentWarSection').style.display = 'none';
+                    }
+                } catch(err) { 
+                    console.warn("Current war fetch error:", err); 
+                    document.getElementById('currentWarSection').style.display = 'none';
+                }
 
                 try {
                     const seasonKey = getCurrentSeason();
@@ -378,16 +496,28 @@
                     });
                 } catch(fErr) { console.warn("Firebase limited."); }
 
-                const list = document.getElementById('memberList'); list.innerHTML = '';
+                const homeList = document.getElementById('homeVillageList'); homeList.innerHTML = '';
+                const builderList = document.getElementById('builderBaseList'); builderList.innerHTML = '';
+                const capitalList = document.getElementById('clanCapitalList'); capitalList.innerHTML = '';
+
                 d.memberList.forEach((m, index) => {
                     let activeStatus = (m.donations > 0 || m.donationsReceived > 0) ? '<span style="color:#4caf50;">Active</span>' : '<span style="color:#e53935;">Inactive</span>';
-                    list.innerHTML += `<tr><td>${index + 1}</td><td><strong>${m.name}</strong></td><td>${m.tag} <button class="copy-icon-btn" onclick="copyTag('${m.tag}', 'player')">${copyIconSVG}</button></td><td><span class="th-badge ${getTHClass(m.townHallLevel)}"><img src="townhall/townhall${m.townHallLevel}.png" style="width:16px; height:16px; vertical-align:middle; object-fit:contain;" onerror="this.style.display='none'"> ${m.townHallLevel}</span></td><td>${getRoleHTML(m.role)}</td><td><strong style="color:#4caf50;">${m.donations || 0}</strong></td><td><strong style="color:#e53935;">${m.donationsReceived || 0}</strong></td><td><strong style="color:#fccb00;">${m.trophies}</strong></td><td><strong>${activeStatus}</strong></td></tr>`;
+                    
+                    let xpBadge = m.expLevel ? `<span class="table-xp-badge">${m.expLevel}</span>` : '';
+                    let capXpBadge = m.capitalReputationLevel ? `<span class="table-xp-badge" style="border-color:#4fc3f7; color:#4fc3f7;">${m.capitalReputationLevel}</span>` : ''; 
+
+                    homeList.innerHTML += `<tr><td>${index + 1}</td><td>${xpBadge}<strong>${m.name}</strong></td><td>${m.tag} <button class="copy-icon-btn" onclick="copyTag('${m.tag}', 'player')">${copyIconSVG}</button></td><td><span class="th-badge ${getTHClass(m.townHallLevel)}"><img src="townhall/townhall${m.townHallLevel}.png" style="width:16px; height:16px; vertical-align:middle; object-fit:contain;" onerror="this.style.display='none'"> ${m.townHallLevel}</span></td><td>${getRoleHTML(m.role)}</td><td><strong style="color:#4caf50;">${m.donations || 0}</strong></td><td><strong style="color:#e53935;">${m.donationsReceived || 0}</strong></td><td><strong style="color:#fccb00;">${m.trophies}</strong></td><td><strong>${activeStatus}</strong></td></tr>`;
+                    
+                    builderList.innerHTML += `<tr><td>${index + 1}</td><td>${xpBadge}<strong>${m.name}</strong></td><td><strong style="color:#fccb00;">${m.builderBaseTrophies || 0}</strong></td></tr>`;
+
+                    capitalList.innerHTML += `<tr><td>${index + 1}</td><td>${capXpBadge}<strong>${m.name}</strong></td><td><strong style="color:#4fc3f7;">${m.clanCapitalContributions || 0}</strong></td></tr>`;
                 });
             } catch(e) { showError("CLAN FETCH ERROR"); }
         }
 
-        function sortTable(n) {
-            const table = document.getElementById("memberTable");
+        function sortTable(tableId, n) {
+            if (n === 0) return; // Disable sorting by S.N.
+            const table = document.getElementById(tableId);
             let rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
             switching = true; dir = "asc";
             while (switching) {
@@ -395,10 +525,16 @@
                 for (i = 1; i < (rows.length - 1); i++) {
                     shouldSwitch = false; x = rows[i].getElementsByTagName("TD")[n]; y = rows[i + 1].getElementsByTagName("TD")[n];
                     let xVal = x.innerText.toLowerCase(); let yVal = y.innerText.toLowerCase();
-                    if ([0, 3, 5, 6, 7].includes(n)) { xVal = parseInt(xVal.replace(/,/g, '')) || 0; yVal = parseInt(yVal.replace(/,/g, '')) || 0; }
+                    if (!isNaN(xVal.replace(/,/g, ''))) { xVal = parseInt(xVal.replace(/,/g, '')) || 0; yVal = parseInt(yVal.replace(/,/g, '')) || 0; }
                     if (dir == "asc") { if (xVal > yVal) { shouldSwitch = true; break; } } else if (dir == "desc") { if (xVal < yVal) { shouldSwitch = true; break; } }
                 }
                 if (shouldSwitch) { rows[i].parentNode.insertBefore(rows[i + 1], rows[i]); switching = true; switchcount ++; } else { if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; } }
+            }
+            
+            // Re-assign Serial Numbers after sorting
+            rows = table.rows;
+            for (i = 1; i < rows.length; i++) {
+                rows[i].getElementsByTagName("TD")[0].innerText = i;
             }
         }
     </script>

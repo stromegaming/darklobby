@@ -62,6 +62,22 @@ app.get('/api/clan/:tag', async (req, res) => {
     } catch (error) { res.status(500).json({ error: 'Proxy connection failed' }); }
 });
 
+// Current War API
+app.get('/api/clan/:tag/currentwar', async (req, res) => {
+    const rawTag = req.params.tag.toUpperCase().replace(/#/g, '');
+    const clanTag = encodeURIComponent('#' + rawTag);
+    const url = `${PROXY_URL}/clans/${clanTag}/currentwar`;
+    
+    try {
+        const response = await fetch(url, { 
+            headers: { 'Authorization': `Bearer ${API_TOKEN}`, 'Accept': 'application/json' }
+        });
+        const data = await response.json();
+        if (!response.ok) return res.status(response.status).json(data);
+        res.json(data);
+    } catch (error) { res.status(500).json({ error: 'Proxy connection failed' }); }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`✅ Server is running on port ${PORT}`);
