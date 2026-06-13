@@ -4,6 +4,8 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+// NEW: Added JSON parser middleware to handle POST requests (needed for Verify Token)
+app.use(express.json()); 
 
 // Render को दुवै सम्भावित नामहरू चेक गर्छ
 const API_TOKEN = process.env.COC_API_TOKEN || process.env.SUPERCELL_API_TOKEN;
@@ -79,7 +81,7 @@ app.get('/api/clan/:tag/currentwar', async (req, res) => {
 });
 
 // =========================================================================
-// NEWLY ADDED ALL POSSIBLE COC API ENDPOINTS (बिना कुनै पुरानो कोड परिवर्तन)
+// ALL POSSIBLE COC API ENDPOINTS 
 // =========================================================================
 
 // 1. Search Clans
@@ -263,6 +265,45 @@ app.get('/api/leagues/:leagueId/seasons/:seasonId', async (req, res) => {
         if (!response.ok) return res.status(response.status).json(data);
         res.json(data);
     } catch (error) { res.status(500).json({ error: 'Proxy connection failed' }); }
+});
+
+// =========================================================================
+// NEW: 12. Verify Player Token API 
+// Allows players to prove account ownership via their in-game API token
+// =========================================================================
+app.post('/api/player/:tag/verifytoken', async (req, res) => {
+    const rawTag = req.params.tag.toUpperCase().replace(/#/g, '');
+    const playerTag = encodeURIComponent('#' + rawTag);
+    const url = `${PROXY_URL}/players/${playerTag}/verifytoken`;
+    
+    // Extract token from the frontend POST request body
+    const { token } = req.body; 
+
+    if (!token) {
+        return res.status(400).json({ error: "Token is required in the request body" });
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST', // This endpoint requires a POST request
+            headers: { 
+                'Authorization': `Bearer ${API_TOKEN}`, 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' // Tell API we are sending JSON
+            },
+            body: JSON.stringify({ token: token }) // Send the token in the body
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            return res.status(response.status).json(data);
+        }
+        
+        res.json(data);
+    } catch (error) { 
+        res.status(500).json({ error: 'Proxy connection failed' }); 
+    }
 });
 
 const PORT = process.env.PORT || 3000;
